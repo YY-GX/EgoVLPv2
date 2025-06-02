@@ -75,6 +75,7 @@ clip_paths = sorted(glob.glob(os.path.join(CLIPS_DIR, '*.mp4')))
 
 for clip_path in tqdm(clip_paths):
     video_frames = load_video_frames(clip_path)  # [1, T, C, H, W]
+    print("video_frames.shape:", video_frames.shape)
     video_embeds = model.compute_video(video_frames).float()   # [1, D]
     video_embeds = F.normalize(video_embeds, dim=-1)
 
