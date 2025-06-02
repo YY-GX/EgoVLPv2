@@ -85,11 +85,16 @@ for i, clip_path in enumerate(tqdm(clip_paths)):
         video_embeds = model.compute_video(video_frames).float()
         video_embeds = F.normalize(video_embeds, dim=-1)
         sim = torch.matmul(video_embeds, text_embeds.T)
+
+        probs = F.softmax(sim, dim=-1)  # [1, num_prompts]
+        confidence, pred_idx = torch.max(probs, dim=-1)
+
         pred_idx = sim.argmax(dim=-1).item()
         pred_label = PROMPTS[pred_idx]
 
     # Log and print if action changed
     if pred_label != previous_label:
+        print(f"probabilities: {probs.cpu().numpy()}, confidence: {confidence.item():.4f}, predicted label: {pred_label}")
         seconds = i * STRIDE_SEC  # since stride is STRIDE_SEC
         print(f"[{seconds:.1f}s] {pred_label}")
         timestamps.append((seconds, pred_label))
