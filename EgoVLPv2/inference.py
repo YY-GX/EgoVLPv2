@@ -19,7 +19,7 @@ PROMPTS = ["a person is walking", "a person is sitting", "a person is standing"]
 
 # ==== Preprocessing (you can tweak this) ====
 IMG_SIZE = 224
-NUM_FRAMES = 8  # sample N frames per video
+NUM_FRAMES = 64  # sample N frames per video
 
 transform = transforms.Compose([
     transforms.Resize((IMG_SIZE, IMG_SIZE)),
