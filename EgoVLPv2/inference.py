@@ -31,8 +31,16 @@ transform = transforms.Compose([
 # ==== Load Model ====
 print("Loading model...")
 ckpt = torch.load(CHECKPOINT_PATH, map_location=DEVICE)
+
+
+
+# Override the number of frames expected by the model
+ckpt['config']['arch']['args']['video_params']['num_frames'] = NUM_FRAMES
+# Create model with updated config
 model = FrozenInTime(**ckpt['config']['arch']['args'])
-model.video_model.num_frames = NUM_FRAMES
+
+
+
 model.load_state_dict(ckpt['state_dict'], strict=False)
 model = model.to(DEVICE)
 model.eval()
