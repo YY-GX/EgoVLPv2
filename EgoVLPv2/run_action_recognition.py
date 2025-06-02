@@ -14,6 +14,17 @@ import cv2
 
 from model.model import FrozenInTime
 
+import random
+import torch
+SEED = 10000
+random.seed(SEED)
+np.random.seed(SEED)
+torch.manual_seed(SEED)
+torch.cuda.manual_seed_all(SEED)
+torch.backends.cudnn.deterministic = True
+torch.backends.cudnn.benchmark = False
+
+
 # === Settings ===
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 CHECKPOINT_PATH = './checkpoints/EgoVLPv2_smallproj.pth'
