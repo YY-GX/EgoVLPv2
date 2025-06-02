@@ -21,6 +21,7 @@ CLIPS_DIR = './sliding_clips'
 OUTPUT_CSV = 'action_segments.csv'
 PROMPTS = ["The person is walking forward", "The person sits down on a chair", "The person is standing still"]
 # PROMPTS = ["The person is walking", "The person sits down on a chair", "The person is standing"]
+PROMPTS = ["walking around", "sitting down on a chair", "standing"]
 
 IMG_SIZE = 224
 NUM_FRAMES = 60  # 2s * 30fps
