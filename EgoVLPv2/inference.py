@@ -9,7 +9,7 @@ from PIL import Image
 import glob
 import cv2
 
-from model.model import EgoVLP
+from model.model import FrozenInTime
 
 # ==== Settings ====
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -31,7 +31,7 @@ transform = transforms.Compose([
 # ==== Load Model ====
 print("Loading model...")
 ckpt = torch.load(CHECKPOINT_PATH, map_location=DEVICE)
-model = EgoVLP(**ckpt['config']['arch']['args'])
+model = FrozenInTime(**ckpt['config']['arch']['args'])
 model.load_state_dict(ckpt['state_dict'], strict=False)
 model = model.to(DEVICE)
 model.eval()
