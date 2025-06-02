@@ -31,8 +31,8 @@ transform = transforms.Compose([
 # ==== Load Model ====
 print("Loading model...")
 ckpt = torch.load(CHECKPOINT_PATH, map_location=DEVICE)
-ckpt['config']['arch']['args']['num_frames'] = NUM_FRAMES
 model = FrozenInTime(**ckpt['config']['arch']['args'])
+model.video_model.num_frames = NUM_FRAMES
 model.load_state_dict(ckpt['state_dict'], strict=False)
 model = model.to(DEVICE)
 model.eval()
