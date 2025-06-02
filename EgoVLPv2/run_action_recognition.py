@@ -29,10 +29,11 @@ torch.backends.cudnn.benchmark = False
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 CHECKPOINT_PATH = './checkpoints/EgoVLPv2_smallproj.pth'
 CLIPS_DIR = './sliding_clips'
-OUTPUT_CSV = 'action_segments.csv'
-PROMPTS = ["The person is walking forward", "The person sits down on a chair", "The person is standing still"]
-# PROMPTS = ["The person is walking", "The person sits down on a chair", "The person is standing"]
-# PROMPTS = ["walking around", "sitting down on a chair", "standing"]
+# PROMPTS, version = ["The person is walking forward", "The person sits down on a chair", "The person is standing still"], "v1"
+# PROMPTS, version = ["The person is walking", "The person sits down on a chair", "The person is standing"], "v2"
+PROMPTS, version = ["walking around", "sitting down on a chair", "standing"], "v3"
+
+OUTPUT_CSV = f'action_segments_{version}.csv'
 
 IMG_SIZE = 224
 NUM_FRAMES = 60  # 2s * 30fps
