@@ -58,13 +58,16 @@ def load_video_frames(path, num_frames=NUM_FRAMES):
         if not success:
             continue
         img = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
-        frames.append(transform(img))
+        frames.append(transform(img))  # shape: [3, H, W]
 
     cap.release()
+
     if len(frames) < num_frames:
-        # pad with last frame if short
         frames += [frames[-1]] * (num_frames - len(frames))
-    return torch.stack(frames).unsqueeze(0).to(DEVICE)  # [1, T, C, H, W]
+
+    frames = torch.stack(frames)           # [T, 3, H, W]
+    frames = frames.unsqueeze(0).to(DEVICE)  # [1, T, 3, H, W]
+    return frames
 
 # ==== Inference on clips ====
 print("Running inference...")
