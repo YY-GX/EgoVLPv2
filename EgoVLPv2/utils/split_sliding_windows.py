@@ -3,13 +3,14 @@ import cv2
 
 INPUT_VIDEO = './clips/yy_1.vrs.mp4'
 OUTPUT_DIR = './sliding_clips'
-WINDOW_SEC = 3
-STRIDE_SEC = 1.5
+WINDOW_SEC = 2
+STRIDE_SEC = 1
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 cap = cv2.VideoCapture(INPUT_VIDEO)
 fps = cap.get(cv2.CAP_PROP_FPS)
+print(fps)
 total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
 window_size = int(WINDOW_SEC * fps)

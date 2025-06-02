@@ -19,10 +19,10 @@ DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 CHECKPOINT_PATH = './checkpoints/EgoVLPv2_smallproj.pth'
 CLIPS_DIR = './sliding_clips'
 OUTPUT_CSV = 'action_segments.csv'
-PROMPTS = ["The person is walking", "The person is sitting", "The person is standing"]
+PROMPTS = ["The person is walking forward", "The person sits down on a chair", "The person is standing still"]
 
 IMG_SIZE = 224
-NUM_FRAMES = 90  # 3s * 30fps
+NUM_FRAMES = 60  # 2s * 30fps
 
 transform = transforms.Compose([
     transforms.Resize((IMG_SIZE, IMG_SIZE)),
