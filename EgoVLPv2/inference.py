@@ -42,7 +42,7 @@ tokenizer = AutoTokenizer.from_pretrained(ckpt['config']['arch']['args']['text_p
 with torch.no_grad():
     print("Encoding prompts...")
     text_inputs = tokenizer(PROMPTS, return_tensors="pt", padding=True, truncation=True).to(DEVICE)
-    text_embeds = model.encode_text(text_inputs).float()  # [3, D]
+    text_embeds = model.compute_text(text_inputs).float()  # [3, D]
     text_embeds = F.normalize(text_embeds, dim=-1)
 
 # ==== Helper: Sample N evenly spaced frames from video ====
@@ -72,7 +72,7 @@ clip_paths = sorted(glob.glob(os.path.join(CLIPS_DIR, '*.mp4')))
 
 for clip_path in tqdm(clip_paths):
     video_frames = load_video_frames(clip_path)  # [1, T, C, H, W]
-    video_embeds = model.encode_video(video_frames).float()  # [1, D]
+    video_embeds = model.compute_video(video_frames).float()   # [1, D]
     video_embeds = F.normalize(video_embeds, dim=-1)
 
     # cosine sim
