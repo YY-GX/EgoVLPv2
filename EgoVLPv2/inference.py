@@ -19,7 +19,7 @@ PROMPTS = ["a person is walking", "a person is sitting", "a person is standing"]
 
 # ==== Preprocessing (you can tweak this) ====
 IMG_SIZE = 224
-NUM_FRAMES = 4  # sample N frames per video
+NUM_FRAMES = 8  # sample N frames per video
 
 transform = transforms.Compose([
     transforms.Resize((IMG_SIZE, IMG_SIZE)),
@@ -31,6 +31,7 @@ transform = transforms.Compose([
 # ==== Load Model ====
 print("Loading model...")
 ckpt = torch.load(CHECKPOINT_PATH, map_location=DEVICE)
+ckpt['config']['arch']['args']['num_frames'] = NUM_FRAMES
 model = FrozenInTime(**ckpt['config']['arch']['args'])
 model.load_state_dict(ckpt['state_dict'], strict=False)
 model = model.to(DEVICE)
@@ -75,7 +76,7 @@ clip_paths = sorted(glob.glob(os.path.join(CLIPS_DIR, '*.mp4')))
 
 for clip_path in tqdm(clip_paths):
     video_frames = load_video_frames(clip_path)  # [1, T, C, H, W]
-    print("video_frames.shape:", video_frames.shape)
+    # print("video_frames.shape:", video_frames.shape)
     video_embeds = model.compute_video(video_frames).float()   # [1, D]
     video_embeds = F.normalize(video_embeds, dim=-1)
 
