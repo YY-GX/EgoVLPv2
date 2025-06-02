@@ -31,7 +31,8 @@ CHECKPOINT_PATH = './checkpoints/EgoVLPv2_smallproj.pth'
 CLIPS_DIR = './sliding_clips'
 # PROMPTS, version = ["The person is walking forward", "The person sits down on a chair", "The person is standing still"], "v1"
 # PROMPTS, version = ["The person is walking", "The person sits down on a chair", "The person is standing"], "v2"
-PROMPTS, version = ["walking around", "sitting down on a chair", "standing"], "v3"
+# PROMPTS, version = ["walking around", "sitting down on a chair", "standing"], "v3"
+PROMPTS, version = ["walking", "sitting", "standing"], "v4"
 
 OUTPUT_CSV = f'action_segments_{version}.csv'
 
