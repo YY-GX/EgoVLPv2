@@ -20,9 +20,11 @@ CHECKPOINT_PATH = './checkpoints/EgoVLPv2_smallproj.pth'
 CLIPS_DIR = './sliding_clips'
 OUTPUT_CSV = 'action_segments.csv'
 PROMPTS = ["The person is walking forward", "The person sits down on a chair", "The person is standing still"]
+PROMPTS = ["The person is walking", "The person sits down on a chair", "The person is standing"]
 
 IMG_SIZE = 224
 NUM_FRAMES = 60  # 2s * 30fps
+STRIDE_SEC = 1
 
 transform = transforms.Compose([
     transforms.Resize((IMG_SIZE, IMG_SIZE)),
@@ -88,7 +90,7 @@ for i, clip_path in enumerate(tqdm(clip_paths)):
 
     # Log and print if action changed
     if pred_label != previous_label:
-        seconds = i * 1.5  # since stride is 1.5s
+        seconds = i * STRIDE_SEC  # since stride is STRIDE_SEC
         print(f"[{seconds:.1f}s] {pred_label}")
         timestamps.append((seconds, pred_label))
         previous_label = pred_label
