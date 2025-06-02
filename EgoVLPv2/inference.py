@@ -1,4 +1,6 @@
 import os
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
 import glob
 import torch
 import torch.nn.functional as F
