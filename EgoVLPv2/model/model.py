@@ -77,7 +77,10 @@ class FrozenInTime(BaseModel):
             arch_config = 'base_patch16_224'
             vit_init = 'imagenet-21k'
             if arch_config == 'base_patch16_224':
-                vit_model = torch.load("/cis/home/shraman/works_meta_2022/pre-training/EgoVLP_Fused_HardNegITM_Checkpoint_multinode/frozen-in-time-main/pretrained/jx_vit_base_p16_224-80ecf9dd.pth", map_location="cpu")
+                # vit_model = torch.load("/cis/home/shraman/works_meta_2022/pre-training/EgoVLP_Fused_HardNegITM_Checkpoint_multinode/frozen-in-time-main/pretrained/jx_vit_base_p16_224-80ecf9dd.pth", map_location="cpu")
+                vit_model = torch.load(
+                    "/mnt/arc/yygx/pkgs_baselines/EgoVLPv2/EgoVLPv2/checkpoints/jx_vit_base_p16_224-80ecf9dd.pth",
+                    map_location="cpu")
                 model = SpaceTimeTransformer(num_frames=self.num_frames,
                                             time_init=time_init,
                                             attention_style=attention_style)
