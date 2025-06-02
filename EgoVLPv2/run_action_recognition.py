@@ -1,3 +1,5 @@
+# run_action_recognition_with_print.py
+
 import os
 import csv
 import glob
@@ -84,9 +86,10 @@ for i, clip_path in enumerate(tqdm(clip_paths)):
         pred_idx = sim.argmax(dim=-1).item()
         pred_label = PROMPTS[pred_idx]
 
-    # Log if action changed
+    # Log and print if action changed
     if pred_label != previous_label:
         seconds = i * 1.5  # since stride is 1.5s
+        print(f"[{seconds:.1f}s] {pred_label}")
         timestamps.append((seconds, pred_label))
         previous_label = pred_label
 
