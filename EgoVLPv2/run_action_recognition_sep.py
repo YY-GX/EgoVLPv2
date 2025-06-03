@@ -86,7 +86,7 @@ for i, clip_path in enumerate(tqdm(clip_paths)):
     video_embeds = F.normalize(video_embeds, dim=-1)
 
     sim = torch.matmul(video_embeds, text_embeds.T)
-    probs = F.softmax(sim, dim=-1).cpu().numpy()[0]
+    probs = F.softmax(sim, dim=-1).cpu().detach().numpy()[0]
     pred_idx = probs.argmax()
     pred_label = PROMPTS[pred_idx]
 
