@@ -26,8 +26,8 @@
                 "type": "MultiDistTextVideoDataLoader",
                 "args":{
                     "dataset_name": "EpicKitchens_MIR",
-                    "data_dir": "/cis/net/io94a/data/shraman/EK100/video_ht256px",
-                    "meta_dir": "/cis/net/io94a/data/shraman/EK100/epic-kitchens-100-annotations/retrieval_annotations",
+                    "data_dir": "/mnt/arc/cezhang/EK100/video_ht256px",
+                    "meta_dir": "/mnt/arc/cezhang/EK100/epic-kitchens-100-annotations/retrieval_annotations",
                     "reader": "cv2_epic",
                     "shuffle": true,
                     "num_workers": 2,
