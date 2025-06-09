@@ -15,10 +15,10 @@ from model.model import FrozenInTime
 # ==== Settings ====
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 CHECKPOINT_PATH = './checkpoints/EgoVLPv2_smallproj.pth'
-CLIPS_DIR = './clips'
+CLIPS_DIR = './clips_egoclip'
 # PROMPTS = ["a person is walking", "a person is sitting", "a person is standing"]
-PROMPTS = ["walk around", "sit on the chair", "stand up"]
-
+# PROMPTS = ["walk around", "sit on the chair", "stand up"]
+PROMPTS = ["looks around", "walks around", "sits in the house"]
 
 # ==== Preprocessing ====
 IMG_SIZE = 224
