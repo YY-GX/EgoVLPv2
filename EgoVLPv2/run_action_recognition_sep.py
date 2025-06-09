@@ -16,7 +16,7 @@ from model.model import FrozenInTime # Assuming this import path is correct
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 CHECKPOINT_PATH = './checkpoints/EgoVLPv2_smallproj.pth'
 CLIPS_DIR = './clips_egoclip' # Ensure this points to your 5-second clips
-PROMPTS = ["looks around", "walks around", "sits in the house"]
+PROMPTS = ["#C C looks around", "#C C walks around", "#C C sits in the house"]
 
 # ==== Preprocessing ====
 IMG_SIZE = 224
