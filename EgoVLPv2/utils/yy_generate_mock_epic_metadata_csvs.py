@@ -9,25 +9,23 @@ EGOCLIP_CSV_PATH = './egoclip.csv'  # Path to your original egoclip.csv
 TARGET_EGOCLIP_VIDEO_UID = '002ad105-bd9a-4858-953e-54e88dc7587e'  # The specific video UID to extract
 MOCK_PARTICIPANT_ID = 'aria_P01'  # Your chosen mock EPIC participant ID
 
-# --- CRITICAL CHANGE: Set MOCK_VIDEO_BASE_NAME to 'clip_' ---
-# This means your CSV video_ids will be like "aria_P01_clip_000"
-# And your actual files on disk should be named "aria_P01_clip_000.MP4"
-MOCK_VIDEO_BASE_NAME = 'clip_'
-# --- END CRITICAL CHANGE ---
+# --- CRITICAL FIX: MOCK_VIDEO_BASE_NAME should be '' for CSV video_id generation ---
+# This ensures video_id in CSV is "aria_P01_000" etc., matching actual filenames.
+# We will use this in the five_s_clip_video_ids generation.
+MOCK_VIDEO_BASE_NAME = ''
+# --- END CRITICAL FIX ---
 
 CLIP_DURATION_SECONDS = 5  # Length of each generated clip
 
 # Output root directory for the mock EPIC dataset structure
-# IMPORTANT: Replace "/path/to/your/EgoVLPv2/EgoVLPv2/" with your actual project root.
-# YOUR_MOCK_EK100_ROOT = "/path/to/your/EgoVLPv2/EgoVLPv2/data/my_simulated_ek100_data" # Commented out, using direct path
-OUTPUT_METADATA_DIR = "/mnt/arc/yygx/pkgs_baselines/EgoVLPv2/EgoVLPv2/data/my_simulated_ek100_data/EK100/epic-kitchens-100-annotations/retrieval_annotations" # Direct path
+OUTPUT_METADATA_DIR = "/mnt/arc/yygx/pkgs_baselines/EgoVLPv2/EgoVLPv2/data/my_simulated_ek100_data/EK100/epic-kitchens-100-annotations/retrieval_annotations"
 OUTPUT_RELEVANCY_DIR = os.path.join(OUTPUT_METADATA_DIR, 'relevancy')
 os.makedirs(OUTPUT_METADATA_DIR, exist_ok=True)
 os.makedirs(OUTPUT_RELEVANCY_DIR, exist_ok=True)
 
 print(f"Loading egoclip.csv from: {EGOCLIP_CSV_PATH}")
 try:
-    df_egoclip = pd.read_csv(EGOCLIP_CSV_PATH, sep='\t', error_bad_lines=False, warn_bad_lines=True)
+    df_egoclip = pd.read_csv(EGOCLIP_CSV_PATH, sep='\t')
 except Exception as e:
     print(f"Error reading egoclip.csv: {e}")
     print("Please ensure the delimiter is correct and any problematic lines are handled.")
@@ -45,7 +43,7 @@ video_total_frames = int(video_total_duration_seconds * 30)  # Assuming 30 FPS
 
 # --- Determine the 5-second clip IDs ---
 num_5s_clips = int(np.ceil(video_total_duration_seconds / CLIP_DURATION_SECONDS))
-# This will generate CSV video_ids like "aria_P01_clip_000"
+# This will generate CSV video_ids like "aria_P01_000", matching the actual filenames.
 five_s_clip_video_ids = [f"{MOCK_PARTICIPANT_ID}_{MOCK_VIDEO_BASE_NAME}{i:03d}" for i in range(num_5s_clips)]
 
 print(f"Video duration: {video_total_duration_seconds:.2f}s. Generating {num_5s_clips} 5-second clips IDs.")
@@ -69,10 +67,8 @@ for mock_5s_clip_id in five_s_clip_video_ids:
     for query_text in unique_queries_raw:  # Iterate over ALL unique queries
         mock_narration_id = query_text_to_mock_narration_id[query_text]
 
-        # --- CRITICAL FIX: Simplify clip_index parsing ---
-        # mock_5s_clip_id is now like "aria_P01_clip_000". We need the "000" part.
+        # This parsing logic is now correct for "aria_P01_000" like IDs
         clip_index = int(mock_5s_clip_id.split('_')[-1])
-        # --- END CRITICAL FIX ---
 
         clip_start_sec = clip_index * CLIP_DURATION_SECONDS
         clip_end_sec = min((clip_index + 1) * CLIP_DURATION_SECONDS, video_total_duration_seconds)
@@ -84,16 +80,18 @@ for mock_5s_clip_id in five_s_clip_video_ids:
         if clip_stop_frame < clip_start_frame:
             clip_stop_frame = clip_start_frame
 
+
         def seconds_to_hms_precise(seconds):
             hours = int(seconds // 3600)
             minutes = int((seconds % 3600) // 60)
             secs = seconds % 60
             return f"{hours:02d}:{minutes:02d}:{secs:06.3f}"
 
+
         epic_retrieval_test_data.append({
             'narration_id': mock_narration_id,
             'participant_id': MOCK_PARTICIPANT_ID,
-            'video_id': mock_5s_clip_id,  # e.g., aria_P01_clip_000
+            'video_id': mock_5s_clip_id,  # This will now be "aria_P01_000" etc.
             'narration_timestamp': seconds_to_hms_precise(clip_start_sec),
             'start_timestamp': seconds_to_hms_precise(clip_start_sec),
             'stop_timestamp': seconds_to_hms_precise(clip_end_sec),
@@ -114,7 +112,7 @@ print(f"\nGenerated EPIC_100_retrieval_test.csv with {len(df_epic_retrieval_test
 
 # --- Generate EPIC_100_retrieval_test_sentence.csv ---
 epic_sentence_data = []
-for query_text in unique_queries_raw:  # Iterate over ALL unique queries
+for query_text in unique_queries_raw:
     mock_narration_id = query_text_to_mock_narration_id[query_text]
     epic_sentence_data.append({
         'narration_id': mock_narration_id,
@@ -136,11 +134,10 @@ query_narration_id_to_idx = {id: i for i, id in enumerate(df_epic_sentence['narr
 five_s_clip_id_to_idx = {id: i for i, id in enumerate(five_s_clip_video_ids)}
 
 # Populate the relevancy_matrix
-for query_text in unique_queries_raw:  # Iterate over ALL unique queries
+for query_text in unique_queries_raw:
     mock_query_narration_id = query_text_to_mock_narration_id[query_text]
-    query_row_idx = query_narration_id_to_idx[mock_query_narration_id]
+    query_row_idx = query_naration_id_to_idx[mock_query_narration_id]
 
-    # Filter original egoclip.csv for this specific query
     matching_original_entries = df_target_video[df_target_video['clip_text'] == query_text]
 
     for _, original_row in matching_original_entries.iterrows():
@@ -148,18 +145,14 @@ for query_text in unique_queries_raw:  # Iterate over ALL unique queries
         original_moment_end_sec = original_row['clip_end']
 
         first_overlapping_5s_clip_idx = int(original_moment_start_sec / CLIP_DURATION_SECONDS)
-        # np.ceil ensures that even a tiny overlap at the end includes the last segment
         last_overlapping_5s_clip_idx = int(np.ceil(original_moment_end_sec / CLIP_DURATION_SECONDS)) - 1
 
-        # Edge case: if original_moment_end_sec is very small or equal to start,
-        # last_overlapping_5s_clip_idx might be less than first_overlapping_5s_clip_idx.
-        # Ensure at least one segment is considered if the moment is valid.
         if last_overlapping_5s_clip_idx < first_overlapping_5s_clip_idx and original_moment_start_sec < original_moment_end_sec:
-            if first_overlapping_5s_clip_idx < num_5s_clips:  # Ensure it's a valid clip index
+            if first_overlapping_5s_clip_idx < num_5s_clips:
                 relevancy_matrix[query_row_idx, first_overlapping_5s_clip_idx] = 1.0
         else:
             for clip_idx in range(first_overlapping_5s_clip_idx, last_overlapping_5s_clip_idx + 1):
-                if 0 <= clip_idx < num_5s_clips:  # Ensure clip_idx is within bounds
+                if 0 <= clip_idx < num_5s_clips:
                     relevancy_matrix[query_row_idx, clip_idx] = 1.0
 
 # Save the relevancy matrix as a pickle file
