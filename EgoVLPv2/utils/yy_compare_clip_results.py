@@ -11,7 +11,7 @@ PREDICTIONS_CSV_PATH = './eval_yy/top_clips_predictions.csv'  # Adjust path if n
 CLIP_DURATION_SECONDS = 5  # Needs to match what you used for splitting and in trainer
 
 # --- IoU Threshold for considering a prediction "correct" ---
-IOU_THRESHOLD = 0.1  # A common threshold (e.g., 50% overlap)
+IOU_THRESHOLD = 0.0001  # A common threshold (e.g., 50% overlap)
 
 # --- Metrics to calculate (top-K) ---
 TOP_K_VALUES = [1, 5]  # Calculate P@1, R@1, P@5, R@5
