@@ -31,7 +31,12 @@ transform = transforms.Compose([
 
 # ==== Load Config and Checkpoint ====
 print("Loading config and checkpoint...")
-config = ConfigParser.from_json(CONFIG_PATH)
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument('-c', '--config', required=True)
+args = parser.parse_args(args=['--config', CONFIG_PATH])
+
+config = ConfigParser(parser)
 ckpt = torch.load(CHECKPOINT_PATH, map_location=DEVICE)
 
 # Inject required keys if missing
