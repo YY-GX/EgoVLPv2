@@ -2,6 +2,7 @@ import pandas as pd
 import os
 import re  # For regex to extract clip numbers
 import csv
+import numpy as np
 
 # --- Configuration ---
 # Paths to your input files
