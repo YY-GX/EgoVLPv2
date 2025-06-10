@@ -9,29 +9,12 @@ from PIL import Image
 import glob
 import cv2
 import csv
-import argparse
 
-from model.model import FrozenInTime
-from parse_config import ConfigParser
-import model.model as module_model
-
-
-# ==== CLI Parser Setup ====
-parser = argparse.ArgumentParser(description='EgoVLPv2 Action Recognition')
-parser.add_argument('-c', '--config', required=True, type=str, help='Path to config file')
-parser.add_argument('-r', '--resume', default=None, type=str, help='Path to checkpoint')
-parser.add_argument('-d', '--device', default=None, type=str, help='CUDA device(s) to use')
-parser.add_argument('--task_names', default='EgoNCE', type=str, help='Task names for model')
-parser.add_argument('--save_dir', type=str, default='./runs', help='Directory to save logs/models')
-args = parser.parse_args()
-
-
-# ==== Load Config ====
-print("Loading config and checkpoint...")
-config = ConfigParser(parser)
+from model.model import FrozenInTime  # Make sure this import path is correct
 
 # ==== Settings ====
-DEVICE = args.device or ('cuda' if torch.cuda.is_available() else 'cpu')
+DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
+CHECKPOINT_PATH = './checkpoints/EgoVLPv2_smallproj.pth'
 CLIPS_DIR = './clips_egoclip'
 PROMPTS = ["walking", "sitting", "standing"]
 IMG_SIZE = 224
@@ -46,13 +29,44 @@ transform = transforms.Compose([
 ])
 
 # ==== Load Model ====
-model = config.initialize('arch', module=module_model)
+print("Loading model...")
+ckpt = torch.load(CHECKPOINT_PATH, map_location=DEVICE)
+
+ckpt_args = ckpt['config']['arch']['args']
+ckpt_args['video_params']['num_frames'] = NUM_FRAMES
+ckpt_args['projection_dim'] = 256
+if 'projection' not in ckpt_args:
+    ckpt_args['projection'] = 'minimal'
+
+dummy_config = {
+    'vocab_size': 50265,
+    'hidden_size': 768,
+    'num_layers': 12,
+    'num_heads': 12,
+    'mlp_ratio': 4,
+    'drop_rate': 0.1,
+    'input_image_embed_size': 768,
+    'input_text_embed_size': 768,
+    'num_fuse_block': 4,
+    'use_checkpoint': False,
+    'task_names': 'EgoNCE'
+}
+
+model = FrozenInTime(
+    **ckpt_args,
+    config=dummy_config,
+    task_names='EgoNCE'
+)
+
+missing, unexpected = model.load_state_dict(ckpt['state_dict'], strict=False)
+print("Missing keys:", missing)
+print("Unexpected keys:", unexpected)
+
 model = model.to(DEVICE)
 model.eval()
 
 # ==== Tokenizer ====
-print("Using tokenizer:", config['arch']['args']['text_params']['model'])
-tokenizer = AutoTokenizer.from_pretrained(config['arch']['args']['text_params']['model'])
+tokenizer = AutoTokenizer.from_pretrained(ckpt_args['text_params']['model'])
 
 with torch.no_grad():
     print("Encoding prompts...")
@@ -101,7 +115,7 @@ start_time = 0
 results = []
 
 if not clip_paths:
-    print(f"Error: No clips found in {CLIPS_DIR} matching 'clip_*.mp4'.")
+    print("No clips found.")
 else:
     for i, clip_path in enumerate(tqdm(clip_paths)):
         video_frames = load_video_frames(clip_path)
