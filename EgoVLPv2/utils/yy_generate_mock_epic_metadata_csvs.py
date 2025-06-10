@@ -66,7 +66,8 @@ for mock_5s_clip_id in five_s_clip_video_ids:
     for query_text in unique_queries_raw:  # Iterate over ALL unique queries
         mock_narration_id = query_text_to_mock_narration_id[query_text]
 
-        clip_index = int(mock_5s_clip_id.split('_')[-1]) if MOCK_VIDEO_BASE_NAME != '' else int(mock_5s_clip_id)
+        # Simplified: Always split by '_' and take the last part for the numeric index
+        clip_index = int(mock_5s_clip_id.split('_')[-1])
         # ^ Adjust parsing based on whether MOCK_VIDEO_BASE_NAME is used in mock_5s_clip_id
 
         clip_start_sec = clip_index * CLIP_DURATION_SECONDS
