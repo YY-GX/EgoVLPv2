@@ -11,17 +11,18 @@
 import math
 import numbers
 from pathlib import Path
-#import ipdb
+# import ipdb
 import numpy as np
 import torch
 import scipy.stats
 from sklearn.metrics import average_precision_score
-#import ipdb
-#import pdb
+# import ipdb
+# import pdb
 import os
 import pandas as pd
 import pickle
-from utils import nDCG, mAP
+from utils import nDCG, mAP  # Assuming these are correctly imported from your utils/ directory
+
 
 def t2v_metrics(sims, query_masks=None):
     """Compute retrieval metrics from a similiarity matrix.
@@ -51,82 +52,32 @@ def t2v_metrics(sims, query_masks=None):
     gt_dists = gt_dists[:, np.newaxis]
     rows, cols = np.where((sorted_dists - gt_dists) == 0)  # find column position of GT
 
-    # --------------------------------
-    # NOTE: Breaking ties
-    # --------------------------------
-    # We sometimes need to break ties (in general, these should occur extremely rarely,
-    # but there are pathological cases when they can distort the scores, such as when
-    # the similarity matrix is all zeros). Previous implementations (e.g. the t2i
-    # evaluation function used
-    # here: https://github.com/niluthpol/multimodal_vtt/blob/master/evaluation.py and
-    # here: https://github.com/linxd5/VSE_Pytorch/blob/master/evaluation.py#L87) generally
-    # break ties "optimistically".  However, if the similarity matrix is constant this
-    # can evaluate to a perfect ranking. A principled option is to average over all
-    # possible partial orderings implied by the ties. See # this paper for a discussion:
-    #    McSherry, Frank, and Marc Najork,
-    #    "Computing information retrieval performance measures efficiently in the presence
-    #    of tied scores." European conference on information retrieval. Springer, Berlin,
-    #    Heidelberg, 2008.
-    # http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.145.8892&rep=rep1&type=pdf
-
     break_ties = "optimistically"
-    #break_ties = "averaging"
-
     if rows.size > num_queries:
         assert np.unique(rows).size == num_queries, "issue in metric evaluation"
         if break_ties == "optimistically":
             _, idx = np.unique(rows, return_index=True)
             cols = cols[idx]
         elif break_ties == "averaging":
-            # fast implementation, based on this code:
-            # https://stackoverflow.com/a/49239335
             locs = np.argwhere((sorted_dists - gt_dists) == 0)
-
-            # Find the split indices
             steps = np.diff(locs[:, 0])
             splits = np.nonzero(steps)[0] + 1
             splits = np.insert(splits, 0, 0)
-
-            # Compute the result columns
             summed_cols = np.add.reduceat(locs[:, 1], splits)
             counts = np.diff(np.append(splits, locs.shape[0]))
             avg_cols = summed_cols / counts
-            if False:
-                print("Running slower code to verify rank averaging across ties")
-                # slow, but more interpretable version, used for testing
-                avg_cols_slow = [np.mean(cols[rows == idx]) for idx in range(num_queries)]
-                assert np.array_equal(avg_cols, avg_cols_slow), "slow vs fast difference"
-                print("passed num check")
             cols = avg_cols
 
     msg = "expected ranks to match queries ({} vs {}) "
     if cols.size != num_queries:
-        #import ipdb;
-        #ipdb.set_trace()
         pass
     assert cols.size == num_queries, msg
 
-    if False:
-        # overload mask to check that we can recover the scores for single-query
-        # retrieval
-        print("DEBUGGING MODE")
-        query_masks = np.zeros_like(query_masks)
-        query_masks[:, 0] = 1  # recover single query score
-
     if query_masks is not None:
-        # remove invalid queries
         assert query_masks.size == num_queries, "invalid query mask shape"
         cols = cols[query_masks.reshape(-1).astype(np.bool)]
         assert cols.size == query_masks.sum(), "masking was not applied correctly"
-        # update number of queries to account for those that were missing
         num_queries = query_masks.sum()
-
-    if False:
-        # sanity check against old logic for square matrices
-        gt_dists_old = np.diag(dists)
-        gt_dists_old = gt_dists_old[:, np.newaxis]
-        _, cols_old = np.where((sorted_dists - gt_dists_old) == 0)
-        assert np.array_equal(cols_old, cols), "new metric doesn't match"
 
     return cols2metrics(cols, num_queries)
 
@@ -146,11 +97,9 @@ def v2t_metrics(sims, query_masks=None):
     to finding the rank of the closest relevant caption in embedding space:
     github.com/ryankiros/visual-semantic-embedding/blob/master/evaluation.py#L52-L56
     """
-    # switch axes of text and video
     sims = sims.T
 
     if False:
-        # experiment with toy example
         sims = np.ones((3, 3))
         sims[0, 0] = 2
         sims[1, 1:2] = 2
@@ -168,36 +117,24 @@ def v2t_metrics(sims, query_masks=None):
     for ii in range(num_queries):
         row_dists = dists[ii, :]
         if query_masks is not None:
-            # Set missing queries to have a distance of infinity.  A missing query
-            # refers to a query position `n` for a video that had less than `n`
-            # captions (for example, a few MSRVTT videos only have 19 queries)
             row_dists[np.logical_not(query_masks.reshape(-1))] = MISSING_VAL
 
-        # NOTE: Using distance subtraction to perform the ranking is easier to make
-        # deterministic than using argsort, which suffers from the issue of defining
-        # "stability" for equal distances.  Example of distance subtraction code:
-        # github.com/antoine77340/Mixture-of-Embedding-Experts/blob/master/train.py
         sorted_dists = np.sort(row_dists)
 
         min_rank = np.inf
         for jj in range(ii * caps_per_video, (ii + 1) * caps_per_video):
             if row_dists[jj] == MISSING_VAL:
-                # skip rankings of missing captions
                 continue
             ranks = np.where((sorted_dists - row_dists[jj]) == 0)[0]
             if break_ties == "optimistically":
                 rank = ranks[0]
             elif break_ties == "averaging":
-                # NOTE: If there is more than one caption per video, its possible for the
-                # method to do "worse than chance" in the degenerate case when all
-                # similarities are tied.  TODO(Samuel): Address this case.
                 rank = ranks.mean()
             if rank < min_rank:
                 min_rank = rank
         query_ranks.append(min_rank)
     query_ranks = np.array(query_ranks)
 
-    # sanity check against old version of code
     if False:
         sorted_dists = np.sort(dists, axis=1)
         gt_dists_old = np.diag(dists)
@@ -210,17 +147,17 @@ def v2t_metrics(sims, query_masks=None):
         msg = f"new metric doesn't match in {num_diffs} places"
         assert np.array_equal(cols_old, query_ranks), msg
 
-        # visualise the distance matrix
         import sys
         import matplotlib
         matplotlib.use("Agg")
         import matplotlib.pyplot as plt
         sys.path.insert(0, str(Path.home() / "coding/src/zsvision/python"))
-        from zsvision.zs_iterm import zs_dispFig  # NOQA
+        from zsvision.zs_iterm import zs_dispFig
         plt.matshow(dists)
         zs_dispFig()
 
     return cols2metrics(query_ranks, num_queries)
+
 
 def egomcq_accuracy_metrics_ensemble(preds, labels, types):
     metrics = {}
@@ -235,10 +172,10 @@ def egomcq_accuracy_metrics_ensemble(preds, labels, types):
                 if pred_.item() == label.item():
                     correct += 1
                 total += 1
-        accuracy = correct/total
-        # metrics['accuracy_p' + str(type_i.item())] = accuracy * 100
+        accuracy = correct / total
         metrics[group_i] = accuracy * 100
     return metrics
+
 
 def egomcq_accuracy_metrics_vtm(preds, labels, types):
     metrics = {}
@@ -253,8 +190,7 @@ def egomcq_accuracy_metrics_vtm(preds, labels, types):
                 if pred_.item() == label.item():
                     correct += 1
                 total += 1
-        accuracy = correct/total
-        # metrics['accuracy_p' + str(type_i.item())] = accuracy * 100
+        accuracy = correct / total
         metrics[group_i] = accuracy * 100
     return metrics
 
@@ -271,6 +207,7 @@ def initialise_nDCG_values(relevancy_matrix):
 
     return IDCG_dict, k_counts_dict
 
+
 def initialise_jpose_nDCG_values(relevancy_matrix):
     action_IDCG, action_k_values = initialise_nDCG_values(relevancy_matrix)
 
@@ -280,51 +217,67 @@ def initialise_jpose_nDCG_values(relevancy_matrix):
     dataset['action']['k_values'] = action_k_values
     return dataset
 
-def mir_metrics_vtc(similarity_matrix, idx_arr):
-    # considered unique narrations for evaluation of EPIC
+
+# --- MODIFIED mir_metrics_vtc START ---
+# This path must be correct for your generated PKL
+ACTUAL_META_DIR = "/mnt/arc/yygx/pkgs_baselines/EgoVLPv2/EgoVLPv2/data/my_simulated_ek100_data/EK100/epic-kitchens-100-annotations/retrieval_annotations"
+
+
+def mir_metrics_vtc(similarity_matrix, idx_arr):  # idx_arr are numerical video IDs
     metrics = {}
 
-    # path_dataframes = '/cis/home/shraman/EPIC-KITCHENS_rgbframes/retrieval_annotations'
-    path_dataframes = '/mnt/arc/cezhang/EK100/epic-kitchens-100-annotations/retrieval_annotations'
-    video_id=pd.read_csv(os.path.join(path_dataframes , "EPIC_100_retrieval_test.csv")).values[:,0]
-    text_id=pd.read_csv(os.path.join(path_dataframes , "EPIC_100_retrieval_test_sentence.csv")).values[:,0]
-    similarity_matrix = (similarity_matrix + 1) / 2
+    # --- Load Relevancy Matrix (your generated PKL) ---
+    relevancy_pkl_path = os.path.join(ACTUAL_META_DIR, "relevancy/caption_relevancy_EPIC_100_retrieval_test.pkl")
+    try:
+        with open(relevancy_pkl_path, 'rb') as pkl_file:
+            relevancy = pickle.load(pkl_file)  # This is your (num_queries x num_clips) numpy array
+    except FileNotFoundError:
+        print(f"Error: Relevancy PKL file not found at {relevancy_pkl_path}. Cannot calculate metrics.")
+        return {'nDCG_V2T': 0.0, 'nDCG_T2V': 0.0, 'nDCG_AVG': 0.0,
+                'mAP_V2T': 0.0, 'mAP_T2V': 0.0, 'mAP_AVG': 0.0}  # Return 0s if file missing
 
-    indexes=[]
-    for elem in text_id:
-        try:
-            indexes.append(video_id.tolist().index(elem))
-        except:
-            print(f"error happened when index of {elem}.")
+    # Ensure relevancy is a numpy array for calculations
+    if not isinstance(relevancy, np.ndarray):
+        print("Warning: Loaded relevancy is not a NumPy array. Attempting conversion.")
+        relevancy = np.array(relevancy)
 
-    order = []
-    idx_arr_list = idx_arr.tolist()
-    for i in range(len(video_id)):
-        order.append(idx_arr_list.index(i))
-    similarity_matrix = similarity_matrix[order,:][:, order]
+    # Validate shapes before passing to metric functions
+    if similarity_matrix.shape != relevancy.shape:
+        print(
+            f"Error: Similarity matrix shape {similarity_matrix.shape} does not match relevancy shape {relevancy.shape}.")
+        print("Metric calculation will be incorrect. Please check your metadata generation.")
+        return {'nDCG_V2T': 0.0, 'nDCG_T2V': 0.0, 'nDCG_AVG': 0.0,
+                'mAP_V2T': 0.0, 'mAP_T2V': 0.0, 'mAP_AVG': 0.0}
 
-    similarity_matrix = similarity_matrix.T[:,indexes]
+    # Similarity matrix needs to be normalized to 0-1 range for mAP/nDCG (if not already)
+    normalized_similarity_matrix = (similarity_matrix + 1) / 2
 
-    # path_relevancy = "/cis/home/shraman/EPIC-KITCHENS_rgbframes/retrieval_annotations/relevancy/caption_relevancy_EPIC_100_retrieval_test.pkl"
-    path_relevancy = "/mnt/arc/cezhang/EK100/epic-kitchens-100-annotations/retrieval_annotations/relevancy/caption_relevancy_EPIC_100_retrieval_test.pkl"
-    pkl_file = open(path_relevancy, 'rb')
-    relevancy = pickle.load(pkl_file)
+    # --- DIRECTLY PASS ALIGNED MATRICES TO METRIC FUNCTIONS ---
+    # The `idx_arr` (numerical video IDs) is not directly used for `nDCG`/`mAP` *calculation* here,
+    # as the matrices are assumed to be pre-aligned.
 
+    # The `initialise_jpose_nDCG_values` function is called to get IDCG and k_values.
+    # This requires `relevancy` to be passed.
     dataset = initialise_jpose_nDCG_values(relevancy)
-    vis_nDCG = nDCG.calculate_nDCG(similarity_matrix,relevancy, dataset['action']['k_values']['v'],IDCG=dataset['action']['IDCG']['v'])
-    txt_nDCG = nDCG.calculate_nDCG(similarity_matrix.T,relevancy.T, dataset['action']['k_values']['t'],IDCG=dataset['action']['IDCG']['t'])
+
+    vis_nDCG = nDCG.calculate_nDCG(normalized_similarity_matrix, relevancy, dataset['action']['k_values']['v'],
+                                   IDCG=dataset['action']['IDCG']['v'])
+    txt_nDCG = nDCG.calculate_nDCG(normalized_similarity_matrix.T, relevancy.T, dataset['action']['k_values']['t'],
+                                   IDCG=dataset['action']['IDCG']['t'])
     metrics['nDCG_V2T'] = vis_nDCG * 100
     metrics['nDCG_T2V'] = txt_nDCG * 100
     metrics['nDCG_AVG'] = 100 * (vis_nDCG + txt_nDCG) / 2
 
-    vis_mAP = mAP.calculate_mAP(similarity_matrix,
-                                relevancy)
-    txt_mAP = mAP.calculate_mAP(similarity_matrix.T,
-                                relevancy.T)
+    vis_mAP = mAP.calculate_mAP(normalized_similarity_matrix, relevancy)
+    txt_mAP = mAP.calculate_mAP(normalized_similarity_matrix.T, relevancy.T)
     metrics['mAP_V2T'] = vis_mAP * 100
     metrics['mAP_T2V'] = txt_mAP * 100
-    metrics['mAP_AVG'] =  100 * (vis_mAP + txt_mAP) / 2
+    metrics['mAP_AVG'] = 100 * (vis_mAP + txt_mAP) / 2
     return metrics
+
+
+# --- MODIFIED mir_metrics_vtc END ---
+
 
 def map(submission_array, gt_array):
     """ Returns mAP, weighted mAP, and AP array """
@@ -341,17 +294,17 @@ def map(submission_array, gt_array):
         fp.sum()
         f_pcs = np.cumsum(fp)
         t_pcs = np.cumsum(tp)
-        prec = t_pcs / (f_pcs+t_pcs).astype(float)
+        prec = t_pcs / (f_pcs + t_pcs).astype(float)
         avg_prec = 0
         for i in range(submission_array.shape[0]):
             if tp[i]:
                 avg_prec += prec[i]
         m_aps.append(avg_prec / n_pos.astype(float))
     m_aps = np.array(m_aps)
-    #m_ap = np.mean(m_aps)
     m_ap = np.nanmean(m_aps)
     w_ap = (m_aps * gt_array.sum(axis=0) / gt_array.sum().sum().astype(float))
     return m_ap, w_ap, m_aps
+
 
 def charades_metrics_vtc(submission_array, gt_array):
     """
@@ -364,8 +317,6 @@ def charades_metrics_vtc(submission_array, gt_array):
     fix[empty, :] = np.NINF
     m_ap, w_ap, m_aps = map(fix, gt_array)
     metrics['mAP'] = m_ap
-    # metrics['wAP'] = w_ap
-    # metrics['mAPs'] = m_aps
     return metrics
 
 
@@ -380,8 +331,6 @@ def charades_metrics_vtm(submission_array, gt_array):
     fix[empty, :] = np.NINF
     m_ap, w_ap, m_aps = map(fix, gt_array)
     metrics['mAP'] = m_ap
-    # metrics['wAP'] = w_ap
-    # metrics['mAPs'] = m_aps
     return metrics
 
 
@@ -394,24 +343,25 @@ def oscc_metrics(preds, labels):
         if pred_.item() == label.item():
             correct += 1
         total += 1
-    accuracy = correct/total
+    accuracy = correct / total
     metrics['accuracy'] = accuracy * 100
     return metrics
 
+
 def pnr_metrics(
-    preds,
-    labels,
-    sc_labels,
-    fps,
-    parent_start_frames,
-    parent_end_frames,
-    parent_pnr_frames,
+        preds,
+        labels,
+        sc_labels,
+        fps,
+        parent_start_frames,
+        parent_end_frames,
+        parent_pnr_frames,
 ):
     metrics = {}
     distance_list = list()
     for pred, label, sc_label, \
-        parent_start_frame, parent_end_frame, parent_pnr_frame, \
-        ind_fps in zip(
+            parent_start_frame, parent_end_frame, parent_pnr_frame, \
+            ind_fps in zip(
         preds,
         labels,
         sc_labels,
@@ -420,24 +370,15 @@ def pnr_metrics(
         parent_pnr_frames,
         fps
     ):
-        # import pdb; pdb.set_trace()
         if sc_label.item() == 1:
             keyframe_loc_pred = torch.argmax(pred).item()
-            # import pdb; pdb.set_trace()
             keyframe_loc_pred_mapped = (parent_end_frame - parent_start_frame) / 16 * keyframe_loc_pred
             keyframe_loc_pred_mapped = keyframe_loc_pred_mapped.item()
             gt = parent_pnr_frame.item() - parent_start_frame.item()
             err_frame = abs(keyframe_loc_pred_mapped - gt)
-            err_sec = err_frame/ind_fps.item()
-            # print(keyframe_loc_pred_mapped, gt,  err_frame, err_sec)
+            err_sec = err_frame / ind_fps.item()
             distance_list.append(err_sec)
     if len(distance_list) == 0:
-        # If evaluating the trained model, use this
-        # Otherwise, Lightning expects us to give a number.
-        # Due to this, the Tensorboard graphs' results for keyframe distance
-        # will be a little inaccurate.
         metrics['keyframe_distance'] = np.mean(0.0)
     metrics['keyframe_distance'] = np.mean(distance_list)
-    # import pdb;
-    # pdb.set_trace()
     return metrics
