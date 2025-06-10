@@ -12,12 +12,12 @@ from tqdm.auto import tqdm
 import torch.distributed as dist
 
 # --- NEW IMPORTS ---
-import pandas as pd  # For reading sentence CSV
-import torch.nn.functional as F  # For normalize and other torch functions
+import pandas as pd  # Added for reading sentence CSV
+import torch.nn.functional as F  # Added for normalize and other torch functions
 # --- END NEW IMPORTS ---
 
 # --- MODIFIED IMPORT FOR BASE CLASS ---
-import base  # Import base module to resolve potential circular import for Multi_BaseTrainer_dist
+import base  # Corrected: import base module for base.Multi_BaseTrainer_dist
 # --- END MODIFIED IMPORT ---
 
 from model.model import sim_matrix
@@ -26,8 +26,7 @@ from pathlib import Path
 import sys
 import json
 
-# --- ADDED GLOBAL CONFIG (must be at the top of trainer_epic_yy.py or passed via config) ---
-# This needs to match the clip duration used when you split your video.
+# --- ADDED GLOBAL CONFIG ---
 CLIP_DURATION_SECONDS = 5
 
 
@@ -53,19 +52,16 @@ class AllGather_multi(torch.autograd.Function):
 
 
 # --- MODIFIED CLASS INHERITANCE ---
-class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):
+class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):  # Corrected: Inherit from base.Multi_BaseTrainer_dist
     # --- END MODIFIED CLASS INHERITANCE ---
     """
     Trainer class
-
-    Note:
-        Inherited from BaseTrainer.
     """
 
     # --- MODIFIED __init__ SIGNATURE START ---
     def __init__(self, args, model, loss, metrics, optimizer, scheduler, gpu, config,
-                 data_loader=None,  # Made explicitly a keyword arg with default
-                 valid_data_loader=None,  # Made explicitly a keyword arg with default
+                 data_loader=None,  # Corrected: Made keyword arg with default
+                 valid_data_loader=None,  # Corrected: Made keyword arg with default
                  lr_scheduler=None, len_epoch=None, writer=None,
                  visualizer=None, tokenizer=None, max_samples_per_epoch=50000):
         # --- MODIFIED __init__ SIGNATURE END ---
@@ -74,16 +70,14 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):
         self.args = args
         self.data_loader = data_loader
 
-        # --- MODIFIED len_epoch CALCULATION START ---
         if len_epoch is None:
-            if not self.data_loader:  # If data_loader (training data) is empty for eval-only runs
-                self.len_epoch = 0  # Set to 0 to prevent min() error
+            if not self.data_loader:  # Corrected: Handle empty data_loader
+                self.len_epoch = 0
             else:
                 self.len_epoch = min([len(x) for x in data_loader])
         else:
             self.data_loader = inf_loop(data_loader)
             self.len_epoch = len_epoch
-        # --- MODIFIED len_epoch CALCULATION END ---
 
         self.valid_data_loader = valid_data_loader
         self.do_validation = self.valid_data_loader is not None
@@ -91,33 +85,32 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):
         self.visualizer = visualizer
         self.val_chunking = True
 
-        # --- MODIFIED BATCH_SIZE / LOG_STEP CALCULATION START ---
-        if self.data_loader:  # Only access data_loader[0] if it's not empty
+        if self.data_loader:  # Corrected: Handle empty data_loader
             self.batch_size = self.data_loader[0].batch_size
             self.log_step = int(np.sqrt(self.batch_size))
             self.total_batch_sum = sum([x.batch_size for x in self.data_loader])
-        else:  # For evaluation-only, set dummy values
-            self.batch_size = 1  # A dummy non-zero value, as some calculations might implicitly use it
+        else:
+            self.batch_size = 1
             self.log_step = 1
             self.total_batch_sum = 0
-        # --- MODIFIED BATCH_SIZE / LOG_STEP CALCULATION END ---
 
         self.tokenizer = tokenizer
         self.max_samples_per_epoch = max_samples_per_epoch
         self.n_gpu = self.args.world_size
         self.allgather = AllGather_multi.apply
-        # self.writer = writer
 
-        # Store text_embeds and query_texts to avoid recomputing every time (optional optimization)
-        self._all_query_texts = None  # Not used in current version, but placeholder
-        self._all_query_narration_ids = None  # Not used in current version, but placeholder
+        # --- CORRECTED & NEW: Initialize accumulators as class attributes (self. prefix) ---
+        # These need to be initialized here once per trainer instance.
+        self.text_embed_arr_storage = {x: [] for x in range(len(self.valid_data_loader))}
+        self.vid_embed_arr_storage = {x: [] for x in range(len(self.valid_data_loader))}
+        self.idx_embed_arr_storage = {x: [] for x in range(len(self.valid_data_loader))}
+        self.meta_arr_storage = {x: {} for x in range(len(self.valid_data_loader))}
+        # --- END CORRECTED & NEW ---
 
     def _eval_metrics(self, output):
         acc_metrics = np.zeros(len(self.metrics))
         for i, metric in enumerate(self.metrics):
             acc_metrics[i] += metric(output)
-            # if self.writer is not None:
-            #     self.writer.log_scalar('{}'.format(metric.__name__), acc_metrics[i])
         return acc_metrics
 
     def _adjust_learning_rate(self, optimizer, epoch, args):
@@ -128,9 +121,8 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):
             param_group['lr'] = lr
 
     def _train_epoch(self, epoch, scaler, gpu):
-        """
-        Training logic for an epoch
-        """
+        # This function is not primarily used for zero-shot evaluation (epochs=0)
+
         if dist.get_rank() == 0:
             Path(self.args.save_dir).mkdir(parents=True, exist_ok=True)
             stats_file = open(Path(self.args.save_dir) / str('stats_vtc.txt'), 'a', buffering=1)
@@ -140,16 +132,16 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):
         log = {}
 
         if self.do_validation and epoch == 1:
-            val_log = self._valid_epoch(0, gpu)  # Pass epoch 0 for initial validation
+            val_log = self._valid_epoch(0, gpu)
             if self.args.rank == 0:
                 log.update(val_log)
 
-        self.model.train()  # Set to train mode (no actual training if self.data_loader is empty)
-        total_loss = [0] * len(self.data_loader)  # This will be [0] if data_loader is empty
+        self.model.train()
+        total_loss = [0] * len(self.data_loader)
         total_metrics = np.zeros(len(self.metrics))
 
         for loader in self.data_loader:
-            if hasattr(loader, 'train_sampler'):  # Defensive check
+            if hasattr(loader, 'train_sampler'):
                 loader.train_sampler.set_epoch(epoch)
 
         for batch_idx, data_li in enumerate(zip(*self.data_loader)):
@@ -158,13 +150,12 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):
                 break
             for dl_idx, data in enumerate(data_li):
                 # ... (original training logic) ...
-                pass  # Placeholder for original training logic if any
+                pass
 
             if batch_idx == self.len_epoch:
                 break
 
         # Log updates related to total_loss (will be 0 if no training batches)
-        # This will be empty if self.data_loader is empty
         log.update({f'loss_{dl_idx}': total_loss[dl_idx] / self.len_epoch for dl_idx in range(len(self.data_loader))})
 
         if self.writer is not None and self.args.rank == 0:
@@ -172,7 +163,6 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):
                 tl = total_loss[dl_idx] / self.len_epoch
                 self.writer.add_scalar(f'Loss_training/loss_total_{dl_idx}', tl, epoch - 1)
 
-        # This will run the validation if self.do_validation is True
         if self.do_validation:
             val_log = self._valid_epoch(epoch, gpu)
             if self.args.rank == 0:
@@ -190,52 +180,40 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):
         total_val_loss = [0] * len(self.valid_data_loader)
         total_val_metrics = [np.zeros(len(self.metrics))] * len(self.valid_data_loader)
 
-        # meta_arr will now store meta data for each item, collected consistently across all processes.
-        # Initialize meta_arr to collect lists for each key from the DataLoader's 'meta' dicts.
-        meta_arr = {x: {} for x in range(len(self.valid_data_loader))}  # Initialize empty dicts per data loader index
+        # --- CORRECTED: Clear accumulators for the current validation epoch ---
+        # These are now class attributes, so we access them with self.
+        for dl_idx in range(len(self.valid_data_loader)):
+            self.text_embed_arr_storage[dl_idx].clear()
+            self.vid_embed_arr_storage[dl_idx].clear()
+            self.idx_embed_arr_storage[dl_idx].clear()
+            # Clear metadata storage by re-initializing lists for keys
+            # Use a consistent set of expected keys from the DataLoader's output `data['meta']`
+            expected_meta_keys = ['narration_id', 'participant_id', 'video_id', 'narration', 'paths', 'raw_captions']
+            self.meta_arr_storage[dl_idx] = {key: [] for key in expected_meta_keys}
+        # --- END CORRECTED ---
 
         with torch.no_grad():
-            for dl_idx, dl in enumerate(self.valid_data_loader):
-                # Before the batch loop, initialize lists for expected meta keys
-                # This ensures keys are present even if a batch is empty or only some keys appear in first batch
-                if dl_idx not in meta_arr:
-                    meta_arr[dl_idx] = {}
-                # The keys available in 'meta' usually depend on the DataLoader's implementation (e.g. EPIC-Kitchens_MIR_dataset.py)
-                # Common keys are 'narration_id', 'narration', 'video_id', 'paths', 'start_frame', 'stop_frame'
-                # Initialize lists for expected keys. This is a robust way to ensure meta_arr_cat works later.
-                # Adjust these keys based on what your DataLoader actually returns in `data['meta']`
-                expected_meta_keys = ['narration_id', 'participant_id', 'video_id', 'narration', 'paths', 'start_frame',
-                                      'stop_frame']  # Add other keys if needed
-                for key in expected_meta_keys:
-                    if key not in meta_arr[dl_idx]:
-                        meta_arr[dl_idx][key] = []
-
-                for batch_idx, data in enumerate(tqdm(dl)):
-                    # Accumulate metadata for each batch
-                    # `data['meta']` is already a dictionary of lists for the current batch
+            for dl_idx, dl in enumerate(tqdm(self.valid_data_loader)):
+                for batch_idx, data in enumerate(tqdm(dl, leave=False)):
+                    # Accumulate metadata for each batch into storage
                     for k, v_list in data['meta'].items():
-                        if k in meta_arr[dl_idx]:  # Check if key is one we're collecting
-                            meta_arr[dl_idx][k].extend(v_list)
-                        else:  # Handle keys not in `expected_meta_keys` but present in data['meta'] if desired
-                            meta_arr[dl_idx][k] = v_list  # Add new key and its list
+                        # Only extend if the key is expected and initialized to prevent errors
+                        if k in self.meta_arr_storage[dl_idx]:
+                            self.meta_arr_storage[dl_idx][k].extend(v_list)
+                        else:  # Handle keys not in `expected_meta_keys` (e.g. if DataLoader adds more)
+                            self.meta_arr_storage[dl_idx][k] = v_list  # Just add it
 
-                    # Original logic for processing batch text and video
-                    # Note: data['meta']['paths'] contains the video_id strings (e.g., 'clip_000')
-                    idx_embed = data['meta']['paths'].cuda(gpu, non_blocking=True)
+                    idx_embed = data['meta']['paths'].cuda(gpu,
+                                                           non_blocking=True)  # This will be a numerical tensor now
                     if self.tokenizer is not None:
-                        # Original: data['text'] is a list of strings here.
-                        # We tokenize and move to GPU for text_embed computation.
                         data['text'] = self.tokenizer(data['text'], return_tensors='pt', padding=True, truncation=True)
                     data['text'] = {key: val.cuda(gpu, non_blocking=True) for key, val in data['text'].items()}
                     data['video'] = data['video'].cuda(gpu, non_blocking=True)
 
-                    # Compute embeddings for the batch
                     ret = self.model.module.infer(data, return_embeds=True, task_names="Dual", ret={})
                     vid_embed = ret['video_embeds']
-                    text_embed = ret['text_embeds']  # This text_embed is from the batch's queries
+                    text_embed = ret['text_embeds']
 
-                    # --- Distributed data collection (necessary for `sim_matrix` over full dataset) ---
-                    # These `_all` tensors collect data from all GPUs/processes
                     vid_embed_all = [torch.zeros_like(vid_embed) for _ in range(self.n_gpu)]
                     torch.distributed.all_gather(vid_embed_all, vid_embed)
                     vid_embed_all = torch.cat(vid_embed_all, dim=0)
@@ -244,15 +222,14 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):
                     torch.distributed.all_gather(text_embed_all, text_embed)
                     text_embed_all = torch.cat(text_embed_all, dim=0)
 
-                    # Append collected embeddings to lists
-                    text_embed_arr[dl_idx].append(text_embed_all.cpu())
-                    vid_embed_arr[dl_idx].append(vid_embed_all.cpu())
-
                     idx_embed_all = [torch.empty_like(idx_embed) for _ in range(self.n_gpu)]
                     torch.distributed.all_gather(idx_embed_all, idx_embed)
                     idx_embed_all = torch.cat(idx_embed_all, dim=0)
-                    idx_embed_arr[dl_idx].append(idx_embed_all.cpu())
-                    # --- End distributed data collection ---
+
+                    # Append collected embeddings to class attributes
+                    self.text_embed_arr_storage[dl_idx].append(text_embed_all.cpu())
+                    self.vid_embed_arr_storage[dl_idx].append(vid_embed_all.cpu())
+                    self.idx_embed_arr_storage[dl_idx].append(idx_embed_all.cpu())
 
             if self.writer is not None and self.args.rank == 0:
                 for dl_idx in range(len(self.valid_data_loader)):
@@ -262,19 +239,14 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):
         for dl_idx in range(len(self.valid_data_loader)):
             nested_metrics = {x: {} for x in range(len(self.valid_data_loader))}
 
-            # Concatenate all gathered embeddings for the full dataset
-            text_embeds_full = torch.cat(text_embed_arr[dl_idx])  # Shape: (total_queries, embed_dim)
-            vid_embeds_full = torch.cat(vid_embed_arr[dl_idx])  # Shape: (total_videos, embed_dim)
-            arr_embeds_full = torch.cat(idx_embed_arr[dl_idx])  # Shape: (total_videos, ) -> video_ids
+            text_embeds_full = torch.cat(self.text_embed_arr_storage[dl_idx])
+            vid_embeds_full = torch.cat(self.vid_embed_arr_storage[dl_idx])
+            arr_embeds_full = torch.cat(self.idx_embed_arr_storage[dl_idx])
 
-            # Compute similarity matrix over the FULL validation dataset
-            # Shape: (total_queries, total_videos)
             sims = sim_matrix(text_embeds_full, vid_embeds_full).detach().cpu().numpy()
 
-            # --- METRIC CALCULATION (Keep as is, now calculates over your full mock dataset) ---
             for metric in self.metrics:
                 metric_name = metric.__name__
-                # `arr_embeds_full` (video_ids) is passed as `idx_arr` to `mir_metrics_vtc`
                 res = metric(sims, arr_embeds_full)
                 if self.args.rank == 0:
                     self.logger.info(verbose(epoch=epoch, metrics=res, name=self.valid_data_loader[dl_idx].dataset_name,
@@ -289,65 +261,72 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):
                         self.writer.add_scalar(f'Val_metrics_{dl_idx}/{key}', val, epoch - 1)
 
                 if self.visualizer is not None and self.args.rank == 0:
-                    # meta_arr[dl_idx] holds accumulated metadata for this dataloader index
-                    # It's already a dictionary of lists. No need to flatten further.
-                    self.visualizer.visualize_ranking(sims, epoch, meta_arr[dl_idx], nested_metrics)
-            # --- END METRIC CALCULATION ---
+                    meta_arr_cat_flattened = {}
+                    # Ensure all expected keys are initialized as lists
+                    for key in expected_meta_keys:  # Use the `expected_meta_keys` from above
+                        meta_arr_cat_flattened[key] = []
+                    # Then extend from the collected storage
+                    for key, values_list in self.meta_arr_storage[dl_idx].items():
+                        if key in meta_arr_cat_flattened:  # Only extend for expected keys
+                            meta_arr_cat_flattened[key].extend(values_list)
+                        else:  # If a key was not in expected_meta_keys but exists, add it
+                            meta_arr_cat_flattened[key] = values_list
 
-            # --- CUSTOM PREDICTION PRINTING LOGIC START ---
-            if self.args.rank == 0:  # Only print from the master process (GPU 0)
+                    self.visualizer.visualize_ranking(sims, epoch, meta_arr_cat_flattened, nested_metrics)
+
+            if self.args.rank == 0:
                 print("\n--- Top Clip Retrieval Predictions for ALL Queries ---")
 
-                # Load the full list of all queries from the sentence CSV (matching data loader order)
-                # This needs to be done once per validation epoch.
                 sentence_csv_path = os.path.join(self.config['data_loader']['args']['meta_dir'],
                                                  "EPIC_100_retrieval_test_sentence.csv")
                 df_sentence_csv = pd.read_csv(sentence_csv_path)
-                # Create a dict from narration_id to actual query text for easy lookup
                 all_narration_id_to_query_text = dict(
                     zip(df_sentence_csv['narration_id'], df_sentence_csv['narration']))
 
-                # `arr_embeds_full` contains the list of all 5-second clip IDs in order.
-                # It's a tensor, convert to list of strings
-                all_5s_clip_ids_evaluated = [str(x) for x in
-                                             arr_embeds_full.tolist()]  # Convert to string for consistent ID
+                dataset_instance = self.valid_data_loader[dl_idx].dataset
+                if hasattr(dataset_instance, 'numerical_idx_to_video_id'):
+                    numerical_idx_to_video_id_map = dataset_instance.numerical_idx_to_video_id
+                else:
+                    print("Warning: numerical_idx_to_video_id map not found in dataset. Cannot print clip IDs by name.")
+                    numerical_idx_to_video_id_map = {}
 
-                top_k_results_per_query = 5  # Number of top clips to display per query (adjust as desired)
+                all_5s_clip_ids_evaluated_numerical = arr_embeds_full.tolist()
+                all_5s_clip_ids_evaluated_strings = [
+                    numerical_idx_to_video_id_map.get(idx, f"UNKNOWN_VID_{idx}")
+                    for idx in all_5s_clip_ids_evaluated_numerical
+                ]
 
-                # Iterate through each query in the `sims` matrix (num_queries x num_clips)
-                for query_row_idx in range(sims.shape[0]):  # Loop through each query
+                top_k_results_per_query = 5
+
+                for query_row_idx in range(sims.shape[0]):
                     query_narration_id = df_sentence_csv['narration_id'].iloc[query_row_idx]
                     query_text = all_narration_id_to_query_text.get(query_narration_id, "UNKNOWN_QUERY")
 
                     print(f"\nQuery: '{query_text}' (ID: {query_narration_id})")
                     print("  Top 5s Clips:")
 
-                    # Get similarity scores for this query across all 5s clips
-                    scores_for_query = sims[query_row_idx, :]  # (1, num_5s_clips) row for this query
+                    scores_for_query = sims[query_row_idx, :]
 
-                    # Sort clips by score in descending order
-                    ranked_clip_indices = np.argsort(scores_for_query)[
-                                          ::-1]  # Get indices of clips from highest score to lowest
+                    ranked_clip_indices = np.argsort(scores_for_query)[::-1]
 
                     for rank, clip_col_idx in enumerate(ranked_clip_indices[:top_k_results_per_query]):
-                        clip_id = all_5s_clip_ids_evaluated[clip_col_idx]
+                        clip_id_numerical = all_5s_clip_ids_evaluated_numerical[clip_col_idx]
+                        clip_id_string = numerical_idx_to_video_id_map.get(clip_id_numerical,
+                                                                           f"UNKNOWN_VID_{clip_id_numerical}")
                         score = scores_for_query[clip_col_idx]
 
-                        # Extract clip number and calculate approximate time (using the CLIP_DURATION_SECONDS)
                         try:
-                            # clip_id is like 'aria_P01_000', split by '_' and take the last numerical part
-                            clip_num_str = clip_id.split('_')[-1]
+                            clip_num_str = clip_id_string.split('_')[-1]
                             clip_num = int(clip_num_str)
                             start_approx = clip_num * CLIP_DURATION_SECONDS
                             end_approx = (clip_num + 1) * CLIP_DURATION_SECONDS
                             time_str = f"({start_approx:.1f}s - {end_approx:.1f}s)"
                         except ValueError:
-                            time_str = "(time N/A)"  # Fallback if clip_id format is unexpected
+                            time_str = "(time N/A)"
 
-                        print(f"    Rank {rank + 1}: {clip_id} {time_str} | Score: {score:.4f}")
+                        print(f"    Rank {rank + 1}: {clip_id_string} {time_str} | Score: {score:.4f}")
 
                 print("\n--- End Top Clip Retrieval Predictions for ALL Queries ---")
-            # --- END CUSTOM PREDICTION PRINTING LOGIC ---
 
         res_dict = {}
         if self.args.rank == 0:
@@ -359,20 +338,19 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):
 
     def _progress(self, batch_idx, dl_idx):
         base = '[{}/{} ({:.0f}%)]'
-        # Check if data_loader[dl_idx] exists and has n_samples
         if len(self.data_loader) > dl_idx and hasattr(self.data_loader[dl_idx], 'n_samples'):
             current = batch_idx * self.data_loader[dl_idx].batch_size
             total = int(self.data_loader[dl_idx].n_samples / self.n_gpu)
-        else:  # Fallback for empty data_loader or when n_samples is not available
+        else:
             current = batch_idx
-            total = self.len_epoch  # This would be 0 for eval-only training loop
+            total = self.len_epoch
         return base.format(current, total, 100.0 * current / total)
 
 
 def verbose(epoch, metrics, mode, args, name="TEST"):
     if dist.get_rank() == 0:
         Path(args.save_dir).mkdir(parents=True, exist_ok=True)
-        stats_file = open(Path(args.save_dir) / 'stats_vtc.txt', 'a', buffering=1)
+        stats_file = open(Path(args.args.save_dir) / 'stats_vtc.txt', 'a', buffering=1)  # Corrected this line
         print(' '.join(sys.argv))
         print(' '.join(sys.argv), file=stats_file)
 
