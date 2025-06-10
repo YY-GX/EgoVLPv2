@@ -17,7 +17,8 @@ DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 CHECKPOINT_PATH = './checkpoints/EgoVLPv2_smallproj.pth'
 CLIPS_DIR = './clips_egoclip' # Ensure this points to your 5-second clips
 # PROMPTS = ["#C C looks around", "#C C walks around", "#C C sits in the house"]
-PROMPTS = ["walking", "sitting", "standing"]
+# PROMPTS = ["walking", "sitting", "standing"]
+PROMPTS = ["cat", "washing machine", "skydiving"]
 
 
 # ==== Preprocessing ====
