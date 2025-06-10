@@ -66,3 +66,5 @@ dist/
 /mnt/arc/yygx/pkgs_baselines/EgoVLPv2/EgoVLPv2/checkpoint/
 /mnt/arc/yygx/pkgs_baselines/EgoVLPv2/EgoVLPv2/clips/
 /mnt/arc/yygx/pkgs_baselines/EgoVLPv2/EgoVLPv2/clips_egoclip/
+/mnt/arc/yygx/pkgs_baselines/EgoVLPv2/EgoVLPv2/data/
+/mnt/arc/yygx/pkgs_baselines/EgoVLPv2/EgoVLPv2/egoclip.csv
