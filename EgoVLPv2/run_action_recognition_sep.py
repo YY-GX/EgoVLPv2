@@ -13,6 +13,8 @@ import argparse
 
 from model.model import FrozenInTime
 from parse_config import ConfigParser
+import model.model as module_model
+
 
 # ==== CLI Parser Setup ====
 parser = argparse.ArgumentParser(description='EgoVLPv2 Action Recognition')
@@ -44,7 +46,7 @@ transform = transforms.Compose([
 ])
 
 # ==== Load Model ====
-model = config.initialize('arch', module=None)
+model = config.initialize('arch', module=module_model)
 model = model.to(DEVICE)
 model.eval()
 
