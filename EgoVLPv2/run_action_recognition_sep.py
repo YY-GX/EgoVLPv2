@@ -79,12 +79,14 @@ model = model.to(DEVICE)
 model.eval()
 
 # ==== Load Tokenizer ====
+print("Using tokenizer:", ckpt['config']['arch']['args']['text_params']['model'])
 tokenizer = AutoTokenizer.from_pretrained(ckpt['config']['arch']['args']['text_params']['model'])
 
 with torch.no_grad():
     print("Encoding prompts...")
     text_inputs = tokenizer(PROMPTS, return_tensors="pt", padding=True, truncation=True).to(DEVICE)
     text_embeds = model.compute_text(text_inputs).float()
+    print("text_embeds std dev:", text_embeds.std().item())
     text_embeds = F.normalize(text_embeds, dim=-1)
 
 # ==== Helper ====
