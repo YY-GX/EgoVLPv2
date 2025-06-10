@@ -8,16 +8,19 @@ import numpy as np
 EGOCLIP_CSV_PATH = './egoclip.csv'  # Path to your original egoclip.csv
 TARGET_EGOCLIP_VIDEO_UID = '002ad105-bd9a-4858-953e-54e88dc7587e'  # The specific video UID to extract
 MOCK_PARTICIPANT_ID = 'aria_P01'  # Your chosen mock EPIC participant ID
-MOCK_VIDEO_BASE_NAME = ''  # IMPORTANT: Leave this blank if your 5-sec clips are named '000.mp4', '001.mp4' directly.
-# If they are named 'clip_000.mp4', set this to 'clip_'.
-# We assume 'aria_P01_000.MP4' or 'aria_P01_clip_000.MP4' files.
+
+# --- CRITICAL CHANGE: Set MOCK_VIDEO_BASE_NAME to 'clip_' ---
+# This means your CSV video_ids will be like "aria_P01_clip_000"
+# And your actual files on disk should be named "aria_P01_clip_000.MP4"
+MOCK_VIDEO_BASE_NAME = 'clip_'
+# --- END CRITICAL CHANGE ---
+
 CLIP_DURATION_SECONDS = 5  # Length of each generated clip
 
 # Output root directory for the mock EPIC dataset structure
 # IMPORTANT: Replace "/path/to/your/EgoVLPv2/EgoVLPv2/" with your actual project root.
-YOUR_MOCK_EK100_ROOT = "/path/to/your/EgoVLPv2/EgoVLPv2/data/my_simulated_ek100_data"
-
-OUTPUT_METADATA_DIR = "/mnt/arc/yygx/pkgs_baselines/EgoVLPv2/EgoVLPv2/data/my_simulated_ek100_data"
+# YOUR_MOCK_EK100_ROOT = "/path/to/your/EgoVLPv2/EgoVLPv2/data/my_simulated_ek100_data" # Commented out, using direct path
+OUTPUT_METADATA_DIR = "/mnt/arc/yygx/pkgs_baselines/EgoVLPv2/EgoVLPv2/data/my_simulated_ek100_data/EK100/epic-kitchens-100-annotations/retrieval_annotations" # Direct path
 OUTPUT_RELEVANCY_DIR = os.path.join(OUTPUT_METADATA_DIR, 'relevancy')
 os.makedirs(OUTPUT_METADATA_DIR, exist_ok=True)
 os.makedirs(OUTPUT_RELEVANCY_DIR, exist_ok=True)
@@ -42,7 +45,7 @@ video_total_frames = int(video_total_duration_seconds * 30)  # Assuming 30 FPS
 
 # --- Determine the 5-second clip IDs ---
 num_5s_clips = int(np.ceil(video_total_duration_seconds / CLIP_DURATION_SECONDS))
-# video_id in CSV will be like "aria_P01_000", matching the new filenames (e.g., aria_P01_000.MP4)
+# This will generate CSV video_ids like "aria_P01_clip_000"
 five_s_clip_video_ids = [f"{MOCK_PARTICIPANT_ID}_{MOCK_VIDEO_BASE_NAME}{i:03d}" for i in range(num_5s_clips)]
 
 print(f"Video duration: {video_total_duration_seconds:.2f}s. Generating {num_5s_clips} 5-second clips IDs.")
@@ -66,9 +69,10 @@ for mock_5s_clip_id in five_s_clip_video_ids:
     for query_text in unique_queries_raw:  # Iterate over ALL unique queries
         mock_narration_id = query_text_to_mock_narration_id[query_text]
 
-        # Simplified: Always split by '_' and take the last part for the numeric index
+        # --- CRITICAL FIX: Simplify clip_index parsing ---
+        # mock_5s_clip_id is now like "aria_P01_clip_000". We need the "000" part.
         clip_index = int(mock_5s_clip_id.split('_')[-1])
-        # ^ Adjust parsing based on whether MOCK_VIDEO_BASE_NAME is used in mock_5s_clip_id
+        # --- END CRITICAL FIX ---
 
         clip_start_sec = clip_index * CLIP_DURATION_SECONDS
         clip_end_sec = min((clip_index + 1) * CLIP_DURATION_SECONDS, video_total_duration_seconds)
@@ -77,9 +81,8 @@ for mock_5s_clip_id in five_s_clip_video_ids:
         clip_stop_frame = int(clip_end_sec * 30)
         if clip_stop_frame > video_total_frames:
             clip_stop_frame = video_total_frames
-        if clip_stop_frame < clip_start_frame:  # Ensure end frame is not before start frame (for very short last segments)
+        if clip_stop_frame < clip_start_frame:
             clip_stop_frame = clip_start_frame
-
 
         def seconds_to_hms_precise(seconds):
             hours = int(seconds // 3600)
@@ -87,11 +90,10 @@ for mock_5s_clip_id in five_s_clip_video_ids:
             secs = seconds % 60
             return f"{hours:02d}:{minutes:02d}:{secs:06.3f}"
 
-
         epic_retrieval_test_data.append({
             'narration_id': mock_narration_id,
             'participant_id': MOCK_PARTICIPANT_ID,
-            'video_id': mock_5s_clip_id,  # e.g., aria_P01_000
+            'video_id': mock_5s_clip_id,  # e.g., aria_P01_clip_000
             'narration_timestamp': seconds_to_hms_precise(clip_start_sec),
             'start_timestamp': seconds_to_hms_precise(clip_start_sec),
             'stop_timestamp': seconds_to_hms_precise(clip_end_sec),
