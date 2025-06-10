@@ -20,7 +20,7 @@ parser.add_argument('-c', '--config', required=True, type=str, help='Path to con
 parser.add_argument('-r', '--resume', default=None, type=str, help='Path to checkpoint')
 parser.add_argument('-d', '--device', default=None, type=str, help='CUDA device(s) to use')
 parser.add_argument('--task_names', default='EgoNCE', type=str)
-args = parser.parse_args()
+args = parser
 
 # ==== Load Config ====
 print("Loading config and checkpoint...")
