@@ -20,14 +20,17 @@ parser.add_argument('-c', '--config', required=True, type=str, help='Path to con
 parser.add_argument('-r', '--resume', default=None, type=str, help='Path to checkpoint')
 parser.add_argument('-d', '--device', default=None, type=str, help='CUDA device(s) to use')
 parser.add_argument('--task_names', default='EgoNCE', type=str)
-args = parser
+args = parser.parse_args()
 
 # ==== Load Config ====
 print("Loading config and checkpoint...")
-config = ConfigParser(args)
+custom_args = [
+    {'flags': ['--task_names'], 'type': str}
+]
+config = ConfigParser(parser, custom_args=custom_args)
 
 # ==== Settings ====
-DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
+DEVICE = config['device'] or ('cuda' if torch.cuda.is_available() else 'cpu')
 CLIPS_DIR = './clips_egoclip'
 PROMPTS = ["walking", "sitting", "standing"]
 IMG_SIZE = 224
