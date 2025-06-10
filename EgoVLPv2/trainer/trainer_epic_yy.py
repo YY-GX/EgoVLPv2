@@ -11,13 +11,20 @@ from torch import nn
 from tqdm.auto import tqdm
 import torch.distributed as dist
 
-# --- NEW IMPORTS (Ensure these are at the top of trainer_epic_yy.py) ---
+# --- NEW IMPORTS ---
 import pandas as pd  # For reading sentence CSV
-import torch.nn.functional as F  # For normalize
-
+import torch.nn.functional as F  # For normalize and other torch functions
 # --- END NEW IMPORTS ---
 
-# --- ADDED GLOBAL CONFIG (Ensure this is at the top of trainer_epic_yy.py) ---
+from base import BaseTrainer  # Keep BaseTrainer as direct import
+import base  # Import base module to resolve potential circular import for Multi_BaseTrainer_dist
+from model.model import sim_matrix
+from utils import inf_loop
+from pathlib import Path
+import sys
+import json
+
+# --- ADDED GLOBAL CONFIG ---
 # This needs to match the clip duration used when you split your video.
 CLIP_DURATION_SECONDS = 5
 
@@ -43,7 +50,9 @@ class AllGather_multi(torch.autograd.Function):
         )
 
 
-class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
+# --- MODIFIED CLASS INHERITANCE ---
+class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):
+    # --- END MODIFIED CLASS INHERITANCE ---
     """
     Trainer class
 
@@ -52,7 +61,7 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
     """
 
     # --- MODIFIED __init__ SIGNATURE START ---
-    def __init__(self, args, model, loss, metrics, optimizer, scheduler, gpu, config,  # Keep these positional
+    def __init__(self, args, model, loss, metrics, optimizer, scheduler, gpu, config,
                  data_loader=None,  # Make explicitly a keyword arg with default
                  valid_data_loader=None,  # Make explicitly a keyword arg with default
                  lr_scheduler=None, len_epoch=None, writer=None,
@@ -65,7 +74,7 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
 
         # --- MODIFIED len_epoch CALCULATION START ---
         if len_epoch is None:
-            if not self.data_loader:  # If data_loader (training data) is empty (for eval-only)
+            if not self.data_loader:  # If data_loader (training data) is empty for eval-only runs
                 self.len_epoch = 0  # Set to 0 to prevent min() error
             else:
                 self.len_epoch = min([len(x) for x in data_loader])
@@ -105,6 +114,8 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
         acc_metrics = np.zeros(len(self.metrics))
         for i, metric in enumerate(self.metrics):
             acc_metrics[i] += metric(output)
+            # if self.writer is not None:
+            #     self.writer.log_scalar('{}'.format(metric.__name__), acc_metrics[i])
         return acc_metrics
 
     def _adjust_learning_rate(self, optimizer, epoch, args):
@@ -115,9 +126,21 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
             param_group['lr'] = lr
 
     def _train_epoch(self, epoch, scaler, gpu):
-        # This function is not primarily used for zero-shot evaluation (epochs=0)
-        # It relies on self.data_loader, which is empty.
-        # The loop below will naturally not execute.
+        """
+        Training logic for an epoch
+
+        :param epoch: Current training epoch.
+        :return: A log that contains all information you want to save.
+
+        Note:
+            If you have additional information to record, for example:
+                > additional_log = {"x": x, "y": y}
+            merge it with log before return. i.e.
+                > log = {**log, **additional_log}
+                > return log
+
+            The metrics in log must have the key 'metrics'.
+        """
 
         if dist.get_rank() == 0:
             Path(self.args.save_dir).mkdir(parents=True, exist_ok=True)
@@ -127,31 +150,79 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
 
         log = {}
 
-        # Initial validation will run at effective epoch 0 (which is epoch=1 here due to indexing)
         if self.do_validation and epoch == 1:
-            val_log = self._valid_epoch(0, gpu)  # Pass epoch 0 for initial validation
+            val_log = self._valid_epoch(0, gpu)
             if self.args.rank == 0:
                 log.update(val_log)
 
-        self.model.train()  # Set to train mode (but no training happens if self.data_loader is empty)
-        total_loss = [0] * len(self.data_loader)  # This will be [0] if data_loader is empty
+        self.model.train()
+        total_loss = [0] * len(self.data_loader)
         total_metrics = np.zeros(len(self.metrics))
 
-        # This loop will not execute if self.data_loader is empty
         for loader in self.data_loader:
-            loader.train_sampler.set_epoch(epoch)
+            # This loop will not execute if self.data_loader is empty
+            if hasattr(loader, 'train_sampler'):  # Defensive check
+                loader.train_sampler.set_epoch(epoch)
+
         for batch_idx, data_li in enumerate(zip(*self.data_loader)):
-            # This block will be skipped if self.data_loader is empty
+            # This entire loop will be skipped if self.data_loader is empty
             if (batch_idx + 1) * self.total_batch_sum > self.max_samples_per_epoch:
                 break
             for dl_idx, data in enumerate(data_li):
-                # ... (original training logic) ...
-                pass  # Placeholder for original training logic if any
+                # then assume we must tokenize the input, e.g. its a string
+                if self.tokenizer is not None:
+                    data['text'] = self.tokenizer(data['text'], return_tensors='pt', padding='max_length',
+                                                  max_length=30,
+                                                  truncation=True)
+                data['text'] = {key: val.cuda(gpu, non_blocking=True) for key, val in data['text'].items()}
+                data['video'] = data['video'].cuda(gpu, non_blocking=True)
+                data['relation'] = data['relation'].cuda(gpu, non_blocking=True)
+
+                self.optimizer.zero_grad()
+                with torch.set_grad_enabled(True):
+                    with torch.cuda.amp.autocast():
+                        loss, loss_dict, _ = self.model(data, self.allgather, self.n_gpu, self.args, self.config,
+                                                        self.loss, gpu, task_names='Dual', dataset_name='epic')
+                        assert loss == loss_dict['Dual']
+
+                scaler.scale(loss).backward()
+                scaler.step(self.optimizer)
+                scaler.update()
+                self.scheduler.step()
+
+                if dist.get_rank() == 0:
+                    if (batch_idx) % self.args.print_freq == 0:
+                        stats = dict(epoch=epoch, step=batch_idx,
+                                     lr_weights=self.optimizer.param_groups[0]['lr'],
+                                     loss=loss.item())
+                        print(json.dumps(stats), file=stats_file)
+
+                if self.writer is not None and self.args.rank == 0:
+                    # self.writer.log_scalar(f'loss_train_{dl_idx}', loss.detach().item())
+                    total = int(self.data_loader[dl_idx].n_samples / self.n_gpu)
+                    current = batch_idx * self.data_loader[dl_idx].batch_size
+                    final_total = (epoch - 1) * total + current
+                    self.writer.add_scalar(f'Loss_training/loss_{dl_idx}', loss.detach().item(), final_total)
+
+                total_loss[dl_idx] += loss.detach().item()
+
+                # if batch_idx % self.log_step == 0 and self.args.local_rank == 0:
+                if batch_idx % self.args.print_freq == 0 and self.args.rank == 0:
+                    self.logger.info('Train Epoch: {} dl{} {} Loss: {:.6f}'.format(
+                        epoch,
+                        dl_idx,
+                        self._progress(batch_idx, dl_idx),
+                        loss.detach().item()))
+
+                self.optimizer.zero_grad()
+
+            # if batch_idx == 100:
+            #    break
 
             if batch_idx == self.len_epoch:
                 break
 
-        # Log updates related to total_loss (will be 0 if no training batches)
+        # This will be empty if self.data_loader is empty
         log.update({f'loss_{dl_idx}': total_loss[dl_idx] / self.len_epoch for dl_idx in range(len(self.data_loader))})
 
         if self.writer is not None and self.args.rank == 0:
@@ -159,7 +230,6 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
                 tl = total_loss[dl_idx] / self.len_epoch
                 self.writer.add_scalar(f'Loss_training/loss_total_{dl_idx}', tl, epoch - 1)
 
-        # This will run the validation if self.do_validation is True
         if self.do_validation:
             val_log = self._valid_epoch(epoch, gpu)
             if self.args.rank == 0:
@@ -177,49 +247,45 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
         self.model.eval()
         total_val_loss = [0] * len(self.valid_data_loader)
         total_val_metrics = [np.zeros(len(self.metrics))] * len(self.valid_data_loader)
-        meta_arr = {x: [] for x in range(len(self.valid_data_loader))}
-        text_embed_arr = {x: [] for x in range(len(self.valid_data_loader))}
-        vid_embed_arr = {x: [] for x in range(len(self.valid_data_loader))}
-        idx_embed_arr = {x: [] for x in range(len(self.valid_data_loader))}
 
-        # Ensure CLIP_DURATION_SECONDS is defined or accessible
-        # If CLIP_DURATION_SECONDS is not a global in trainer_epic_yy.py, define it here:
-        # CLIP_DURATION_SECONDS = 5 # Or retrieve from config if it's there
+        # meta_arr will now store meta data for each item, not just each batch
+        # It needs to be collected consistently across all processes.
+        # Initialize `meta_arr` with a list of dictionaries to append to
+        # Example: meta_arr[dl_idx] will be a list of dictionaries, one per item.
+        meta_arr = {x: {'narration_id': [], 'narration': [], 'video_id': [], 'paths': []} for x in
+                    range(len(self.valid_data_loader))}
 
         with torch.no_grad():
             for dl_idx, dl in enumerate(self.valid_data_loader):
                 for batch_idx, data in enumerate(tqdm(dl)):
                     # Accumulate metadata for each batch
-                    # `meta_batch` is now an individual dict for the current batch
-                    meta_batch = data['meta']
-                    for k, v in meta_batch.items():
-                        # Initialize list for key if not exists
-                        if k not in meta_arr[dl_idx]:
-                            meta_arr[dl_idx][k] = []
-                        # Extend the list with the batch's values
-                        meta_arr[dl_idx][k].extend(
-                            v)  # Use extend for lists, or append for single items if structure differs.
-                        # Assuming meta_batch[k] is a list of values
+                    # `data['meta']` is already a dictionary of lists for the current batch
+                    for k, v in data['meta'].items():
+                        if k in meta_arr[dl_idx]:  # Ensure key is expected in meta_arr structure
+                            meta_arr[dl_idx][k].extend(v)
+                        # else: # Optional: print a warning for unexpected meta keys
+                        #     print(f"Warning: Unexpected meta key '{k}' in batch.")
 
+                    # Original logic for processing batch text and video
+                    # Note: data['meta']['paths'] contains the video_id strings (e.g., 'clip_000')
                     idx_embed = data['meta']['paths'].cuda(gpu, non_blocking=True)
                     if self.tokenizer is not None:
-                        # Original: data['text'] is a list of strings here.
-                        # We tokenize and move to GPU for text_embed computation.
                         data['text'] = self.tokenizer(data['text'], return_tensors='pt', padding=True, truncation=True)
                     data['text'] = {key: val.cuda(gpu, non_blocking=True) for key, val in data['text'].items()}
                     data['video'] = data['video'].cuda(gpu, non_blocking=True)
 
+                    # Compute embeddings for the batch
                     ret = self.model.module.infer(data, return_embeds=True, task_names="Dual", ret={})
                     vid_embed = ret['video_embeds']
                     text_embed = ret['text_embeds']  # This text_embed is from the batch's queries
 
-                    # Distributed data collection (necessary for `sim_matrix` over full dataset)
+                    # --- Distributed data collection (necessary for `sim_matrix` over full dataset) ---
                     # These `_all` tensors collect data from all GPUs/processes
                     vid_embed_all = [torch.zeros_like(vid_embed) for _ in range(self.n_gpu)]
                     torch.distributed.all_gather(vid_embed_all, vid_embed)
                     vid_embed_all = torch.cat(vid_embed_all, dim=0)
 
-                    text_embed_all = [torch.zeros_like(text_embed) for _ in range(self.n_gpu)]
+                    text_embed_all = [torch.empty_like(text_embed) for _ in range(self.n_gpu)]  # Changed to empty_like
                     torch.distributed.all_gather(text_embed_all, text_embed)
                     text_embed_all = torch.cat(text_embed_all, dim=0)
 
@@ -227,7 +293,7 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
                     text_embed_arr[dl_idx].append(text_embed_all.cpu())
                     vid_embed_arr[dl_idx].append(vid_embed_all.cpu())
 
-                    idx_embed_all = [torch.zeros_like(idx_embed) for _ in range(self.n_gpu)]
+                    idx_embed_all = [torch.empty_like(idx_embed) for _ in range(self.n_gpu)]  # Changed to empty_like
                     torch.distributed.all_gather(idx_embed_all, idx_embed)
                     idx_embed_all = torch.cat(idx_embed_all, dim=0)
                     idx_embed_arr[dl_idx].append(idx_embed_all.cpu())
@@ -268,14 +334,25 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
                         self.writer.add_scalar(f'Val_metrics_{dl_idx}/{key}', val, epoch - 1)
 
                 if self.visualizer is not None and self.args.rank == 0:
-                    # Note: meta_arr is a list of dictionaries (one dict per batch)
-                    # We need to flatten it into a single dict with lists for each key
+                    # Note: meta_arr is a dictionary of lists collected across batches.
+                    # meta_arr[dl_idx] needs to be flattened into a single dict with lists for each key
                     meta_arr_cat = {}
-                    if meta_arr[dl_idx]:  # Check if meta_arr[dl_idx] is not empty
-                        for key in meta_arr[dl_idx][0].keys():  # Use keys from first batch's meta
+                    # `data['meta']` structure in the DataLoader is {key: list_of_values_for_batch}.
+                    # So `meta_arr[dl_idx]` is `{'key': [batch1_val1, batch1_val2, ...], 'key2': [...]}`
+                    # No, `meta_arr[dl_idx]` is actually `[batch_meta_dict_1, batch_meta_dict_2, ...]` where each `batch_meta_dict` is `{'key': [val1, val2], ...}`
+                    # Reconstruct meta_arr_cat by iterating through the batch results
+                    if meta_arr[dl_idx] and isinstance(meta_arr[dl_idx][0],
+                                                       dict):  # Check if first item is dict (i.e. contains meta for batches)
+                        # Initialize combined lists for all keys from the first batch's meta
+                        for key in meta_arr[dl_idx][0].keys():
                             meta_arr_cat[key] = []
-                            for meta_batch_data in meta_arr[dl_idx]:
-                                meta_arr_cat[key].extend(meta_batch_data[key])  # Extend with values from each batch
+                        # Extend lists for each key from all collected batches
+                        for meta_batch_data in meta_arr[dl_idx]:
+                            for key, values_in_batch in meta_batch_data.items():
+                                if key in meta_arr_cat:  # Ensure key exists to prevent KeyError
+                                    meta_arr_cat[key].extend(values_in_batch)
+                                else:  # Handle new keys if they appear in later batches (unlikely but safe)
+                                    meta_arr_cat[key] = values_in_batch
 
                     self.visualizer.visualize_ranking(sims, epoch, meta_arr_cat, nested_metrics)
             # --- END METRIC CALCULATION ---
