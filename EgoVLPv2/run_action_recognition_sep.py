@@ -24,13 +24,10 @@ args = parser.parse_args()
 
 # ==== Load Config ====
 print("Loading config and checkpoint...")
-custom_args = [
-    {'flags': ['--task_names'], 'type': str}
-]
-config = ConfigParser(parser, custom_args=custom_args)
+config = ConfigParser(args)
 
 # ==== Settings ====
-DEVICE = config['device'] or ('cuda' if torch.cuda.is_available() else 'cpu')
+DEVICE = args.device or ('cuda' if torch.cuda.is_available() else 'cpu')
 CLIPS_DIR = './clips_egoclip'
 PROMPTS = ["walking", "sitting", "standing"]
 IMG_SIZE = 224
