@@ -11,7 +11,8 @@ import sys
 from base import BaseDataLoaderExplicitSplit, BaseMultiDataLoader, \
     DistBaseDataLoaderExplicitSplit, MultiDistBaseDataLoaderExplicitSplit
 from data_loader.EgoClip_EgoMCQ_dataset import EgoClip_EgoMCQ
-from data_loader.EpicKitchens_MIR_dataset import MultiInstanceRetrieval
+# from data_loader.EpicKitchens_MIR_dataset import MultiInstanceRetrieval
+from data_loader.EpicKitchens_MIR_dataset_yy import MultiInstanceRetrieval
 from data_loader.CharadesEgo_dataset import CharadesEgo
 from data_loader.Ego4D_MQ_dataset import MomentQueries
 from data_loader.transforms import init_transform_dict, init_video_transform_dict
