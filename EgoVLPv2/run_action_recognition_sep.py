@@ -24,7 +24,7 @@ args = parser.parse_args()
 
 # ==== Load Config ====
 print("Loading config and checkpoint...")
-config = ConfigParser(args)
+config = ConfigParser(parser)
 
 # ==== Settings ====
 DEVICE = args.device or ('cuda' if torch.cuda.is_available() else 'cpu')
