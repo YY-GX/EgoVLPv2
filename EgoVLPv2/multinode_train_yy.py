@@ -82,7 +82,6 @@ def main():
 
 
 def main_worker(gpu, args):
-
     print("main worker started")
     args.rank += gpu
     torch.distributed.init_process_group(
@@ -94,7 +93,6 @@ def main_worker(gpu, args):
     torch.backends.cudnn.benchmark = True
     print("device set")
 
-    
     logger = config.get_logger('train')
     os.environ['TOKENIZERS_PARALLELISM'] = "false"
     if config['visualizer']['type'] != "":
@@ -106,43 +104,54 @@ def main_worker(gpu, args):
         )
     else:
         visualizer = None
-        
+
     # build tokenizer
     tokenizer = transformers.AutoTokenizer.from_pretrained(config['arch']['args']['text_params']['model'],
-                                                               TOKENIZERS_PARALLELISM=False)
+                                                           TOKENIZERS_PARALLELISM=False)
 
     # setup data_loader instances
     data_loader, valid_data_loader = init_dataloaders(config, module_data)
-    
+
     if args.rank == 0:
-        print('Train dataset: ', [x.n_samples for x in data_loader], ' samples')
+        # Check if data_loader is not empty before trying to access n_samples
+        if data_loader:  # Only print if there's a training data loader
+            print('Train dataset: ', [x.n_samples for x in data_loader], ' samples')
         print('Val dataset: ', [x.n_samples for x in valid_data_loader], ' samples')
     # build model architecture, then print to console
-    
+
     print("dataloader initialized")
 
-    
     model = config.initialize('arch', module_arch)
 
     if args.rank == 0:
         logger.info(model)
 
-    
     # get function handles of loss and metrics
     loss = config.initialize(name="loss", module=module_loss)
     metrics = [getattr(module_metric, met) for met in config['metrics']]
     # build optimizer, learning rate scheduler. delete every lines containing lr_scheduler for disabling scheduler
-    
+
     ## set_schedule will be modified; currently same as pretraining
-    max_steps = int(len(data_loader[0]) * config['trainer']['epochs'])
-    if max_steps==0:
-        max_steps = int(len(data_loader[0]) * 10)
+    # --- MODIFIED SECTION START ---
+    if config['trainer']['epochs'] == 0:
+        max_steps = 0  # For zero-shot evaluation, there are no training steps
+    else:
+        # Original logic for training (only executed if epochs > 0)
+        # Ensure data_loader[0] exists in this case
+        if not data_loader:  # Defensive check, though should not be empty if epochs > 0
+            raise ValueError("Training data_loader is empty but epochs > 0. This should not happen.")
+        max_steps = int(len(data_loader[0]) * config['trainer']['epochs'])
+        if max_steps == 0:
+            # Fallback if epoch * len results in 0 (e.g. very small dataset, but we want some steps)
+            max_steps = int(len(data_loader[0]) * 10)
+    # --- MODIFIED SECTION END ---
+
     warmup_steps = config_yaml["warmup_steps"]
     if isinstance(config_yaml["warmup_steps"], float):
         warmup_steps = int(max_steps * warmup_steps)
 
     optimizer, scheduler = set_schedule(model, config, config_yaml, max_steps, warmup_steps)
-    
+
     lr_scheduler = None
     writer = None
 
@@ -151,16 +160,15 @@ def main_worker(gpu, args):
 
     print("trainer should being here")
     trainer = Multi_Trainer_dist_MIR(args, model, loss, metrics, optimizer, scheduler, gpu,
-                      config=config,
-                      data_loader=data_loader,
-                      valid_data_loader=valid_data_loader,
-                      lr_scheduler=lr_scheduler,
-                      visualizer=visualizer,
-                      writer=writer,
-                      tokenizer=tokenizer,
-                      max_samples_per_epoch=config['trainer']['max_samples_per_epoch'])
+                                     config=config,
+                                     data_loader=data_loader,  # This will be empty now
+                                     valid_data_loader=valid_data_loader,
+                                     lr_scheduler=lr_scheduler,
+                                     visualizer=visualizer,
+                                     writer=writer,
+                                     tokenizer=tokenizer,
+                                     max_samples_per_epoch=config['trainer']['max_samples_per_epoch'])
 
-    
     trainer.train(gpu)
     
 
