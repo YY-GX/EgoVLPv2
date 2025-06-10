@@ -307,6 +307,14 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):  # Corrected: Inherit
             if self.args.rank == 0:
                 print("\n--- Top Clip Retrieval Predictions for ALL Queries ---")
 
+                # Define an output file path (e.g., in your save_dir)
+                output_results_file = os.path.join(self.args.save_dir, 'top_clips_predictions.csv')
+                # Prepare a list to hold all results
+                all_prediction_rows = []
+                # Add headers to the results list
+                all_prediction_rows.append(
+                    ['Query_ID', 'Query_Text', 'Rank', 'Clip_ID', 'Start_Time', 'End_Time', 'Score'])
+
                 sentence_csv_path = os.path.join(self.config['data_loader']['args']['meta_dir'],
                                                  "EPIC_100_retrieval_test_sentence.csv")
                 df_sentence_csv = pd.read_csv(sentence_csv_path)
@@ -346,13 +354,30 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):  # Corrected: Inherit
                             clip_num = int(clip_num_str)
                             start_approx = clip_num * CLIP_DURATION_SECONDS
                             end_approx = (clip_num + 1) * CLIP_DURATION_SECONDS
-                            time_str = f"({start_approx:.1f}s - {end_approx:.1f}s)"
+                            time_str_val = f"{start_approx:.1f}s - {end_approx:.1f}s"  # For CSV
+                            time_str_print = f"({start_approx:.1f}s - {end_approx:.1f}s)"  # For print
                         except ValueError:
-                            time_str = "(time N/A)"
+                            time_str_val = "N/A"
+                            time_str_print = "(time N/A)"
 
-                        print(f"    Rank {rank + 1}: {clip_id_string} {time_str} | Score: {score:.4f}")
+                        print(f"    Rank {rank + 1}: {clip_id_string} {time_str_print} | Score: {score:.4f}")
 
-                print("\n--- End Top Clip Retrieval Predictions for ALL Queries ---")
+                        # --- NEW: Append to results list for CSV ---
+                        all_prediction_rows.append([
+                            query_narration_id, query_text, rank + 1, clip_id_string,
+                            f"{start_approx:.1f}s", f"{end_approx:.1f}s", f"{score:.4f}"
+                        ])
+                        # --- END NEW ---
+
+                    print("\n--- End Top Clip Retrieval Predictions for ALL Queries ---")
+
+                # --- NEW: Write all results to CSV after loops ---
+                import csv  # Ensure csv is imported at the top of trainer_epic_yy.py
+                with open(output_results_file, 'w', newline='') as f:
+                    writer = csv.writer(f)
+                    writer.writerows(all_prediction_rows)
+                print(f"\nSaved detailed predictions to: {output_results_file}")
+                # --- END NEW ---
 
         res_dict = {}
         if self.args.rank == 0:
