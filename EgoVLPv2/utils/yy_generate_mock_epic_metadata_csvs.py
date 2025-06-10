@@ -1,4 +1,3 @@
-# Save this as `generate_mock_epic_clip_retrieval_metadata.py` in your main project folder.
 import pandas as pd
 import os
 import csv
@@ -14,7 +13,7 @@ CLIP_DURATION_SECONDS = 5  # Length of each generated clip
 
 # Output directory for the mock EPIC annotations
 # Ensure YOUR_MOCK_EK100_ROOT is set as an environment variable OR hardcode its absolute path
-YOUR_MOCK_EK100_ROOT = os.environ.get('YOUR_MOCK_EK100_ROOT', './my_simulated_ek100_data')
+YOUR_MOCK_EK100_ROOT = "/mnt/arc/yygx/pkgs_baselines/EgoVLPv2/EgoVLPv2/data/my_simulated_ek100_data"
 OUTPUT_METADATA_DIR = os.path.join(YOUR_MOCK_EK100_ROOT, 'EK100/epic-kitchens-100-annotations/retrieval_annotations')
 OUTPUT_RELEVANCY_DIR = os.path.join(OUTPUT_METADATA_DIR, 'relevancy')
 os.makedirs(OUTPUT_METADATA_DIR, exist_ok=True)
@@ -28,7 +27,7 @@ except Exception as e:
     print("Please ensure the delimiter is correct and any problematic lines are handled.")
     exit()
 
-# Filter for the target video (no query filtering here)
+# Filter for the target video (NO QUERY FILTERING HERE!)
 df_target_video = df_egoclip[df_egoclip['video_uid'] == TARGET_EGOCLIP_VIDEO_UID].copy()
 
 if df_target_video.empty:
@@ -44,7 +43,8 @@ five_s_clip_video_ids = [f"{MOCK_VIDEO_BASE_NAME}{i:03d}" for i in range(num_5s_
 
 print(f"Video duration: {video_total_duration_seconds:.2f}s. Generating {num_5s_clips} 5-second clips IDs.")
 
-# --- Prepare unique queries (all from egoclip.csv for this video) ---
+# --- Prepare ALL unique queries from egoclip.csv for sentence mapping ---
+# This list will contain ALL unique narrations for the target video.
 unique_queries_raw = df_target_video['clip_text'].unique().tolist()
 unique_queries_raw.sort()  # Sort for consistent ID assignment
 
@@ -54,7 +54,8 @@ query_text_to_mock_narration_id = {
 }
 mock_narration_id_to_query_text = {v: k for k, v in query_text_to_mock_narration_id.items()}
 
-print(f"Using {len(unique_queries_raw)} unique queries from egoclip.csv for metadata generation.")
+print(
+    f"Using {len(unique_queries_raw)} unique queries from egoclip.csv for metadata generation (all available queries).")
 
 # --- Generate EPIC_100_retrieval_test.csv ---
 epic_retrieval_test_data = []
@@ -84,7 +85,7 @@ for mock_5s_clip_id in five_s_clip_video_ids:
         epic_retrieval_test_data.append({
             'narration_id': mock_narration_id,
             'participant_id': MOCK_PARTICIPANT_ID,
-            'video_id': mock_5s_clip_id,
+            'video_id': mock_5s_clip_id,  # e.g., clip_000
             'narration_timestamp': seconds_to_hms_precise(clip_start_sec),
             'start_timestamp': seconds_to_hms_precise(clip_start_sec),
             'stop_timestamp': seconds_to_hms_precise(clip_end_sec),
@@ -101,7 +102,7 @@ df_epic_retrieval_test.to_csv(
     os.path.join(OUTPUT_METADATA_DIR, "EPIC_100_retrieval_test.csv"),
     index=False
 )
-print(f"\nGenerated EPIC_100_retrieval_test.csv with {len(df_epic_retrieval_test)} entries.")
+print(f"\nGenerated EPIC_100_retrieval_test.csv with {len(df_epic_retrieval_test)} entries (all queries).")
 
 # --- Generate EPIC_100_retrieval_test_sentence.csv ---
 epic_sentence_data = []
@@ -117,9 +118,10 @@ df_epic_sentence.to_csv(
     os.path.join(OUTPUT_METADATA_DIR, "EPIC_100_retrieval_test_sentence.csv"),
     index=False
 )
-print(f"Generated EPIC_100_retrieval_test_sentence.csv with {len(df_epic_sentence)} entries.")
+print(f"Generated EPIC_100_retrieval_test_sentence.csv with {len(df_epic_sentence)} entries (all unique queries).")
 
 # --- Generate caption_relevancy_EPIC_100_retrieval_test.pkl ---
+# The relevancy matrix will be (num_ALL_unique_queries x num_5s_clips)
 relevancy_matrix = np.zeros((len(unique_queries_raw), num_5s_clips), dtype=np.float32)
 
 # Create mappings from mock_narration_id/mock_5s_clip_id to their row/column indices in the matrix
@@ -131,6 +133,7 @@ for query_text in unique_queries_raw:  # Iterate over ALL unique queries
     mock_query_narration_id = query_text_to_mock_narration_id[query_text]
     query_row_idx = query_narration_id_to_idx[mock_query_narration_id]
 
+    # Filter original egoclip.csv for this specific query
     matching_original_entries = df_target_video[df_target_video['clip_text'] == query_text]
 
     for _, original_row in matching_original_entries.iterrows():
