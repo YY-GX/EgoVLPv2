@@ -35,7 +35,7 @@ CHECKPOINT_PATH = './checkpoints/EgoVLPv2_smallproj.pth'
 CLIPS_DIR = './clips_egoclip'
 PROMPTS = ["walking", "sitting", "standing"]
 IMG_SIZE = 224
-NUM_FRAMES = 128
+NUM_FRAMES = 4
 CLIP_DURATION = 5
 
 # ==== Preprocessing ====
