@@ -33,6 +33,7 @@ def remove_module_prefix(state_dict):
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 CHECKPOINT_PATH = './checkpoints/EgoVLPv2_smallproj.pth'
 CLIPS_DIR = './clips_egoclip'
+CLIPS_DIR = './clips'
 PROMPTS = ["walking", "sitting", "standing"]
 IMG_SIZE = 224
 NUM_FRAMES = 4
