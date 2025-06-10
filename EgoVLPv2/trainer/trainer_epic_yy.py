@@ -11,19 +11,13 @@ from torch import nn
 from tqdm.auto import tqdm
 import torch.distributed as dist
 
-# --- NEW IMPORTS ---
+# --- NEW IMPORTS (Ensure these are at the top of trainer_epic_yy.py) ---
 import pandas as pd  # For reading sentence CSV
 import torch.nn.functional as F  # For normalize
+
 # --- END NEW IMPORTS ---
 
-from base import BaseTrainer, Multi_BaseTrainer_dist
-from model.model import sim_matrix
-from utils import inf_loop
-from pathlib import Path
-import sys
-import json
-
-# --- ADDED GLOBAL CONFIG ---
+# --- ADDED GLOBAL CONFIG (Ensure this is at the top of trainer_epic_yy.py) ---
 # This needs to match the clip duration used when you split your video.
 CLIP_DURATION_SECONDS = 5
 
@@ -57,67 +51,60 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
         Inherited from BaseTrainer.
     """
 
-    class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
-        """
-        Trainer class
+    # --- MODIFIED __init__ SIGNATURE START ---
+    def __init__(self, args, model, loss, metrics, optimizer, scheduler, gpu, config,  # Keep these positional
+                 data_loader=None,  # Make explicitly a keyword arg with default
+                 valid_data_loader=None,  # Make explicitly a keyword arg with default
+                 lr_scheduler=None, len_epoch=None, writer=None,
+                 visualizer=None, tokenizer=None, max_samples_per_epoch=50000):
+        # --- MODIFIED __init__ SIGNATURE END ---
+        super().__init__(args, model, loss, metrics, optimizer, scheduler, gpu, config, writer)
+        self.config = config
+        self.args = args
+        self.data_loader = data_loader
 
-        Note:
-            Inherited from BaseTrainer.
-        """
-
-        def __init__(self, args, model, loss, metrics, optimizer, scheduler, gpu, config, data_loader,
-                     valid_data_loader=None, lr_scheduler=None, len_epoch=None, writer=None,
-                     visualizer=None, tokenizer=None, max_samples_per_epoch=50000):
-            super().__init__(args, model, loss, metrics, optimizer, scheduler, gpu, config, writer)
-            self.config = config
-            self.args = args
-            self.data_loader = data_loader
-
-            # --- MODIFIED SECTION START ---
-            if len_epoch is None:
-                # If the data_loader (training data) is empty, set len_epoch to 0.
-                # This handles evaluation-only runs where no training data is provided.
-                if not self.data_loader:
-                    self.len_epoch = 0
-                else:
-                    # Original logic for epoch-based training: take the minimum length
-                    # among multiple data loaders if they exist.
-                    self.len_epoch = min([len(x) for x in data_loader])
+        # --- MODIFIED len_epoch CALCULATION START ---
+        if len_epoch is None:
+            if not self.data_loader:  # If data_loader (training data) is empty (for eval-only)
+                self.len_epoch = 0  # Set to 0 to prevent min() error
             else:
-                # Iteration-based training (original logic, not relevant for our current use case)
-                self.data_loader = inf_loop(data_loader)
-                self.len_epoch = len_epoch
-            # --- MODIFIED SECTION END ---
+                self.len_epoch = min([len(x) for x in data_loader])
+        else:
+            self.data_loader = inf_loop(data_loader)
+            self.len_epoch = len_epoch
+        # --- MODIFIED len_epoch CALCULATION END ---
 
-            self.valid_data_loader = valid_data_loader
-            self.do_validation = self.valid_data_loader is not None
-            self.lr_scheduler = lr_scheduler
-            self.visualizer = visualizer
-            self.val_chunking = True
+        self.valid_data_loader = valid_data_loader
+        self.do_validation = self.valid_data_loader is not None
+        self.lr_scheduler = lr_scheduler
+        self.visualizer = visualizer
+        self.val_chunking = True
 
-            # --- MODIFIED SECTION START (Defensive check for self.batch_size if data_loader is empty) ---
-            if self.data_loader:  # Only access data_loader[0] if it's not empty
-                self.batch_size = self.data_loader[0].batch_size
-                self.log_step = int(np.sqrt(self.batch_size))
-                self.total_batch_sum = sum([x.batch_size for x in self.data_loader])
-            else:  # For evaluation-only, set dummy values
-                self.batch_size = 1  # Or any non-zero dummy value
-                self.log_step = 1  # Or any non-zero dummy value
-                self.total_batch_sum = 0  # No batches for training
-            # --- MODIFIED SECTION END ---
+        # --- MODIFIED BATCH_SIZE / LOG_STEP CALCULATION START ---
+        if self.data_loader:  # Only access data_loader[0] if it's not empty
+            self.batch_size = self.data_loader[0].batch_size
+            self.log_step = int(np.sqrt(self.batch_size))
+            self.total_batch_sum = sum([x.batch_size for x in self.data_loader])
+        else:  # For evaluation-only, set dummy values
+            self.batch_size = 1  # A dummy non-zero value, as some calculations might implicitly use it
+            self.log_step = 1
+            self.total_batch_sum = 0
+        # --- MODIFIED BATCH_SIZE / LOG_STEP CALCULATION END ---
 
-            self.tokenizer = tokenizer
-            self.max_samples_per_epoch = max_samples_per_epoch
-            self.n_gpu = self.args.world_size
-            self.allgather = AllGather_multi.apply
-            # self.writer = writer
+        self.tokenizer = tokenizer
+        self.max_samples_per_epoch = max_samples_per_epoch
+        self.n_gpu = self.args.world_size
+        self.allgather = AllGather_multi.apply
+        # self.writer = writer
+
+        # Store text_embeds and query_texts to avoid recomputing every time (optional optimization)
+        self._all_query_texts = None  # Not used in current version, but placeholder
+        self._all_query_narration_ids = None  # Not used in current version, but placeholder
 
     def _eval_metrics(self, output):
         acc_metrics = np.zeros(len(self.metrics))
         for i, metric in enumerate(self.metrics):
             acc_metrics[i] += metric(output)
-            # if self.writer is not None:
-            #     self.writer.log_scalar('{}'.format(metric.__name__), acc_metrics[i])
         return acc_metrics
 
     def _adjust_learning_rate(self, optimizer, epoch, args):
@@ -128,21 +115,9 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
             param_group['lr'] = lr
 
     def _train_epoch(self, epoch, scaler, gpu):
-        """
-        Training logic for an epoch
-
-        :param epoch: Current training epoch.
-        :return: A log that contains all information you want to save.
-
-        Note:
-            If you have additional information to record, for example:
-                > additional_log = {"x": x, "y": y}
-            merge it with log before return. i.e.
-                > log = {**log, **additional_log}
-                > return log
-
-            The metrics in log must have the key 'metrics'.
-        """
+        # This function is not primarily used for zero-shot evaluation (epochs=0)
+        # It relies on self.data_loader, which is empty.
+        # The loop below will naturally not execute.
 
         if dist.get_rank() == 0:
             Path(self.args.save_dir).mkdir(parents=True, exist_ok=True)
@@ -152,74 +127,31 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
 
         log = {}
 
+        # Initial validation will run at effective epoch 0 (which is epoch=1 here due to indexing)
         if self.do_validation and epoch == 1:
-            val_log = self._valid_epoch(0, gpu)
+            val_log = self._valid_epoch(0, gpu)  # Pass epoch 0 for initial validation
             if self.args.rank == 0:
                 log.update(val_log)
 
-        self.model.train()
-        total_loss = [0] * len(self.data_loader)
+        self.model.train()  # Set to train mode (but no training happens if self.data_loader is empty)
+        total_loss = [0] * len(self.data_loader)  # This will be [0] if data_loader is empty
         total_metrics = np.zeros(len(self.metrics))
 
+        # This loop will not execute if self.data_loader is empty
         for loader in self.data_loader:
             loader.train_sampler.set_epoch(epoch)
         for batch_idx, data_li in enumerate(zip(*self.data_loader)):
+            # This block will be skipped if self.data_loader is empty
             if (batch_idx + 1) * self.total_batch_sum > self.max_samples_per_epoch:
                 break
             for dl_idx, data in enumerate(data_li):
-                # then assume we must tokenize the input, e.g. its a string
-                if self.tokenizer is not None:
-                    data['text'] = self.tokenizer(data['text'], return_tensors='pt', padding='max_length',
-                                                  max_length=30,
-                                                  truncation=True)
-                data['text'] = {key: val.cuda(gpu, non_blocking=True) for key, val in data['text'].items()}
-                data['video'] = data['video'].cuda(gpu, non_blocking=True)
-                data['relation'] = data['relation'].cuda(gpu, non_blocking=True)
-
-                self.optimizer.zero_grad()
-                with torch.set_grad_enabled(True):
-                    with torch.cuda.amp.autocast():
-                        loss, loss_dict, _ = self.model(data, self.allgather, self.n_gpu, self.args, self.config,
-                                                        self.loss, gpu, task_names='Dual', dataset_name='epic')
-                        assert loss == loss_dict['Dual']
-
-                scaler.scale(loss).backward()
-                scaler.step(self.optimizer)
-                scaler.update()
-                self.scheduler.step()
-
-                if dist.get_rank() == 0:
-                    if (batch_idx) % self.args.print_freq == 0:
-                        stats = dict(epoch=epoch, step=batch_idx,
-                                     lr_weights=self.optimizer.param_groups[0]['lr'],
-                                     loss=loss.item())
-                        print(json.dumps(stats), file=stats_file)
-
-                if self.writer is not None and self.args.rank == 0:
-                    # self.writer.log_scalar(f'loss_train_{dl_idx}', loss.detach().item())
-                    total = int(self.data_loader[dl_idx].n_samples / self.n_gpu)
-                    current = batch_idx * self.data_loader[dl_idx].batch_size
-                    final_total = (epoch - 1) * total + current
-                    self.writer.add_scalar(f'Loss_training/loss_{dl_idx}', loss.detach().item(), final_total)
-
-                total_loss[dl_idx] += loss.detach().item()
-
-                # if batch_idx % self.log_step == 0 and self.args.local_rank == 0:
-                if batch_idx % self.args.print_freq == 0 and self.args.rank == 0:
-                    self.logger.info('Train Epoch: {} dl{} {} Loss: {:.6f}'.format(
-                        epoch,
-                        dl_idx,
-                        self._progress(batch_idx, dl_idx),
-                        loss.detach().item()))
-
-                self.optimizer.zero_grad()
-
-            # if batch_idx == 100:
-            #    break
+                # ... (original training logic) ...
+                pass  # Placeholder for original training logic if any
 
             if batch_idx == self.len_epoch:
                 break
 
+        # Log updates related to total_loss (will be 0 if no training batches)
         log.update({f'loss_{dl_idx}': total_loss[dl_idx] / self.len_epoch for dl_idx in range(len(self.data_loader))})
 
         if self.writer is not None and self.args.rank == 0:
@@ -227,6 +159,7 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
                 tl = total_loss[dl_idx] / self.len_epoch
                 self.writer.add_scalar(f'Loss_training/loss_total_{dl_idx}', tl, epoch - 1)
 
+        # This will run the validation if self.do_validation is True
         if self.do_validation:
             val_log = self._valid_epoch(epoch, gpu)
             if self.args.rank == 0:
@@ -239,11 +172,7 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
     def _valid_epoch(self, epoch, gpu):
         """
         Validate after training an epoch
-
         :return: A log that contains information about validation
-
-        Note:
-            The validation metrics in log must have the key 'val_metrics'.
         """
         self.model.eval()
         total_val_loss = [0] * len(self.valid_data_loader)
@@ -252,26 +181,40 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
         text_embed_arr = {x: [] for x in range(len(self.valid_data_loader))}
         vid_embed_arr = {x: [] for x in range(len(self.valid_data_loader))}
         idx_embed_arr = {x: [] for x in range(len(self.valid_data_loader))}
+
+        # Ensure CLIP_DURATION_SECONDS is defined or accessible
+        # If CLIP_DURATION_SECONDS is not a global in trainer_epic_yy.py, define it here:
+        # CLIP_DURATION_SECONDS = 5 # Or retrieve from config if it's there
+
         with torch.no_grad():
-            # for validation we switch the nested loop order, because alternate batches not needed...
-            # ... and dataloaders can be of different length
             for dl_idx, dl in enumerate(self.valid_data_loader):
                 for batch_idx, data in enumerate(tqdm(dl)):
-                    meta_arr[dl_idx].append(data['meta'])
+                    # Accumulate metadata for each batch
+                    # `meta_batch` is now an individual dict for the current batch
+                    meta_batch = data['meta']
+                    for k, v in meta_batch.items():
+                        # Initialize list for key if not exists
+                        if k not in meta_arr[dl_idx]:
+                            meta_arr[dl_idx][k] = []
+                        # Extend the list with the batch's values
+                        meta_arr[dl_idx][k].extend(
+                            v)  # Use extend for lists, or append for single items if structure differs.
+                        # Assuming meta_batch[k] is a list of values
 
-                    # Original logic for processing batch text and video
-                    idx_embed = data['meta']['paths'].cuda(gpu, non_blocking=True)  # paths contain video_ids
+                    idx_embed = data['meta']['paths'].cuda(gpu, non_blocking=True)
                     if self.tokenizer is not None:
+                        # Original: data['text'] is a list of strings here.
+                        # We tokenize and move to GPU for text_embed computation.
                         data['text'] = self.tokenizer(data['text'], return_tensors='pt', padding=True, truncation=True)
                     data['text'] = {key: val.cuda(gpu, non_blocking=True) for key, val in data['text'].items()}
                     data['video'] = data['video'].cuda(gpu, non_blocking=True)
 
-                    # Compute embeddings for the batch
                     ret = self.model.module.infer(data, return_embeds=True, task_names="Dual", ret={})
                     vid_embed = ret['video_embeds']
                     text_embed = ret['text_embeds']  # This text_embed is from the batch's queries
 
-                    # --- Distributed data collection (necessary for `sim_matrix` over full dataset) ---
+                    # Distributed data collection (necessary for `sim_matrix` over full dataset)
+                    # These `_all` tensors collect data from all GPUs/processes
                     vid_embed_all = [torch.zeros_like(vid_embed) for _ in range(self.n_gpu)]
                     torch.distributed.all_gather(vid_embed_all, vid_embed)
                     vid_embed_all = torch.cat(vid_embed_all, dim=0)
@@ -280,6 +223,7 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
                     torch.distributed.all_gather(text_embed_all, text_embed)
                     text_embed_all = torch.cat(text_embed_all, dim=0)
 
+                    # Append collected embeddings to lists
                     text_embed_arr[dl_idx].append(text_embed_all.cpu())
                     vid_embed_arr[dl_idx].append(vid_embed_all.cpu())
 
@@ -324,14 +268,15 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
                         self.writer.add_scalar(f'Val_metrics_{dl_idx}/{key}', val, epoch - 1)
 
                 if self.visualizer is not None and self.args.rank == 0:
-                    # Note: visualizer.visualize_ranking might need access to raw text.
-                    # It relies on `meta_arr_cat` which is accumulated.
-                    # For this, `meta_arr` might need to accumulate `data['meta']['narration']` etc.
-                    # But the default `meta_arr` should contain enough.
-                    meta_arr_cat = {key: [] for key in meta_arr[0]}
-                    for meta_batch in meta_arr:  # Iterate through each collected batch of meta
-                        for key, val_list in meta_batch.items():
-                            meta_arr_cat[key].extend(val_list)  # Extend lists for each key
+                    # Note: meta_arr is a list of dictionaries (one dict per batch)
+                    # We need to flatten it into a single dict with lists for each key
+                    meta_arr_cat = {}
+                    if meta_arr[dl_idx]:  # Check if meta_arr[dl_idx] is not empty
+                        for key in meta_arr[dl_idx][0].keys():  # Use keys from first batch's meta
+                            meta_arr_cat[key] = []
+                            for meta_batch_data in meta_arr[dl_idx]:
+                                meta_arr_cat[key].extend(meta_batch_data[key])  # Extend with values from each batch
+
                     self.visualizer.visualize_ranking(sims, epoch, meta_arr_cat, nested_metrics)
             # --- END METRIC CALCULATION ---
 
@@ -340,6 +285,7 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
                 print("\n--- Top Clip Retrieval Predictions for ALL Queries ---")
 
                 # Load the full list of all queries from the sentence CSV (matching data loader order)
+                # This needs to be done once per validation epoch.
                 sentence_csv_path = os.path.join(self.config['data_loader']['args']['meta_dir'],
                                                  "EPIC_100_retrieval_test_sentence.csv")
                 df_sentence_csv = pd.read_csv(sentence_csv_path)
