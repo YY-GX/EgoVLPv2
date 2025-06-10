@@ -350,7 +350,7 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):  # Corrected: Inherit
 def verbose(epoch, metrics, mode, args, name="TEST"):
     if dist.get_rank() == 0:
         Path(args.save_dir).mkdir(parents=True, exist_ok=True)
-        stats_file = open(Path(args.args.save_dir) / 'stats_vtc.txt', 'a', buffering=1)  # Corrected this line
+        stats_file = open(Path(args.save_dir) / 'stats_vtc.txt', 'a', buffering=1)  # Remove the extra '.args'
         print(' '.join(sys.argv))
         print(' '.join(sys.argv), file=stats_file)
 
