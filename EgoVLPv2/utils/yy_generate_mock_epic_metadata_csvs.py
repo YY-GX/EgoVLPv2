@@ -136,7 +136,7 @@ five_s_clip_id_to_idx = {id: i for i, id in enumerate(five_s_clip_video_ids)}
 # Populate the relevancy_matrix
 for query_text in unique_queries_raw:
     mock_query_narration_id = query_text_to_mock_narration_id[query_text]
-    query_row_idx = query_naration_id_to_idx[mock_query_narration_id]
+    query_row_idx = query_narration_id_to_idx[mock_query_narration_id]
 
     matching_original_entries = df_target_video[df_target_video['clip_text'] == query_text]
 
