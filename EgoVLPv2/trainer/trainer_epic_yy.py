@@ -182,7 +182,6 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):  # Corrected: Inherit
             self.text_embed_arr_storage[dl_idx].clear()
             self.vid_embed_arr_storage[dl_idx].clear()
             self.idx_embed_arr_storage[dl_idx].clear()
-            # Clear metadata storage by re-initializing lists for keys
             expected_meta_keys = ['narration_id', 'participant_id', 'video_id', 'narration', 'paths', 'raw_captions']
             self.meta_arr_storage[dl_idx] = {key: [] for key in expected_meta_keys}
         # --- END CORRECTED ---
@@ -224,6 +223,13 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):  # Corrected: Inherit
             text_embeds_local_concat = torch.cat(self.text_embed_arr_storage[dl_idx])
             vid_embeds_local_concat = torch.cat(self.vid_embed_arr_storage[dl_idx])
             idx_embeds_local_concat = torch.cat(self.idx_embed_arr_storage[dl_idx])
+
+            # --- CRITICAL FIX START: Move concatenated tensors to CUDA before all_gather ---
+            # This ensures they are on the GPU for the all_gather operation.
+            text_embeds_local_concat = text_embeds_local_concat.to(gpu)
+            vid_embeds_local_concat = vid_embeds_local_concat.to(gpu)
+            idx_embeds_local_concat = idx_embeds_local_concat.to(gpu)
+            # --- CRITICAL FIX END ---
 
             # Perform final all_gather and de-duplication on Rank 0
             if self.n_gpu > 1:
@@ -271,13 +277,11 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):  # Corrected: Inherit
                 if self.args.rank == 0:
                     self.logger.info(
                         self.verbose(epoch=epoch, metrics=res, name=self.valid_data_loader[dl_idx].dataset_name,
-                                     # Corrected: Call self.verbose
                                      mode=metric_name, args=self.args))
                 nested_metrics[dl_idx][metric_name] = res
 
                 if self.writer is not None and self.args.rank == 0:
                     to_write = self.format_nested_metrics_for_writer(res, mode=metric_name,
-                                                                     # Corrected: Call self.format_nested_metrics_for_writer
                                                                      name=self.valid_data_loader[dl_idx].dataset_name)
                     for key, val in to_write.items():
                         key = key.replace('[', '_').replace(']', '_')
@@ -290,10 +294,9 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):  # Corrected: Inherit
                     for key in expected_meta_keys:
                         if key in self.meta_arr_storage[dl_idx]:
                             if self.n_gpu > 1 and self.args.rank == 0:
-                                # Slice meta_arr_cat_flattened to only include unique elements
                                 meta_arr_cat_flattened[key] = self.meta_arr_storage[dl_idx][key][
                                                               :total_unique_videos_dataset]
-                            else:  # Single GPU or non-rank 0, take all
+                            else:
                                 meta_arr_cat_flattened[key] = self.meta_arr_storage[dl_idx][key]
                         else:
                             meta_arr_cat_flattened[key] = []
@@ -368,9 +371,6 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):  # Corrected: Inherit
             total = self.len_epoch
         return base.format(current, total, 100.0 * current / total)
 
-    # --- MODIFIED: Moved these functions inside the class and made them staticmethods ---
-    # They are now called as self.verbose(...) and self.format_nested_metrics_for_writer(...)
-    # This fixes the NameError in multi-process contexts.
     @staticmethod
     def verbose(epoch, metrics, mode, args, name="TEST"):
         if dist.get_rank() == 0:
@@ -401,4 +401,3 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):  # Corrected: Inherit
             log_name = f"[{mode}]{name}_{key}"
             res[log_name] = val
         return res
-# --- END MODIFIED: Moved functions ---
