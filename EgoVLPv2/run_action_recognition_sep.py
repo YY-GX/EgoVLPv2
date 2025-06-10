@@ -34,17 +34,17 @@ ckpt = torch.load(CHECKPOINT_PATH, map_location=DEVICE)
 ckpt_args = ckpt['config']['arch']['args']
 ckpt_args['video_params']['num_frames'] = NUM_FRAMES
 
-# Use exact config to avoid projection mismatches
-ckpt_args = ckpt['config']['arch']['args']  # already a dict
-ckpt_args['video_params']['num_frames'] = NUM_FRAMES
+# Ensure missing keys are injected
+if 'use_checkpoint' not in ckpt['config']:
+    ckpt['config']['use_checkpoint'] = False
+if 'task_names' not in ckpt['config']:
+    ckpt['config']['task_names'] = 'EgoNCE'
 
 model = FrozenInTime(
     **ckpt_args,
-    config=ckpt['config'],  # pass as-is
-    task_names='EgoNCE'  # hardcoded or fallback
+    config=ckpt['config'],
+    task_names=ckpt['config']['task_names']
 )
-
-
 
 missing_keys, _ = model.load_state_dict(ckpt['state_dict'], strict=False)
 print("Missing keys:", missing_keys)
@@ -104,6 +104,7 @@ else:
         video_frames = load_video_frames(clip_path)
         if video_frames is None:
             continue
+
         video_embeds = model.compute_video(video_frames).float()
         video_embeds = F.normalize(video_embeds, dim=-1)
 
