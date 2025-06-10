@@ -19,8 +19,10 @@ parser = argparse.ArgumentParser(description='EgoVLPv2 Action Recognition')
 parser.add_argument('-c', '--config', required=True, type=str, help='Path to config file')
 parser.add_argument('-r', '--resume', default=None, type=str, help='Path to checkpoint')
 parser.add_argument('-d', '--device', default=None, type=str, help='CUDA device(s) to use')
-parser.add_argument('--task_names', default='EgoNCE', type=str)
+parser.add_argument('--task_names', default='EgoNCE', type=str, help='Task names for model')
+parser.add_argument('--save_dir', type=str, default='./runs', help='Directory to save logs/models')
 args = parser.parse_args()
+
 
 # ==== Load Config ====
 print("Loading config and checkpoint...")
