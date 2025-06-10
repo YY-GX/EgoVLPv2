@@ -16,9 +16,9 @@ from model.model import FrozenInTime # Assuming this import path is correct
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 CHECKPOINT_PATH = './checkpoints/EgoVLPv2_smallproj.pth'
 CLIPS_DIR = './clips_egoclip' # Ensure this points to your 5-second clips
-# PROMPTS = ["#C C looks around", "#C C walks around", "#C C sits in the house"]
+PROMPTS = ["#C C looks around", "#C C walks around", "#C C sits in the house"]
 # PROMPTS = ["walking", "sitting", "standing"]
-PROMPTS = ["cat", "washing machine", "skydiving"]
+# PROMPTS = ["cat", "washing machine", "skydiving"]
 
 
 # ==== Preprocessing ====
@@ -75,7 +75,8 @@ model = FrozenInTime(
 )
 
 # Load the pre-trained weights
-model.load_state_dict(ckpt['state_dict'], strict=False)
+missing, unexpected = model.load_state_dict(ckpt['state_dict'], strict=False)
+print("Missing keys:", missing)
 model = model.to(DEVICE)
 model.eval()
 
