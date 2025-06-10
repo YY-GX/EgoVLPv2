@@ -57,39 +57,60 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
         Inherited from BaseTrainer.
     """
 
-    def __init__(self, args, model, loss, metrics, optimizer, scheduler, gpu, config, data_loader,
-                 valid_data_loader=None, lr_scheduler=None, len_epoch=None, writer=None,
-                 visualizer=None, tokenizer=None, max_samples_per_epoch=50000):
-        super().__init__(args, model, loss, metrics, optimizer, scheduler, gpu, config, writer)
-        self.config = config
-        self.args = args
-        self.data_loader = data_loader
-        if len_epoch is None:
-            # epoch-based training
-            # take the min
-            self.len_epoch = min([len(x) for x in data_loader])
-        else:
-            # iteration-based training
-            self.data_loader = inf_loop(data_loader)
-            self.len_epoch = len_epoch
+    class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
+        """
+        Trainer class
 
-        self.valid_data_loader = valid_data_loader
-        self.do_validation = self.valid_data_loader is not None
-        self.lr_scheduler = lr_scheduler
-        self.visualizer = visualizer
-        self.val_chunking = True
-        self.batch_size = self.data_loader[0].batch_size
-        self.log_step = int(np.sqrt(self.batch_size))
-        self.total_batch_sum = sum([x.batch_size for x in self.data_loader])
-        self.tokenizer = tokenizer
-        self.max_samples_per_epoch = max_samples_per_epoch
-        self.n_gpu = self.args.world_size
-        self.allgather = AllGather_multi.apply
-        # self.writer = writer
+        Note:
+            Inherited from BaseTrainer.
+        """
 
-        # Store text_embeds and query_texts to avoid recomputing every time (optional optimization)
-        self._all_query_texts = None
-        self._all_query_narration_ids = None
+        def __init__(self, args, model, loss, metrics, optimizer, scheduler, gpu, config, data_loader,
+                     valid_data_loader=None, lr_scheduler=None, len_epoch=None, writer=None,
+                     visualizer=None, tokenizer=None, max_samples_per_epoch=50000):
+            super().__init__(args, model, loss, metrics, optimizer, scheduler, gpu, config, writer)
+            self.config = config
+            self.args = args
+            self.data_loader = data_loader
+
+            # --- MODIFIED SECTION START ---
+            if len_epoch is None:
+                # If the data_loader (training data) is empty, set len_epoch to 0.
+                # This handles evaluation-only runs where no training data is provided.
+                if not self.data_loader:
+                    self.len_epoch = 0
+                else:
+                    # Original logic for epoch-based training: take the minimum length
+                    # among multiple data loaders if they exist.
+                    self.len_epoch = min([len(x) for x in data_loader])
+            else:
+                # Iteration-based training (original logic, not relevant for our current use case)
+                self.data_loader = inf_loop(data_loader)
+                self.len_epoch = len_epoch
+            # --- MODIFIED SECTION END ---
+
+            self.valid_data_loader = valid_data_loader
+            self.do_validation = self.valid_data_loader is not None
+            self.lr_scheduler = lr_scheduler
+            self.visualizer = visualizer
+            self.val_chunking = True
+
+            # --- MODIFIED SECTION START (Defensive check for self.batch_size if data_loader is empty) ---
+            if self.data_loader:  # Only access data_loader[0] if it's not empty
+                self.batch_size = self.data_loader[0].batch_size
+                self.log_step = int(np.sqrt(self.batch_size))
+                self.total_batch_sum = sum([x.batch_size for x in self.data_loader])
+            else:  # For evaluation-only, set dummy values
+                self.batch_size = 1  # Or any non-zero dummy value
+                self.log_step = 1  # Or any non-zero dummy value
+                self.total_batch_sum = 0  # No batches for training
+            # --- MODIFIED SECTION END ---
+
+            self.tokenizer = tokenizer
+            self.max_samples_per_epoch = max_samples_per_epoch
+            self.n_gpu = self.args.world_size
+            self.allgather = AllGather_multi.apply
+            # self.writer = writer
 
     def _eval_metrics(self, output):
         acc_metrics = np.zeros(len(self.metrics))
