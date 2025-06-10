@@ -38,7 +38,7 @@ CLIPS_DIR = './clips_egoclip_v2'
 PROMPTS = ["#C C walks around", "#C C looks around", "#C C stands along countertop"]
 IMG_SIZE = 224
 NUM_FRAMES = 4
-CLIP_DURATION = 5
+CLIP_DURATION = 2
 
 # ==== Preprocessing ====
 transform = transforms.Compose([
