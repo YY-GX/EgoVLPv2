@@ -143,6 +143,10 @@ else:
         video_embeds = model.compute_video(video_frames).float()
         video_embeds = F.normalize(video_embeds, dim=-1)
 
+        text_sims = torch.matmul(text_embeds, text_embeds.T)
+        print("Prompt-to-prompt similarity matrix:")
+        print(text_sims.cpu().numpy())
+
         sim = torch.matmul(video_embeds, text_embeds.T)
         probs = F.softmax(sim, dim=-1).cpu().detach().numpy()[0]
         pred_idx = probs.argmax()
