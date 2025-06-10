@@ -187,7 +187,6 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):  # Corrected: Inherit
             self.text_embed_arr_storage[dl_idx].clear()
             self.vid_embed_arr_storage[dl_idx].clear()
             self.idx_embed_arr_storage[dl_idx].clear()
-            # Clear metadata storage by re-initializing lists for keys
             expected_meta_keys = ['narration_id', 'participant_id', 'video_id', 'narration', 'paths',
                                   'raw_captions']
             self.meta_arr_storage[dl_idx] = {key: [] for key in expected_meta_keys}
@@ -203,8 +202,7 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):  # Corrected: Inherit
                         else:
                             self.meta_arr_storage[dl_idx][k] = v_list
 
-                    idx_embed_local = data['meta']['paths'].cuda(gpu,
-                                                                 non_blocking=True)  # Use _local suffix for clarity
+                    idx_embed_local = data['meta']['paths'].cuda(gpu, non_blocking=True)
                     if self.tokenizer is not None:
                         data['text'] = self.tokenizer(data['text'], return_tensors='pt', padding=True,
                                                       truncation=True)
@@ -212,15 +210,13 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):  # Corrected: Inherit
                     data['video'] = data['video'].cuda(gpu, non_blocking=True)
 
                     ret = self.model.module.infer(data, return_embeds=True, task_names="Dual", ret={})
-                    vid_embed_local = ret['video_embeds']  # Use _local suffix
-                    text_embed_local = ret['text_embeds']  # Use _local suffix
+                    vid_embed_local = ret['video_embeds']
+                    text_embed_local = ret['text_embeds']
 
-                    # --- CORRECTED: Append local embeddings directly to storage ---
-                    # The all_gather will happen once at the end for the full set.
+                    # Append local embeddings directly to storage (on CPU)
                     self.text_embed_arr_storage[dl_idx].append(text_embed_local.cpu())
                     self.vid_embed_arr_storage[dl_idx].append(vid_embed_local.cpu())
                     self.idx_embed_arr_storage[dl_idx].append(idx_embed_local.cpu())
-                    # --- END CORRECTED ---
 
             if self.writer is not None and self.args.rank == 0:
                 for dl_idx in range(len(self.valid_data_loader)):
@@ -230,16 +226,20 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):  # Corrected: Inherit
         for dl_idx in range(len(self.valid_data_loader)):
             nested_metrics = {x: {} for x in range(len(self.valid_data_loader))}
 
-            # --- CORRECTED: Perform final all_gather and de-duplication on Rank 0 ---
             # Concatenate all locally collected embeddings for this dataloader index
             text_embeds_local_concat = torch.cat(self.text_embed_arr_storage[dl_idx])
             vid_embeds_local_concat = torch.cat(self.vid_embed_arr_storage[dl_idx])
             idx_embeds_local_concat = torch.cat(self.idx_embed_arr_storage[dl_idx])
 
-            # Use all_gather (or all_gather_object) to collect from all processes
-            # This is where the actual accumulation across GPUs happens
+            # --- CRITICAL FIX START: Move concatenated tensors to CUDA before all_gather ---
+            # This ensures they are on the GPU for the all_gather operation.
+            text_embeds_local_concat = text_embeds_local_concat.to(gpu)
+            vid_embeds_local_concat = vid_embeds_local_concat.to(gpu)
+            idx_embeds_local_concat = idx_embeds_local_concat.to(gpu)
+            # --- CRITICAL FIX END ---
+
+            # Perform final all_gather and de-duplication on Rank 0
             if self.n_gpu > 1:
-                # Gather all concatenated local tensors from all GPUs
                 text_embeds_all_gpus = [torch.empty_like(text_embeds_local_concat) for _ in range(self.n_gpu)]
                 torch.distributed.all_gather(text_embeds_all_gpus, text_embeds_local_concat)
                 text_embeds_full = torch.cat(text_embeds_all_gpus, dim=0)
@@ -252,57 +252,45 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):  # Corrected: Inherit
                 torch.distributed.all_gather(idx_embeds_all_gpus, idx_embeds_local_concat)
                 arr_embeds_full = torch.cat(idx_embeds_all_gpus, dim=0)
 
-                # --- De-duplication of gathered tensors (assuming simple slicing) ---
-                # This assumes data is perfectly partitioned and gathered in order.
-                # If total_samples is N, each GPU has N/num_gpus. Gathered is N.
-                # But for `sims` matrix, we need unique text embeddings (N_queries) and unique video embeddings (N_videos).
-                # `text_embeds_full` will have N_queries * num_gpus (duplicates).
-                # `arr_embeds_full` (video IDs) will have N_videos * num_gpus (duplicates).
+                # --- Corrected: De-duplication based on total unique elements ---
+                # Total unique queries is `df_sentence_csv_for_slice.shape[0]`
+                # Total unique videos is `len(self.valid_data_loader[dl_idx].dataset.video_id_to_numerical_idx)`
 
-                # We need to take a slice from the gathered tensors to get unique ones,
-                # corresponding to the global order.
-                # The total number of unique queries in the dataset is `df_sentence_csv.shape[0]`.
-                # The total number of unique video clips is `num_5s_clips` (from generate_mock script).
-
-                # Load the full sentence CSV to get total unique queries for slicing
+                # Load the full sentence CSV to get total unique queries for slicing (if not loaded already)
+                # This ensures we get the exact number of unique queries for slicing.
                 sentence_csv_path_for_slice = os.path.join(self.config['data_loader']['args']['meta_dir'],
                                                            "EPIC_100_retrieval_test_sentence.csv")
                 df_sentence_csv_for_slice = pd.read_csv(sentence_csv_path_for_slice)
                 total_unique_queries_dataset = df_sentence_csv_for_slice.shape[0]
 
-                # Similarly, get total unique video clips dataset-wide.
-                # From generate_mock_epic_clip_retrieval_metadata.py, it's `num_5s_clips`.
-                # The total number of `video_id`s should be `num_5s_clips`.
-                # This is more complex to get directly here. Let's get it from the dataset's `video_id_to_numerical_idx`
+                # Get total unique video clips (from dataset's map)
                 total_unique_videos_dataset = len(self.valid_data_loader[dl_idx].dataset.video_id_to_numerical_idx)
 
-                # Slicing the gathered tensors to get unique parts on Rank 0
                 if self.args.rank == 0:
-                    # Take only the first "num_unique_queries" elements for text embeddings
                     text_embeds_full_unique = text_embeds_full[:total_unique_queries_dataset]
-                    # Take only the first "num_unique_videos" elements for video embeddings (IDs)
                     vid_embeds_full_unique = vid_embeds_full[:total_unique_videos_dataset]
                     arr_embeds_full_unique = arr_embeds_full[:total_unique_videos_dataset]
                 else:
                     # Non-rank 0 processes don't need the full unique data
+                    # (they will typically exit after their part of all_gather anyway)
                     text_embeds_full_unique = text_embeds_full
                     vid_embeds_full_unique = vid_embeds_full
                     arr_embeds_full_unique = arr_embeds_full
 
-            else:  # Single GPU case (no all_gather needed for full set)
-                text_embeds_full_unique = torch.cat(self.text_embed_arr_storage[dl_idx])
-                vid_embeds_full_unique = torch.cat(self.vid_embed_arr_storage[dl_idx])
-                arr_embeds_full_unique = torch.cat(self.idx_embed_arr_storage[dl_idx])
+            else:  # Single GPU case (no all_gather needed for full set, use locally concatenated)
+                text_embeds_full_unique = text_embeds_local_concat
+                vid_embeds_full_unique = vid_embeds_local_concat
+                arr_embeds_full_unique = idx_embeds_local_concat  # This is already on CPU/GPU as needed
 
             # Compute similarity matrix over the FULL UNIQUE dataset embeddings
             # Shape: (total_unique_queries, total_unique_videos)
             sims = sim_matrix(text_embeds_full_unique, vid_embeds_full_unique).detach().cpu().numpy()
 
-            # --- METRIC CALCULATION (Keep as is, now calculates over your full mock dataset) ---
+            # ... (rest of metric calculation and custom printing logic, unchanged) ...
+
             for metric in self.metrics:
                 metric_name = metric.__name__
-                # `arr_embeds_full_unique` contains numerical video_ids now
-                res = metric(sims, arr_embeds_full_unique)
+                res = metric(sims, arr_embeds_full_unique)  # Passed unique numerical video_ids
                 if self.args.rank == 0:
                     self.logger.info(
                         verbose(epoch=epoch, metrics=res, name=self.valid_data_loader[dl_idx].dataset_name,
@@ -321,28 +309,23 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):  # Corrected: Inherit
                     expected_meta_keys = ['narration_id', 'participant_id', 'video_id', 'narration', 'paths',
                                           'raw_captions']
                     for key in expected_meta_keys:
-                        if key in self.meta_arr_storage[dl_idx]:  # Check if key exists in storage
-                            meta_arr_cat_flattened[key] = self.meta_arr_storage[dl_idx][
-                                key]  # meta_arr_storage[dl_idx][key] is already flattened list
-                        else:  # Ensure key is initialized even if no data collected for it
+                        if key in self.meta_arr_storage[dl_idx]:
+                            # meta_arr_storage[dl_idx][key] already contains lists of all collected meta for this key
+                            # but needs to be de-duplicated if self.n_gpu > 1
+                            if self.n_gpu > 1 and self.args.rank == 0:
+                                # We need to get the unique portion of meta. This is complex to slice without a global map.
+                                # For simplicity, let's just take the first N_unique_items from the accumulated list.
+                                # This assumes data is ordered and unique items come first.
+                                # If meta_arr_storage[dl_idx][key] is large, slice it.
+                                meta_arr_cat_flattened[key] = self.meta_arr_storage[dl_idx][key][
+                                                              :total_unique_videos_dataset]  # Assuming video_id is unique per sample
+                            else:
+                                meta_arr_cat_flattened[key] = self.meta_arr_storage[dl_idx][key]
+                        else:
                             meta_arr_cat_flattened[key] = []
 
-                    # For visualizer, it needs corresponding meta-data. `meta_arr_storage` also has duplicates.
-                    # We need to de-duplicate meta_arr_storage[dl_idx] as well.
-                    # This is complex. Let's simplify meta_arr_cat_flattened for rank 0.
-                    # The meta_arr_storage is collected by extend. So it will have `num_gpus` copies of everything.
-                    # We need to slice it down for `visualize_ranking`.
-                    if self.n_gpu > 1 and self.args.rank == 0:
-                        # Slice meta_arr_cat_flattened to only include unique elements
-                        # This requires understanding exact order of meta data to slice.
-                        # This is tricky. Let's make it simpler for now and assume visualize_ranking
-                        # might handle duplicates or we don't care about it for debugging.
-                        # For now, pass `meta_arr_cat_flattened` directly and accept duplicates if they appear.
-                        pass  # Pass as is
                     self.visualizer.visualize_ranking(sims, epoch, meta_arr_cat_flattened, nested_metrics)
-            # --- END METRIC CALCULATION ---
 
-            # --- CUSTOM PREDICTION PRINTING LOGIC START ---
             if self.args.rank == 0:
                 print("\n--- Top Clip Retrieval Predictions for ALL Queries ---")
 
@@ -355,7 +338,7 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):  # Corrected: Inherit
                 dataset_instance = self.valid_data_loader[dl_idx].dataset
                 numerical_idx_to_video_id_map = dataset_instance.numerical_idx_to_video_id
 
-                # Use the unique numerical video IDs from arr_embeds_full_unique
+                # Use unique numerical IDs from `arr_embeds_full_unique`
                 all_5s_clip_ids_evaluated_numerical = arr_embeds_full_unique.tolist()
                 all_5s_clip_ids_evaluated_strings = [
                     numerical_idx_to_video_id_map.get(idx, f"UNKNOWN_VID_{idx}")
@@ -364,7 +347,7 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):  # Corrected: Inherit
 
                 top_k_results_per_query = 5
 
-                # Loop through unique queries (which is `df_sentence_csv.shape[0]`)
+                # Loop through the actual unique queries from sentence CSV
                 for query_row_idx in range(df_sentence_csv.shape[0]):
                     query_narration_id = df_sentence_csv['narration_id'].iloc[query_row_idx]
                     query_text = all_narration_id_to_query_text.get(query_narration_id, "UNKNOWN_QUERY")
@@ -394,7 +377,6 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):  # Corrected: Inherit
                         print(f"    Rank {rank + 1}: {clip_id_string} {time_str} | Score: {score:.4f}")
 
                 print("\n--- End Top Clip Retrieval Predictions for ALL Queries ---")
-            # --- END CUSTOM PREDICTION PRINTING LOGIC ---
 
         res_dict = {}
         if self.args.rank == 0:
@@ -441,3 +423,4 @@ class Multi_Trainer_dist_MIR(base.Multi_BaseTrainer_dist):  # Corrected: Inherit
             log_name = f"[{mode}]{name}_{key}"
             res[log_name] = val
         return res
+
