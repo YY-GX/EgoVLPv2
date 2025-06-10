@@ -12,6 +12,23 @@ import csv
 
 from model.model import FrozenInTime  # Make sure this import path is correct
 
+from collections import OrderedDict
+
+def remove_module_prefix(state_dict):
+    """
+    Remove 'module.' prefix from state_dict keys (used when model was saved with DataParallel).
+    """
+    new_state_dict = OrderedDict()
+    for k, v in state_dict.items():
+        if k.startswith('module.'):
+            new_k = k[len('module.'):]
+        else:
+            new_k = k
+        new_state_dict[new_k] = v
+    return new_state_dict
+
+
+
 # ==== Settings ====
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 CHECKPOINT_PATH = './checkpoints/EgoVLPv2_smallproj.pth'
@@ -31,6 +48,8 @@ transform = transforms.Compose([
 # ==== Load Model ====
 print("Loading model...")
 ckpt = torch.load(CHECKPOINT_PATH, map_location=DEVICE)
+
+ckpt['state_dict'] = remove_module_prefix(ckpt['state_dict'])
 
 ckpt_args = ckpt['config']['arch']['args']
 ckpt_args['video_params']['num_frames'] = NUM_FRAMES
