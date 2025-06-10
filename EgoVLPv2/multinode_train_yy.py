@@ -164,27 +164,55 @@ def main_worker(gpu, args):
     trainer.train(gpu)
     
 
+# def init_dataloaders(config, module_data):
+#     """
+#     We need a way to change split from 'train' to 'val'.
+#     """
+#     if "type" in config["data_loader"] and "args" in config["data_loader"]:
+#         # then its a single dataloader
+#         data_loader = [config.initialize("data_loader", module_data)]
+#         config['data_loader']['args'] = replace_nested_dict_item(config['data_loader']['args'], 'split', 'val')
+#         valid_data_loader = [config.initialize("data_loader", module_data)]
+#     elif isinstance(config["data_loader"], list):
+#         data_loader = [config.initialize('data_loader', module_data, index=idx) for idx in
+#                        range(len(config['data_loader']))]
+#         new_cfg_li = []
+#         for dl_cfg in config['data_loader']:
+#             dl_cfg['args'] = replace_nested_dict_item(dl_cfg['args'], 'split', 'val')
+#             new_cfg_li.append(dl_cfg)
+#         config._config['data_loader'] = new_cfg_li
+#         valid_data_loader = [config.initialize('data_loader', module_data, index=idx) for idx in
+#                              range(len(config['data_loader']))]
+#     else:
+#         raise ValueError("Check data_loader config, not correct format.")
+#
+#     return data_loader, valid_data_loader
+
+
 def init_dataloaders(config, module_data):
     """
-    We need a way to change split from 'train' to 'val'.
+    Initializes data loaders for zero-shot evaluation.
+    Only the validation data loader will be actively used and initialized.
+    The 'training' data_loader will be an empty list.
     """
-    if "type" in config["data_loader"] and "args" in config["data_loader"]:
-        # then its a single dataloader
-        data_loader = [config.initialize("data_loader", module_data)]
-        config['data_loader']['args'] = replace_nested_dict_item(config['data_loader']['args'], 'split', 'val')
-        valid_data_loader = [config.initialize("data_loader", module_data)]
-    elif isinstance(config["data_loader"], list):
-        data_loader = [config.initialize('data_loader', module_data, index=idx) for idx in
-                       range(len(config['data_loader']))]
-        new_cfg_li = []
-        for dl_cfg in config['data_loader']:
-            dl_cfg['args'] = replace_nested_dict_item(dl_cfg['args'], 'split', 'val')
-            new_cfg_li.append(dl_cfg)
-        config._config['data_loader'] = new_cfg_li
-        valid_data_loader = [config.initialize('data_loader', module_data, index=idx) for idx in
-                             range(len(config['data_loader']))]
-    else:
-        raise ValueError("Check data_loader config, not correct format.")
+    # Initialize the training data_loader as empty since it's not needed for zero-shot evaluation.
+    data_loader = []
+
+    # Store the original split argument from the config.
+    original_split = config['data_loader']['args']['split']
+
+    # Temporarily set the split to 'test' (or 'val') for the validation data loader.
+    # This ensures it loads data from your 'EPIC_100_retrieval_test.csv' file.
+    config['data_loader']['args']['split'] = 'test'
+
+    # Initialize the validation data loader.
+    # This is the only data loader that will contain actual data for evaluation.
+    valid_data_loader = [config.initialize("data_loader", module_data)]
+
+    # Restore the original split argument in the config.
+    # This is good practice in case other parts of the script rely on the original 'split' value,
+    # though it's likely not critical for a pure evaluation run.
+    config['data_loader']['args']['split'] = original_split
 
     return data_loader, valid_data_loader
 
