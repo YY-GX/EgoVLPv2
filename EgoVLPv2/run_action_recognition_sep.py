@@ -16,7 +16,9 @@ from model.model import FrozenInTime # Assuming this import path is correct
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 CHECKPOINT_PATH = './checkpoints/EgoVLPv2_smallproj.pth'
 CLIPS_DIR = './clips_egoclip' # Ensure this points to your 5-second clips
-PROMPTS = ["#C C looks around", "#C C walks around", "#C C sits in the house"]
+# PROMPTS = ["#C C looks around", "#C C walks around", "#C C sits in the house"]
+PROMPTS = ["walking", "sitting", "standing"]
+
 
 # ==== Preprocessing ====
 IMG_SIZE = 224
@@ -43,30 +45,33 @@ ckpt_args['projection_dim'] = 256
 if 'projection' not in ckpt_args:
     ckpt_args['projection'] = 'minimal'
 
-from types import SimpleNamespace
-
-dummy_config_dict = {
-    'vocab_size': 50265,
-    'hidden_size': 768,
-    'num_layers': 12,
-    'num_heads': 12,
-    'mlp_ratio': 4,
-    'drop_rate': 0.1,
-    'input_image_embed_size': 768,
-    'input_text_embed_size': 768,
-    'num_fuse_block': 4,
-    'use_checkpoint': False,
-    'task_names': 'EgoNCE',
+# --- PROBLEM FIX: Provide a dummy config dictionary for FrozenInTime's internal use ---
+# This dictionary contains parameters that FrozenInTime expects to find
+# within its 'config' object for initializing sub-modules like cross-attention heads.
+# These values are typical for roberta-base and the EgoVLP architecture.
+dummy_config = {
+    'vocab_size': 50265, # Standard for RoBERTa tokenizer
+    'hidden_size': 768,  # RoBERTa base hidden size
+    'num_layers': 12,    # RoBERTa base layers
+    'num_heads': 12,     # RoBERTa base heads
+    'mlp_ratio': 4,      # Common MLP ratio for transformers
+    'drop_rate': 0.1,    # Common dropout rate
+    'input_image_embed_size': 768, # ViT base embed_dim
+    'input_text_embed_size': 768,  # RoBERTa base hidden size (same as hidden_size for RoBERTa)
+    'num_fuse_block': 4, # Crucial for cross-modal layers; typical value from EgoVLP
+    'use_checkpoint': False # Set to False unless you're using torch.utils.checkpoint
 }
 
-dummy_config = SimpleNamespace(**dummy_config_dict)
+# The `FrozenInTime` class also expects a `task_names` key in its `config` dictionary if
+# it's going to initialize ITM/MLM heads or similar.
+dummy_config['task_names'] = 'EgoNCE' # Setting it to EgoNCE for basic embedding extraction
 
+# Instantiate the model with the prepared arguments and the dummy config
 model = FrozenInTime(
     **ckpt_args,
-    config=dummy_config,
-    task_names=dummy_config.task_names,
+    config=dummy_config, # Pass the dictionary directly
+    task_names='EgoNCE' # Explicitly set task to EgoNCE for simpler inference path
 )
-
 
 # Load the pre-trained weights
 model.load_state_dict(ckpt['state_dict'], strict=False)
