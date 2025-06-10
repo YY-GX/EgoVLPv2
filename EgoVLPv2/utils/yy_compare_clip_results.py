@@ -6,7 +6,7 @@ import csv
 # --- Configuration ---
 # Paths to your input files
 EGOCLIP_GT_CSV_PATH = './egoclip.csv'
-PREDICTIONS_CSV_PATH = './my_aria_clip_retrieval_results/top_clips_predictions.csv'  # Adjust path if needed
+PREDICTIONS_CSV_PATH = './eval_yy/top_clips_predictions.csv'  # Adjust path if needed
 CLIP_DURATION_SECONDS = 5  # Needs to match what you used for splitting and in trainer
 
 # --- IoU Threshold for considering a prediction "correct" ---
