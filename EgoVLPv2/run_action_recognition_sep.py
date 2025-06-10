@@ -35,10 +35,13 @@ ckpt_args = ckpt['config']['arch']['args']
 ckpt_args['video_params']['num_frames'] = NUM_FRAMES
 
 # Use exact config to avoid projection mismatches
+cfg = ckpt['config']
+task_names = getattr(cfg, 'task_names', 'EgoNCE')
+
 model = FrozenInTime(
-    **ckpt_args,
-    config=ckpt['config'],
-    task_names=ckpt['config'].get('task_names', 'EgoNCE')
+    **cfg.arch.args,
+    config=cfg,
+    task_names=task_names
 )
 
 missing_keys, _ = model.load_state_dict(ckpt['state_dict'], strict=False)
