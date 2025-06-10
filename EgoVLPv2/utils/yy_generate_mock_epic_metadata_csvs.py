@@ -26,7 +26,7 @@ def seconds_to_hms(seconds):
 
 
 print(f"Loading egoclip.csv from: {EGOCLIP_CSV_PATH}")
-df_egoclip = pd.read_csv(EGOCLIP_CSV_PATH, sep='\t')
+df_egoclip = pd.read_csv(EGOCLIP_CSV_PATH, sep='\t', error_bad_lines=False, warn_bad_lines=True)
 
 # Filter for the target video
 df_target_video = df_egoclip[df_egoclip['video_uid'] == TARGET_EGOCLIP_VIDEO_UID].copy()
