@@ -13,7 +13,7 @@ os.makedirs(OUTPUT_RELEVANCY_DIR, exist_ok=True)
 MOCK_SENTENCE_CSV_PATH = os.path.join(YOUR_MOCK_EK100_ROOT, 'EK100/epic-kitchens-100-annotations/retrieval_annotations', 'EPIC_100_retrieval_test_sentence.csv')
 
 # Load the sentence CSV to get the number of queries
-df_sentence = pd.read_csv(EGOCLIP_CSV_PATH, sep='\t', error_bad_lines=False, warn_bad_lines=True)
+df_sentence = pd.read_csv(MOCK_SENTENCE_CSV_PATH, sep='\t', error_bad_lines=False, warn_bad_lines=True)
 num_queries = len(df_sentence)
 num_videos = 1 # You only have one video: aria_P01_01
 
