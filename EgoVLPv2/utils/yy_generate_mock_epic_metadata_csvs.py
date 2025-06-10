@@ -25,7 +25,7 @@ os.makedirs(OUTPUT_RELEVANCY_DIR, exist_ok=True)
 
 print(f"Loading egoclip.csv from: {EGOCLIP_CSV_PATH}")
 try:
-    df_egoclip = pd.read_csv(EGOCLIP_CSV_PATH, sep='\t')
+    df_egoclip = pd.read_csv(EGOCLIP_CSV_PATH, sep='\t', error_bad_lines=False, warn_bad_lines=True)
 except Exception as e:
     print(f"Error reading egoclip.csv: {e}")
     print("Please ensure the delimiter is correct and any problematic lines are handled.")
