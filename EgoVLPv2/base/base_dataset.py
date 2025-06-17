@@ -226,7 +226,8 @@ def sample_frames_start_end(num_frames, start, end, sample='rand', fix_start=Non
 def read_frames_cv2(video_path, num_frames, sample='rand', fix_start=None):
     cap = cv2.VideoCapture(video_path)
     if not cap.isOpened():
-        return None, []
+        # Return a zero tensor instead of None
+        return torch.zeros((num_frames, 3, 224, 224)), []
     vlen = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     # get indexes of sampled frames
     frame_idxs = sample_frames(num_frames, vlen, sample=sample, fix_start=fix_start)
@@ -248,7 +249,8 @@ def read_frames_cv2(video_path, num_frames, sample='rand', fix_start=None):
 
     if not frames:  # If no frames were successfully read
         cap.release()
-        return None, []
+        # Return a zero tensor instead of None
+        return torch.zeros((num_frames, 3, 224, 224)), []
         
     frames = torch.stack(frames).float() / 255
     cap.release()
@@ -375,15 +377,20 @@ def read_frames_av(video_path, num_frames, sample='rand', fix_start=None):
 decord.bridge.set_bridge("torch")
 
 def read_frames_decord(video_path, num_frames, sample='rand', fix_start=None):
-    video_reader = decord.VideoReader(video_path, num_threads=1)
-    vlen = len(video_reader)
-    frame_idxs = sample_frames(num_frames, vlen, sample=sample, fix_start=fix_start)
-    video_reader.skip_frames(1)
-    frames = video_reader.get_batch(frame_idxs)
+    try:
+        video_reader = decord.VideoReader(video_path, num_threads=1)
+        vlen = len(video_reader)
+        frame_idxs = sample_frames(num_frames, vlen, sample=sample, fix_start=fix_start)
+        video_reader.skip_frames(1)
+        frames = video_reader.get_batch(frame_idxs)
 
-    frames = frames.float() / 255
-    frames = frames.permute(0, 3, 1, 2)
-    return frames, frame_idxs
+        frames = frames.float() / 255
+        frames = frames.permute(0, 3, 1, 2)
+        return frames, frame_idxs
+    except Exception as e:
+        print(f"Error reading video {video_path}: {e}")
+        # Return a zero tensor instead of raising an error
+        return torch.zeros((num_frames, 3, 224, 224)), []
 
 def read_frames_decord_start_end(video_path, start, end, num_frames):
     video_reader = decord.VideoReader(video_path, num_threads=1)
