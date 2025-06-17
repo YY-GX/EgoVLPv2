@@ -37,6 +37,9 @@ class ParkinsonEgo(TextVideoDataset):
             
         df = pd.read_csv(csv_path)
         df.columns = df.columns.str.strip()  # Strip whitespace from headers
+        if 'video_path' not in df.columns:
+            print(f"[DEBUG] Columns in {csv_path}: {df.columns.tolist()}")
+            raise KeyError(f"'video_path' column not found in {csv_path}")
         
         self.metadata = []
         for _, row in df.iterrows():
