@@ -14,8 +14,11 @@ import torch
 import transformers
 from tqdm import tqdm
 
-from ..base.base_dataset import TextVideoDataset
-from ..base.transforms import init_transform_dict, init_video_transform_dict
+# Add the project root to Python path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
+from EgoVLPv2.base.base_dataset import TextVideoDataset
+from EgoVLPv2.base.transforms import init_transform_dict, init_video_transform_dict
 
 
 class ParkinsonEgo(TextVideoDataset):
@@ -28,16 +31,27 @@ class ParkinsonEgo(TextVideoDataset):
     def _load_metadata(self):
         # Load the CSV file for the current split
         csv_path = os.path.join(self.meta_dir, f'{self.split}.csv')
+        if not os.path.exists(csv_path):
+            raise FileNotFoundError(f"CSV file not found: {csv_path}")
+            
         df = pd.read_csv(csv_path)
         
         self.metadata = []
         for _, row in df.iterrows():
+            video_path = os.path.join(self.data_dir, row['video_path'])
+            if not os.path.exists(video_path):
+                print(f"Warning: Video file not found: {video_path}")
+                continue
+                
             self.metadata.append({
-                'video_path': os.path.join(self.data_dir, row['video_path']),
+                'video_path': video_path,
                 'action_label': row['action_label'],
                 'start_time': row['start_time'],
                 'end_time': row['end_time']
             })
+            
+        if len(self.metadata) == 0:
+            raise ValueError(f"No valid samples found in {csv_path}")
 
     def __getitem__(self, item):
         item = item % len(self.metadata)
@@ -45,7 +59,12 @@ class ParkinsonEgo(TextVideoDataset):
         
         # Load video frames
         video_path = sample['video_path']
-        frames = self.video_reader(video_path, self.video_params['num_frames'])
+        try:
+            frames = self.video_reader(video_path, self.video_params['num_frames'])
+        except Exception as e:
+            print(f"Error loading video {video_path}: {str(e)}")
+            # Return a different sample
+            return self.__getitem__((item + 1) % len(self.metadata))
         
         # Apply video transforms
         if self.transforms is not None:
