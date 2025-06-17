@@ -34,7 +34,7 @@ class ParkinsonEgo(TextVideoDataset):
     def _load_metadata(self):
         """Load metadata from CSV file."""
         metadata = []
-        csv_path = os.path.join(self.data_dir, 'annotations', f'{self.split}.csv')
+        csv_path = os.path.join(os.path.dirname(self.data_dir), 'annotations', f'{self.split}.csv')
         
         if not os.path.exists(csv_path):
             raise FileNotFoundError(f"CSV file not found: {csv_path}")
