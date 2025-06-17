@@ -64,18 +64,6 @@
         "early_stop": 10
     },
     "visualizer": {
-        "type": "",
-        "args": {
-            "log_dir": "runs/",
-            "enabled": false,
-            "web_domain": "localhost",
-            "web_port": 8097,
-            "args": {
-                "log_dir": "runs/",
-                "enabled": false,
-                "web_domain": "localhost",
-                "web_port": 8097
-            }
-        }
+        "type": ""
     }
 } 
