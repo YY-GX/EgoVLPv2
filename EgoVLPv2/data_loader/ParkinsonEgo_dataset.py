@@ -72,25 +72,33 @@ class ParkinsonEgo(TextVideoDataset):
         # Load video frames
         video_path = sample['video_path']
         try:
-            frames = self.video_reader(video_path, self.video_params['num_frames'])
-            # Convert frames to tensor if they're not already
-            if isinstance(frames, tuple):
-                frames = torch.stack(frames)
+            imgs, idxs = self.video_reader(video_path, self.video_params['num_frames'])
+            
+            # Apply video transforms
+            if self.transforms is not None:
+                if self.video_params['num_frames'] > 1:
+                    imgs = imgs.transpose(0, 1)  # [T, C, H, W] ---> [C, T, H, W]
+                    imgs = self.transforms(imgs)
+                    imgs = imgs.transpose(0, 1)  # recover
+                else:
+                    imgs = self.transforms(imgs)
+            
+            # Create final tensor with padding if needed
+            final = torch.zeros([self.video_params['num_frames'], 3, self.video_params['input_res'],
+                               self.video_params['input_res']])
+            final[:imgs.shape[0]] = imgs
+            
         except Exception as e:
             print(f"Error loading video {video_path}: {str(e)}")
             # Return a different sample
             return self.__getitem__((item + 1) % len(self.metadata))
-        
-        # Apply video transforms
-        if self.transforms is not None:
-            frames = self.transforms(frames)
         
         # Tokenize action label
         text = sample['action_label']
         text_tokens = self.tokenizer(text, padding='max_length', truncation=True, max_length=self.text_params['max_length'], return_tensors='pt')
         
         return {
-            'video': frames,
+            'video': final,
             'text': text_tokens,
             'meta': {
                 'video_path': video_path,
