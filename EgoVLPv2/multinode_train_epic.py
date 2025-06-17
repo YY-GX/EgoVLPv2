@@ -172,6 +172,8 @@ def init_dataloaders(config, module_data):
         # then its a single dataloader
         data_loader = [config.initialize("data_loader", module_data)]
         config['data_loader']['args'] = replace_nested_dict_item(config['data_loader']['args'], 'split', 'val')
+        # Use fewer workers for validation
+        config['data_loader']['args'] = replace_nested_dict_item(config['data_loader']['args'], 'num_workers', 1)
         valid_data_loader = [config.initialize("data_loader", module_data)]
     elif isinstance(config["data_loader"], list):
         data_loader = [config.initialize('data_loader', module_data, index=idx) for idx in
@@ -179,6 +181,8 @@ def init_dataloaders(config, module_data):
         new_cfg_li = []
         for dl_cfg in config['data_loader']:
             dl_cfg['args'] = replace_nested_dict_item(dl_cfg['args'], 'split', 'val')
+            # Use fewer workers for validation
+            dl_cfg['args'] = replace_nested_dict_item(dl_cfg['args'], 'num_workers', 1)
             new_cfg_li.append(dl_cfg)
         config._config['data_loader'] = new_cfg_li
         valid_data_loader = [config.initialize('data_loader', module_data, index=idx) for idx in
