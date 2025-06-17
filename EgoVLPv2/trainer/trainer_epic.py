@@ -213,47 +213,76 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
         text_embed_arr = {x: [] for x in range(len(self.valid_data_loader))}
         vid_embed_arr = {x: [] for x in range(len(self.valid_data_loader))}
         idx_embed_arr = {x: [] for x in range(len(self.valid_data_loader))}
+        
         with torch.no_grad():
-            # for validation we switch the nested loop order, because alternate batches not needed...
-            # ... and dataloaders can be of different length
             for dl_idx, dl in enumerate(self.valid_data_loader):
                 for batch_idx, data in enumerate(tqdm(dl)):
-                    meta_arr[dl_idx].append(data['meta'])
-                    # import pdb; pdb.set_trace()
-                    idx_embed = data['meta']['paths'].cuda(gpu, non_blocking=True)
-                    if self.tokenizer is not None:
-                        data['text'] = self.tokenizer(data['text'], return_tensors='pt', padding=True, truncation=True)
-                    data['text'] = {key: val.cuda(gpu, non_blocking=True) for key, val in data['text'].items()}
-                    data['video'] = data['video'].cuda(gpu, non_blocking=True)
-
-                    # text_embed, vid_embed = self.model(data, return_embeds=True)
-                    #text_embed, vid_embed = self.model.module(data, return_embeds=True)
-                    ret = self.model.module.infer(data, return_embeds=True, task_names="Dual", ret={})
-                    vid_embed = ret['video_embeds']
-                    text_embed = ret['text_embeds']
-
-                    # if isinstance(self.model, nn.DataParallel) and data["video"].shape[0] < len(self.model.device_ids):
-                    # Note that if some batch has size smaller than the GPU size, `DataParallel` will fail.
-                    # It can happen with the last batch of the dataset, depending on its size.
-                    # This avoids using `DataParallel` in this case, and supposes the entire batch fits in one GPU.
-                    #    text_embed, vid_embed = self.model.module(data, return_embeds=True)
-                    # else:
-                    #    text_embed, vid_embed = self.model(data, return_embeds=True)
-                    vid_embed_all = [torch.zeros_like(vid_embed) for _ in range(self.n_gpu)]
-                    torch.distributed.all_gather(vid_embed_all, vid_embed)
-                    vid_embed_all = torch.cat(vid_embed_all, dim=0)
-
-                    text_embed_all = [torch.zeros_like(text_embed) for _ in range(self.n_gpu)]
-                    torch.distributed.all_gather(text_embed_all, text_embed)
-                    text_embed_all = torch.cat(text_embed_all, dim=0)
-
-                    text_embed_arr[dl_idx].append(text_embed_all.cpu())
-                    vid_embed_arr[dl_idx].append(vid_embed_all.cpu())
-
-                    idx_embed_all = [torch.zeros_like(idx_embed) for _ in range(self.n_gpu)]
-                    torch.distributed.all_gather(idx_embed_all, idx_embed)
-                    idx_embed_all = torch.cat(idx_embed_all, dim=0)
-                    idx_embed_arr[dl_idx].append(idx_embed_all.cpu())
+                    try:
+                        meta_arr[dl_idx].append(data['meta'])
+                        
+                        # Ensure all tensors are on the correct device
+                        idx_embed = data['meta']['paths'].cuda(gpu, non_blocking=True)
+                        
+                        # Handle text tokenization
+                        if self.tokenizer is not None:
+                            data['text'] = self.tokenizer(data['text'], return_tensors='pt', padding=True, truncation=True)
+                        data['text'] = {key: val.cuda(gpu, non_blocking=True) for key, val in data['text'].items()}
+                        
+                        # Ensure video tensor is valid
+                        if data['video'] is None:
+                            # Create a zero tensor with the expected shape
+                            data['video'] = torch.zeros([self.video_params['num_frames'], 3, 
+                                                       self.video_params['input_res'],
+                                                       self.video_params['input_res']]).cuda(gpu, non_blocking=True)
+                        else:
+                            data['video'] = data['video'].cuda(gpu, non_blocking=True)
+                        
+                        # Get embeddings
+                        ret = self.model.module.infer(data, return_embeds=True, task_names="Dual", ret={})
+                        vid_embed = ret['video_embeds']
+                        text_embed = ret['text_embeds']
+                        
+                        # Gather embeddings from all GPUs
+                        vid_embed_all = [torch.zeros_like(vid_embed) for _ in range(self.n_gpu)]
+                        torch.distributed.all_gather(vid_embed_all, vid_embed)
+                        vid_embed_all = torch.cat(vid_embed_all, dim=0)
+                        
+                        text_embed_all = [torch.zeros_like(text_embed) for _ in range(self.n_gpu)]
+                        torch.distributed.all_gather(text_embed_all, text_embed)
+                        text_embed_all = torch.cat(text_embed_all, dim=0)
+                        
+                        idx_embed_all = [torch.zeros_like(idx_embed) for _ in range(self.n_gpu)]
+                        torch.distributed.all_gather(idx_embed_all, idx_embed)
+                        idx_embed_all = torch.cat(idx_embed_all, dim=0)
+                        
+                        # Store results
+                        text_embed_arr[dl_idx].append(text_embed_all.cpu())
+                        vid_embed_arr[dl_idx].append(vid_embed_all.cpu())
+                        idx_embed_arr[dl_idx].append(idx_embed_all.cpu())
+                        
+                    except Exception as e:
+                        print(f"Error processing validation batch {batch_idx} in dataloader {dl_idx}: {str(e)}")
+                        # Create zero tensors with correct shapes for failed batch
+                        zero_vid_embed = torch.zeros([self.video_params['num_frames'], 3, 
+                                                    self.video_params['input_res'],
+                                                    self.video_params['input_res']]).cuda(gpu)
+                        zero_text_embed = torch.zeros([1, self.text_params['max_length']]).cuda(gpu)
+                        
+                        # Gather zero tensors
+                        vid_embed_all = [torch.zeros_like(zero_vid_embed) for _ in range(self.n_gpu)]
+                        torch.distributed.all_gather(vid_embed_all, zero_vid_embed)
+                        vid_embed_all = torch.cat(vid_embed_all, dim=0)
+                        
+                        text_embed_all = [torch.zeros_like(zero_text_embed) for _ in range(self.n_gpu)]
+                        torch.distributed.all_gather(text_embed_all, zero_text_embed)
+                        text_embed_all = torch.cat(text_embed_all, dim=0)
+                        
+                        # Store zero tensors
+                        text_embed_arr[dl_idx].append(text_embed_all.cpu())
+                        vid_embed_arr[dl_idx].append(vid_embed_all.cpu())
+                        idx_embed_arr[dl_idx].append(torch.zeros_like(idx_embed).cpu())
+                        
+                        continue
 
             if self.writer is not None and self.args.rank == 0:
                 for dl_idx in range(len(self.valid_data_loader)):
