@@ -90,8 +90,9 @@ class ParkinsonEgo(TextVideoDataset):
             
         except Exception as e:
             print(f"Error loading video {video_path}: {str(e)}")
-            # Return a different sample
-            return self.__getitem__((item + 1) % len(self.metadata))
+            # Return a zero tensor instead of recursively calling __getitem__
+            final = torch.zeros([self.video_params['num_frames'], 3, self.video_params['input_res'],
+                               self.video_params['input_res']])
         
         # Tokenize action label
         text = sample['action_label']
