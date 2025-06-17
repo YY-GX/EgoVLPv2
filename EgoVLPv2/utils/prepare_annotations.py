@@ -9,6 +9,8 @@ import glob
 def parse_timestamp(timestamp):
     """Convert timestamp string to seconds."""
     try:
+        if timestamp.strip() == 'end':
+            return None
         dt = datetime.strptime(timestamp.strip(), '%M:%S')
         return dt.minute * 60 + dt.second
     except ValueError:
@@ -25,11 +27,16 @@ def get_action_at_time(timestamp, annotations):
         current_start = parse_timestamp(annotations.iloc[i]['timestamp'])
         next_start = parse_timestamp(annotations.iloc[i + 1]['timestamp'])
         
-        if current_start <= timestamp_sec < next_start:
-            return annotations.iloc[i]['action_label']
+        # Handle the case where next_start is 'end'
+        if next_start is None:
+            if current_start <= timestamp_sec:
+                return annotations.iloc[i]['action_label']
+        else:
+            if current_start <= timestamp_sec < next_start:
+                return annotations.iloc[i]['action_label']
     
     # If timestamp is after the last action, return the last action
-    return annotations.iloc[-1]['action_label']
+    return annotations.iloc[-2]['action_label']  # -2 because the last row is 'end'
 
 def generate_clip_annotations_for_video(raw_annotation_file, clip_duration, video_id):
     """
@@ -48,11 +55,15 @@ def generate_clip_annotations_for_video(raw_annotation_file, clip_duration, vide
     # Strip whitespace from column names
     annotations.columns = annotations.columns.str.strip()
     
-    # Get video duration from last timestamp
-    last_timestamp = parse_timestamp(annotations.iloc[-1]['timestamp'])
+    # Get video duration from the 'end' timestamp
+    end_timestamp = annotations.iloc[-1]['timestamp']
+    if end_timestamp.strip() != 'end':
+        raise ValueError(f"Last row of {raw_annotation_file} must have 'end' as timestamp")
+    last_timestamp = parse_timestamp(annotations.iloc[-2]['timestamp'])  # Get timestamp of last action
+    end_time = parse_timestamp(end_timestamp)  # Get the end time
     
     # Generate clip timestamps
-    clip_starts = np.arange(0, last_timestamp, clip_duration)
+    clip_starts = np.arange(0, end_time, clip_duration)
     
     # Create clips dataframe
     clips = []
