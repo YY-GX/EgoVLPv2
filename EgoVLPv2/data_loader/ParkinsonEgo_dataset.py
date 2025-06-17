@@ -15,6 +15,8 @@ import transformers
 from tqdm import tqdm
 from PIL import Image
 from torchvision import transforms
+import csv
+from pathlib import Path
 
 # Add the parent directory to Python path
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -25,7 +27,7 @@ from base.base_dataset import TextVideoDataset
 
 
 class ParkinsonEgo(TextVideoDataset):
-    def __init__(self, dataset_name, text_params, video_params, data_dir, meta_dir=None, split='train', tsfms=None, cut=None, subsample=1, sliding_window_stride=-1, reader='decord', neg_param=None):
+    def __init__(self, dataset_name, text_params, video_params, data_dir, meta_dir=None, split='train', tsfms=None, cut=None, subsample=None, sliding_window_stride=-1, reader='decord', neg_param=None):
         super().__init__(dataset_name=dataset_name, text_params=text_params, video_params=video_params, data_dir=data_dir, meta_dir=meta_dir, split=split, tsfms=tsfms, cut=cut, subsample=subsample, sliding_window_stride=sliding_window_stride, reader=reader, neg_param=neg_param)
         
         # Build tokenizer robustly
