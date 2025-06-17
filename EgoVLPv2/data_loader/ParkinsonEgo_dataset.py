@@ -68,85 +68,87 @@ class ParkinsonEgo(TextVideoDataset):
             raise ValueError(f"No valid samples found in {csv_path}")
 
     def __getitem__(self, item):
-        item = item % len(self.metadata)
-        sample = self.metadata[item]
-        
-        # Load video frames
-        video_path = sample['video_path']
-        video_loading = self.video_params.get('loading', 'strict')
-        frame_sample = 'rand'
-        if self.split == 'test':
-            frame_sample = 'uniform'
-        
-        # Create a zero tensor as fallback
-        fallback_tensor = torch.zeros([self.video_params['num_frames'], 3, self.video_params['input_res'],
-                                     self.video_params['input_res']])
-        
         try:
-            if not os.path.isfile(video_path):
-                if video_loading == 'strict':
-                    raise FileNotFoundError(f"Video file not found: {video_path}")
-                frames = fallback_tensor
-            else:
-                frames, idxs = self.video_reader(video_path, self.video_params['num_frames'], frame_sample)
-                if frames is None or frames.shape[0] == 0:
-                    if video_loading == 'strict':
-                        raise ValueError(f"No frames loaded from {video_path}")
-                    frames = fallback_tensor
-                
-                # Apply video transforms
-                if self.transforms is not None:
-                    if self.video_params['num_frames'] > 1:
-                        frames = frames.transpose(0, 1)  # [T, C, H, W] ---> [C, T, H, W]
-                        frames = self.transforms(frames)
-                        frames = frames.transpose(0, 1)  # recover
-                    else:
-                        frames = self.transforms(frames)
-                
-                # Create final tensor with padding if needed
-                final = torch.zeros([self.video_params['num_frames'], 3, self.video_params['input_res'],
-                                   self.video_params['input_res']])
-                final[:frames.shape[0]] = frames
-                frames = final
-                
-        except Exception as e:
-            if video_loading == 'strict':
-                raise ValueError(f'Video loading failed for {video_path}, video loading for this dataset is strict.') from e
-            frames = fallback_tensor
-        
-        # Tokenize action label
-        text = sample['action_label']
-        text_tokens = self.tokenizer(text, padding='max_length', truncation=True, max_length=self.text_params['max_length'], return_tensors='pt')
-        
-        # Ensure all tensors are on CPU for distributed training
-        frames = frames.cpu()
-        text_tokens = {k: v.cpu() for k, v in text_tokens.items()}
-        
-        meta_arr = {
-            'raw_captions': text,
-            'paths': video_path,
-            'dataset': self.dataset_name,
-            'start_time': sample['start_time'],
-            'end_time': sample['end_time']
-        }
-        
-        result = {
-            'video': frames,
-            'text': text_tokens,
-            'meta': meta_arr
-        }
-        
-        # Debug prints to identify None values
-        if frames is None:
-            print(f"[DEBUG] Video frames is None for video_path: {video_path}")
-        if text_tokens is None:
-            print(f"[DEBUG] Text tokens is None for text: {text}")
-        if meta_arr is None:
-            print(f"[DEBUG] Meta array is None for video_path: {video_path}")
-        if result is None:
-            print(f"[DEBUG] Entire result is None for video_path: {video_path}")
+            item = item % len(self.metadata)
+            sample = self.metadata[item]
             
-        return result
+            # Debug print at the start
+            print(f"[DEBUG] Processing item {item} with sample: {sample}")
+            
+            # Load video frames
+            video_path = sample['video_path']
+            video_loading = self.video_params.get('loading', 'strict')
+            frame_sample = 'rand'
+            if self.split == 'test':
+                frame_sample = 'uniform'
+            
+            # Create a zero tensor as fallback
+            fallback_tensor = torch.zeros([self.video_params['num_frames'], 3, self.video_params['input_res'],
+                                         self.video_params['input_res']])
+            
+            try:
+                if not os.path.isfile(video_path):
+                    print(f"[DEBUG] Video file not found: {video_path}")
+                    if video_loading == 'strict':
+                        raise FileNotFoundError(f"Video file not found: {video_path}")
+                    frames = fallback_tensor
+                else:
+                    frames, idxs = self.video_reader(video_path, self.video_params['num_frames'], frame_sample)
+                    if frames is None or frames.shape[0] == 0:
+                        print(f"[DEBUG] No frames loaded from {video_path}")
+                        if video_loading == 'strict':
+                            raise ValueError(f"No frames loaded from {video_path}")
+                        frames = fallback_tensor
+                    
+                    # Apply video transforms
+                    if self.transforms is not None:
+                        if self.video_params['num_frames'] > 1:
+                            frames = frames.transpose(0, 1)  # [T, C, H, W] ---> [C, T, H, W]
+                            frames = self.transforms(frames)
+                            frames = frames.transpose(0, 1)  # recover
+                        else:
+                            frames = self.transforms(frames)
+                    
+                    # Create final tensor with padding if needed
+                    final = torch.zeros([self.video_params['num_frames'], 3, self.video_params['input_res'],
+                                       self.video_params['input_res']])
+                    final[:frames.shape[0]] = frames
+                    frames = final
+                    
+            except Exception as e:
+                print(f"[DEBUG] Error in video loading: {str(e)}")
+                if video_loading == 'strict':
+                    raise ValueError(f'Video loading failed for {video_path}, video loading for this dataset is strict.') from e
+                frames = fallback_tensor
+            
+            # Tokenize action label
+            text = sample['action_label']
+            text_tokens = self.tokenizer(text, padding='max_length', truncation=True, max_length=self.text_params['max_length'], return_tensors='pt')
+            
+            # Ensure all tensors are on CPU for distributed training
+            frames = frames.cpu()
+            text_tokens = {k: v.cpu() for k, v in text_tokens.items()}
+            
+            meta_arr = {
+                'raw_captions': text,
+                'paths': video_path,
+                'dataset': self.dataset_name,
+                'start_time': sample['start_time'],
+                'end_time': sample['end_time']
+            }
+            
+            result = {
+                'video': frames,
+                'text': text_tokens,
+                'meta': meta_arr
+            }
+            
+            return result
+            
+        except Exception as e:
+            print(f"[DEBUG] Critical error in __getitem__ for item {item}: {str(e)}")
+            print(f"[DEBUG] Full traceback:", e.__traceback__)
+            raise  # Re-raise the exception so the worker can handle it
 
     def __len__(self):
         return len(self.metadata) 
