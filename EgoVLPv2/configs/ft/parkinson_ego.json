@@ -56,7 +56,7 @@
         "type": "CrossEntropy",
         "args": {}
     },
-    "metrics": ["accuracy"],
+    "metrics": ["egomcq_accuracy_metrics_ensemble"],
     "trainer": {
         "epochs": 100,
         "save_dir": "",
