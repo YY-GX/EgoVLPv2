@@ -17,7 +17,7 @@
                 "pretrained": true,
                 "input": "text"
             },
-            "projection": "minimal",
+            "projection": "frozen-in-time",
             "load_checkpoint": "checkpoints/EgoVLPv2.pth"
         }
     },
