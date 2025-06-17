@@ -220,22 +220,9 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
                     try:
                         meta_arr[dl_idx].append(data['meta'])
                         
-                        # Ensure all tensors are on the correct device
-                        idx_embed = data['meta']['paths'].cuda(gpu, non_blocking=True)
-                        
-                        # Handle text tokenization
-                        if self.tokenizer is not None:
-                            data['text'] = self.tokenizer(data['text'], return_tensors='pt', padding=True, truncation=True)
-                        data['text'] = {key: val.cuda(gpu, non_blocking=True) for key, val in data['text'].items()}
-                        
-                        # Ensure video tensor is valid
-                        if data['video'] is None:
-                            # Create a zero tensor with the expected shape
-                            data['video'] = torch.zeros([self.video_params['num_frames'], 3, 
-                                                       self.video_params['input_res'],
-                                                       self.video_params['input_res']]).cuda(gpu, non_blocking=True)
-                        else:
-                            data['video'] = data['video'].cuda(gpu, non_blocking=True)
+                        # Move all tensors to GPU
+                        data = {k: v.cuda(gpu, non_blocking=True) if isinstance(v, torch.Tensor) else v 
+                               for k, v in data.items()}
                         
                         # Get embeddings
                         ret = self.model.module.infer(data, return_embeds=True, task_names="Dual", ret={})
@@ -245,11 +232,12 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
                         # Store results locally
                         text_embed_arr[dl_idx].append(text_embed.cpu())
                         vid_embed_arr[dl_idx].append(vid_embed.cpu())
-                        idx_embed_arr[dl_idx].append(idx_embed.cpu())
+                        idx_embed_arr[dl_idx].append(data['meta']['paths'].cpu())
                         
                     except Exception as e:
                         print(f"Error processing validation batch {batch_idx} in dataloader {dl_idx}: {str(e)}")
-                        continue
+                        print(f"Full traceback:", e.__traceback__)
+                        raise  # Re-raise to see the full error
 
             if self.writer is not None and self.args.rank == 0:
                 for dl_idx in range(len(self.valid_data_loader)):
