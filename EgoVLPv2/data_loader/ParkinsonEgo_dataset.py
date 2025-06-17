@@ -27,10 +27,7 @@ class ParkinsonEgo(TextVideoDataset):
         super().__init__(dataset_name=dataset_name, text_params=text_params, video_params=video_params, data_dir=data_dir, meta_dir=meta_dir, split=split, tsfms=tsfms, cut=cut, subsample=subsample, sliding_window_stride=sliding_window_stride, reader=reader, neg_param=neg_param)
         
         # Build tokenizer robustly
-        model_name = text_params.get('model') or text_params.get('input') or 'roberta-base'
-        if not model_name:
-            raise ValueError("No model name found in text_params. Please provide 'model' or 'input' key.")
-        self.tokenizer = transformers.AutoTokenizer.from_pretrained(model_name)
+        self.tokenizer = transformers.AutoTokenizer.from_pretrained("roberta-base")
 
     def _load_metadata(self):
         # Load the CSV file for the current split

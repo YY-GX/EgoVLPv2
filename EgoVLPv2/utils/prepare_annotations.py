@@ -5,6 +5,7 @@ from datetime import datetime
 import argparse
 from pathlib import Path
 import glob
+from collections import Counter
 
 def parse_timestamp(timestamp):
     """Convert timestamp string to seconds."""
@@ -16,70 +17,85 @@ def parse_timestamp(timestamp):
         dt = datetime.strptime(timestamp.strip(), '%H:%M:%S')
         return dt.hour * 3600 + dt.minute * 60 + dt.second
 
-def get_action_at_time(timestamp, annotations):
-    """Get the action label for a given timestamp."""
-    timestamp_sec = parse_timestamp(timestamp)
+def get_most_common_action(start_time, end_time, annotations):
+    """Get the most common action label between start_time and end_time."""
+    start_sec = parse_timestamp(start_time)
+    end_sec = parse_timestamp(end_time)
     
-    # Find the last action that started before this timestamp
+    # Get all actions that overlap with this time period
+    actions = []
     for i in range(len(annotations) - 1):
         current_start = parse_timestamp(annotations.iloc[i]['timestamp'])
         next_start = parse_timestamp(annotations.iloc[i + 1]['timestamp'])
         
-        # Handle the case where next row is the end marker
+        # Skip the end marker
         if annotations.iloc[i + 1]['action_label'].strip() == 'end':
-            if current_start <= timestamp_sec:
-                return annotations.iloc[i]['action_label']
-        else:
-            if current_start <= timestamp_sec < next_start:
-                return annotations.iloc[i]['action_label']
+            if current_start <= end_sec:
+                actions.append(annotations.iloc[i]['action_label'])
+            continue
+            
+        # If this action overlaps with our time period
+        if (current_start <= end_sec and next_start >= start_sec):
+            # Calculate overlap duration
+            overlap_start = max(current_start, start_sec)
+            overlap_end = min(next_start, end_sec)
+            overlap_duration = overlap_end - overlap_start
+            
+            # Add the action multiple times based on duration
+            actions.extend([annotations.iloc[i]['action_label']] * overlap_duration)
     
-    # If timestamp is after the last action, return the last action
-    return annotations.iloc[-2]['action_label']  # -2 because the last row is 'end'
+    if not actions:
+        return None
+        
+    # Return the most common action
+    return Counter(actions).most_common(1)[0][0]
 
-def generate_clip_annotations_for_video(raw_annotation_file, clip_duration, video_id):
+def generate_clip_annotations_for_video(raw_annotation_file, clip_duration, video_id, video_dir):
     """
-    Generate clip annotations for a single video.
+    Generate clip annotations for a single video based on existing clips.
     
     Args:
         raw_annotation_file (str): Path to the raw annotation CSV file
         clip_duration (int): Duration of each clip in seconds
         video_id (str): ID of the video (e.g., 'video_0')
+        video_dir (str): Directory containing the video clips
     
     Returns:
         pd.DataFrame: DataFrame containing clip annotations
     """
     # Read raw annotations
     annotations = pd.read_csv(raw_annotation_file)
-    # Strip whitespace from column names and values
     annotations.columns = annotations.columns.str.strip()
     annotations['action_label'] = annotations['action_label'].str.strip()
     
-    # Get video duration from the end timestamp
-    if annotations.iloc[-1]['action_label'] != 'end':
-        raise ValueError(f"Last row of {raw_annotation_file} must have 'end' as action_label")
+    # Get list of existing clips
+    clip_pattern = os.path.join(video_dir, f"{video_id}", "clip_*.mp4")
+    existing_clips = glob.glob(clip_pattern)
     
-    end_time = parse_timestamp(annotations.iloc[-1]['timestamp'])
-    last_action_time = parse_timestamp(annotations.iloc[-2]['timestamp'])
-    
-    # Generate clip timestamps
-    clip_starts = np.arange(0, end_time, clip_duration)
+    if not existing_clips:
+        raise ValueError(f"No clips found matching pattern: {clip_pattern}")
     
     # Create clips dataframe
     clips = []
-    for start_time in clip_starts:
-        # Convert start_time back to MM:SS format
+    for clip_path in existing_clips:
+        # Extract clip number from filename
+        clip_num = int(os.path.basename(clip_path).replace('clip_', '').replace('.mp4', ''))
+        start_time = clip_num * clip_duration
+        
+        # Convert start_time to MM:SS format
         minutes = int(start_time // 60)
         seconds = int(start_time % 60)
         timestamp = f"{minutes:02d}:{seconds:02d}"
         
         # Get action label for this timestamp
-        action_label = get_action_at_time(timestamp, annotations)
+        action_label = get_most_common_action(timestamp, f"{int((start_time + clip_duration) // 60):02d}:{int((start_time + clip_duration) % 60):02d}", annotations)
         
-        # Generate clip ID
-        clip_id = f"{video_id}_clip_{int(start_time):03d}"
-        
+        if action_label is None:
+            print(f"Warning: No action label found for clip {clip_path}")
+            continue
+            
         clips.append({
-            'video_id': clip_id,
+            'video_id': f"{video_id}_clip_{clip_num:03d}",
             'action_label': action_label,
             'start_time': timestamp,
             'source_video': video_id
@@ -87,13 +103,14 @@ def generate_clip_annotations_for_video(raw_annotation_file, clip_duration, vide
     
     return pd.DataFrame(clips)
 
-def generate_combined_annotations(annotation_dir, clip_duration, train_ratio=0.7, val_ratio=0.15, test_ratio=0.15, output_dir=None):
+def generate_combined_annotations(annotation_dir, clip_duration, video_dir, train_ratio=0.7, val_ratio=0.15, test_ratio=0.15, output_dir=None):
     """
     Generate train/val/test annotation files from multiple raw timestamp annotations.
     
     Args:
         annotation_dir (str): Directory containing raw annotation CSV files
         clip_duration (int): Duration of each clip in seconds
+        video_dir (str): Directory containing the video clips
         train_ratio (float): Ratio of clips for training
         val_ratio (float): Ratio of clips for validation
         test_ratio (float): Ratio of clips for testing
@@ -108,7 +125,7 @@ def generate_combined_annotations(annotation_dir, clip_duration, train_ratio=0.7
     all_clips = []
     for raw_file in raw_annotation_files:
         video_id = os.path.splitext(os.path.basename(raw_file))[0]  # Get video_0, video_1, etc.
-        clips_df = generate_clip_annotations_for_video(raw_file, clip_duration, video_id)
+        clips_df = generate_clip_annotations_for_video(raw_file, clip_duration, video_id, video_dir)
         all_clips.append(clips_df)
     
     # Combine all clips
@@ -168,6 +185,8 @@ def main():
                       help='Directory containing raw annotation CSV files (video_*.csv)')
     parser.add_argument('--clip_duration', type=int, required=True, 
                       help='Duration of each clip in seconds')
+    parser.add_argument('--video_dir', type=str, required=True,
+                      help='Directory containing the video clips')
     parser.add_argument('--train_ratio', type=float, default=0.7, 
                       help='Ratio of clips for training')
     parser.add_argument('--val_ratio', type=float, default=0.15, 
@@ -182,6 +201,7 @@ def main():
     generate_combined_annotations(
         args.annotation_dir,
         args.clip_duration,
+        args.video_dir,
         args.train_ratio,
         args.val_ratio,
         args.test_ratio,
