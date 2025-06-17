@@ -77,7 +77,9 @@ class ParkinsonEgo(TextVideoDataset):
         
         try:
             if os.path.isfile(video_path):
-                imgs, idxs = self.video_reader(video_path, self.video_params['num_frames'])
+                frames, frame_idxs = self.video_reader(video_path, self.video_params['num_frames'])
+                if len(frames) == 0:
+                    raise ValueError(f"No frames loaded from {video_path}")
             else:
                 print(f"Warning: missing video file {video_path}.")
                 raise FileNotFoundError(f"Video file not found: {video_path}")
@@ -86,22 +88,22 @@ class ParkinsonEgo(TextVideoDataset):
                 raise ValueError(f'Video loading failed for {video_path}, video loading for this dataset is strict.') from e
             else:
                 # Create a black image and convert to tensor
-                imgs = Image.new('RGB', (self.video_params['input_res'], self.video_params['input_res']), (0, 0, 0))
-                imgs = transforms.ToTensor()(imgs).unsqueeze(0)
+                frames = torch.zeros([self.video_params['num_frames'], 3, self.video_params['input_res'], 
+                                    self.video_params['input_res']])
         
         # Apply video transforms
         if self.transforms is not None:
             if self.video_params['num_frames'] > 1:
-                imgs = imgs.transpose(0, 1)  # [T, C, H, W] ---> [C, T, H, W]
-                imgs = self.transforms(imgs)
-                imgs = imgs.transpose(0, 1)  # recover
+                frames = frames.transpose(0, 1)  # [T, C, H, W] ---> [C, T, H, W]
+                frames = self.transforms(frames)
+                frames = frames.transpose(0, 1)  # recover
             else:
-                imgs = self.transforms(imgs)
+                frames = self.transforms(frames)
         
         # Create final tensor with padding if needed
         final = torch.zeros([self.video_params['num_frames'], 3, self.video_params['input_res'],
                            self.video_params['input_res']])
-        final[:imgs.shape[0]] = imgs
+        final[:frames.shape[0]] = frames
         
         # Tokenize action label
         text = sample['action_label']
