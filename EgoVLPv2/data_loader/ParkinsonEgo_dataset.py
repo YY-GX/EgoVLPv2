@@ -68,25 +68,35 @@ class ParkinsonEgo(TextVideoDataset):
             raise ValueError(f"No valid samples found in {csv_path}")
 
     def __getitem__(self, item):
+        if self.split == 'val':
+            print(f"\n[VAL DEBUG] Processing validation item {item}")
+        
         item = item % len(self.metadata)
         sample = self.metadata[item]
         
         # Load video frames
         video_path = sample['video_path']
+        if self.split == 'val':
+            print(f"[VAL DEBUG] Video path: {video_path}")
+        
         video_loading = self.video_params.get('loading', 'strict')
         frame_sample = 'rand'
         if self.split == 'test':
             frame_sample = 'uniform'
         
         try:
-            if not os.path.isfile(video_path):
-                raise FileNotFoundError(f"Video file not found: {video_path}")
-                
-            frames, idxs = self.video_reader(video_path, self.video_params['num_frames'], frame_sample)
-            if frames is None or frames.shape[0] == 0:
-                raise ValueError(f"No frames loaded from {video_path}")
-                
+            if os.path.isfile(video_path):
+                frames, idxs = self.video_reader(video_path, self.video_params['num_frames'], frame_sample)
+                if self.split == 'val':
+                    print(f"[VAL DEBUG] Loaded frames shape: {frames.shape if frames is not None else None}")
+                if frames is None or frames.shape[0] == 0:
+                    raise ValueError(f"No frames loaded from {video_path}")
+            else:
+                print(f"Warning: missing video file {video_path}")
+                assert False
         except Exception as e:
+            if self.split == 'val':
+                print(f"[VAL DEBUG] Error loading video: {str(e)}")
             if video_loading == 'strict':
                 raise ValueError(f'Video loading failed for {video_path}, video loading for this dataset is strict.') from e
             else:
@@ -101,6 +111,8 @@ class ParkinsonEgo(TextVideoDataset):
                 frames = frames.transpose(0, 1)  # recover
             else:
                 frames = self.transforms(frames)
+            if self.split == 'val':
+                print(f"[VAL DEBUG] After transforms shape: {frames.shape}")
         
         # Create final tensor with padding if needed
         final = torch.zeros([self.video_params['num_frames'], 3, self.video_params['input_res'],
@@ -128,6 +140,10 @@ class ParkinsonEgo(TextVideoDataset):
             'text': text_tokens,
             'meta': meta_arr
         }
+        if self.split == 'val':
+            print(f"[VAL DEBUG] Returning result with keys: {result.keys()}")
+            print(f"[VAL DEBUG] Video tensor shape: {result['video'].shape}")
+            print(f"[VAL DEBUG] Text tokens shape: {result['text']['input_ids'].shape}")
         return result
 
     def __len__(self):
