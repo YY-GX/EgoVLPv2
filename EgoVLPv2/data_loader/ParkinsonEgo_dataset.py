@@ -130,7 +130,7 @@ class ParkinsonEgo(TextVideoDataset):
             
             # Ensure all tensors are on CPU for distributed training
             frames = frames.cpu()
-            text_tokens = {k: v.cpu() for k, v in text_tokens.items()}
+            text_tokens = {k: v.squeeze(0).cpu() for k, v in text_tokens.items()}  # Remove batch dimension
             
             meta_arr = {
                 'raw_captions': text,
