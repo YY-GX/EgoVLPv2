@@ -15,6 +15,7 @@ from data_loader.EgoClip_EgoMCQ_dataset import EgoClip_EgoMCQ
 from data_loader.EpicKitchens_MIR_dataset_yy import MultiInstanceRetrieval
 from data_loader.CharadesEgo_dataset import CharadesEgo
 from data_loader.Ego4D_MQ_dataset import MomentQueries
+from data_loader.ParkinsonEgo_dataset import ParkinsonEgo
 from data_loader.transforms import init_transform_dict, init_video_transform_dict
 
 def dataset_loader(dataset_name,
@@ -55,6 +56,8 @@ def dataset_loader(dataset_name,
         dataset = CharadesEgo(**kwargs)
     elif dataset_name == "Ego4D_MQ":
         dataset = MomentQueries(**kwargs)
+    elif dataset_name == "ParkinsonEgo":
+        dataset = ParkinsonEgo(**kwargs)
     else:
         raise NotImplementedError(f"Dataset: {dataset_name} not found.")
 
