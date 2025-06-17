@@ -45,6 +45,8 @@ def generate_clip_annotations_for_video(raw_annotation_file, clip_duration, vide
     """
     # Read raw annotations
     annotations = pd.read_csv(raw_annotation_file)
+    # Strip whitespace from column names
+    annotations.columns = annotations.columns.str.strip()
     
     # Get video duration from last timestamp
     last_timestamp = parse_timestamp(annotations.iloc[-1]['timestamp'])
