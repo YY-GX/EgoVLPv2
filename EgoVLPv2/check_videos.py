@@ -20,7 +20,7 @@ for idx, row in df.iterrows():
             'video_id': row['video_id'],
             'action_label': row['action_label'],
             'start_time': row['start_time'],
-            'end_time': row['end_time']
+            'end_time': row.get('end_time', None)  # Use get() to handle missing column
         })
         print(f"Missing video: {video_path}")
 
