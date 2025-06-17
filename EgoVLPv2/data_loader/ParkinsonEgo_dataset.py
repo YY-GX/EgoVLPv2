@@ -69,15 +69,17 @@ class ParkinsonEgo(TextVideoDataset):
 
     def __getitem__(self, item):
         try:
-            # Get worker info
+            # Get worker info and print immediately
             worker_info = torch.utils.data.get_worker_info()
             worker_id = worker_info.id if worker_info is not None else 0
+            num_workers = worker_info.num_workers if worker_info is not None else 1
+            print(f"[DEBUG] Worker {worker_id}/{num_workers} starting to process item {item}", flush=True)
             
             item = item % len(self.metadata)
             sample = self.metadata[item]
             
             # Debug print at the start with worker ID and force flush
-            print(f"[DEBUG] Worker {worker_id} processing item {item} with sample: {sample}", flush=True)
+            print(f"[DEBUG] Worker {worker_id}/{num_workers} processing item {item} with sample: {sample}", flush=True)
             
             # Load video frames
             video_path = sample['video_path']
