@@ -221,8 +221,12 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
                         meta_arr[dl_idx].append(data['meta'])
                         
                         # Move all tensors to GPU
-                        data = {k: v.cuda(gpu, non_blocking=True) if isinstance(v, torch.Tensor) else v 
-                               for k, v in data.items()}
+                        for k, v in data.items():
+                            if isinstance(v, dict):
+                                data[k] = {sub_k: sub_v.cuda(gpu, non_blocking=True) if isinstance(sub_v, torch.Tensor) else sub_v 
+                                          for sub_k, sub_v in v.items()}
+                            elif isinstance(v, torch.Tensor):
+                                data[k] = v.cuda(gpu, non_blocking=True)
                         
                         # Get embeddings
                         ret = self.model.module.infer(data, return_embeds=True, task_names="Dual", ret={})
