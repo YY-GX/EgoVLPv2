@@ -12,7 +12,9 @@ video_dir = "data/video_0"
 # Check each video file
 missing_videos = []
 for idx, row in df.iterrows():
-    video_path = os.path.join(video_dir, f"clip_{row['video_id']:03d}.mp4")
+    # Convert video_id to string and ensure it's 3 digits
+    video_id = str(row['video_id']).zfill(3)
+    video_path = os.path.join(video_dir, f"clip_{video_id}.mp4")
     if not os.path.exists(video_path):
         missing_videos.append({
             'video_id': row['video_id'],
