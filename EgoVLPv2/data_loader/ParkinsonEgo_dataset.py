@@ -74,12 +74,13 @@ class ParkinsonEgo(TextVideoDataset):
         # Load video frames
         video_path = sample['video_path']
         video_loading = self.video_params.get('loading', 'strict')
+        frame_sample = 'rand'
+        if self.split == 'test':
+            frame_sample = 'uniform'
         
         try:
             if os.path.isfile(video_path):
-                frames, frame_idxs = self.video_reader(video_path, self.video_params['num_frames'])
-                if len(frames) == 0:
-                    raise ValueError(f"No frames loaded from {video_path}")
+                frames, idxs = self.video_reader(video_path, self.video_params['num_frames'], frame_sample)
             else:
                 print(f"Warning: missing video file {video_path}.")
                 raise FileNotFoundError(f"Video file not found: {video_path}")
@@ -109,15 +110,18 @@ class ParkinsonEgo(TextVideoDataset):
         text = sample['action_label']
         text_tokens = self.tokenizer(text, padding='max_length', truncation=True, max_length=self.text_params['max_length'], return_tensors='pt')
         
+        meta_arr = {
+            'raw_captions': text,
+            'paths': video_path,
+            'dataset': self.dataset_name,
+            'start_time': sample['start_time'],
+            'end_time': sample['end_time']
+        }
+        
         return {
             'video': final,
             'text': text_tokens,
-            'meta': {
-                'video_path': video_path,
-                'action_label': text,
-                'start_time': sample['start_time'],
-                'end_time': sample['end_time']
-            }
+            'meta': meta_arr
         }
 
     def __len__(self):
