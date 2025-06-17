@@ -18,7 +18,7 @@
                 "input": "text"
             },
             "projection": "minimal",
-            "load_checkpoint": "EgoVLPv2.pth"
+            "load_checkpoint": "checkpoints/EgoVLPv2.pth"
         }
     },
     "data_loader": {
