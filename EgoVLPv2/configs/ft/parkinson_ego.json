@@ -18,6 +18,7 @@
                 "input": "text"
             },
             "projection": "minimal",
+            "projection_dim": 4096,
             "load_checkpoint": "checkpoints/EgoVLPv2.pth"
         }
     },
