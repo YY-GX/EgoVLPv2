@@ -59,11 +59,13 @@
     "metrics": ["egomcq_accuracy_metrics_ensemble"],
     "trainer": {
         "epochs": 100,
-        "save_dir": "",
-        "save_period": 2,
+        "save_dir": "saved/",
+        "save_period": 1,
         "verbosity": 2,
-        "monitor": "max val_accuracy",
-        "early_stop": 10
+        "monitor": "min val_loss",
+        "early_stop": 10,
+        "tensorboard": true,
+        "max_samples_per_epoch": 100000
     },
     "visualizer": {
         "type": "",
