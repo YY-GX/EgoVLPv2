@@ -36,6 +36,7 @@ class ParkinsonEgo(TextVideoDataset):
             raise FileNotFoundError(f"CSV file not found: {csv_path}")
             
         df = pd.read_csv(csv_path)
+        df.columns = df.columns.str.strip()  # Strip whitespace from headers
         
         self.metadata = []
         for _, row in df.iterrows():
