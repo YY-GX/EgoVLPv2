@@ -86,6 +86,8 @@ class ParkinsonEgo(TextVideoDataset):
                 print(f"[DEBUG] Loading video with {self.video_reader.__name__}")
                 frames, idxs = self.video_reader(video_path, self.video_params['num_frames'], frame_sample)
                 print(f"[DEBUG] Loaded frames shape: {frames.shape if frames is not None else None}")
+                if frames is None or frames.shape[0] == 0:
+                    raise ValueError(f"No frames loaded from {video_path}")
             else:
                 print(f"[DEBUG] Warning: missing video file {video_path}")
                 raise FileNotFoundError(f"Video file not found: {video_path}")
@@ -120,6 +122,10 @@ class ParkinsonEgo(TextVideoDataset):
         print(f"[DEBUG] Action label: {text}")
         text_tokens = self.tokenizer(text, padding='max_length', truncation=True, max_length=self.text_params['max_length'], return_tensors='pt')
         print(f"[DEBUG] Text tokens shape: {text_tokens['input_ids'].shape}")
+        
+        # Ensure all tensors are on CPU for distributed training
+        final = final.cpu()
+        text_tokens = {k: v.cpu() for k, v in text_tokens.items()}
         
         meta_arr = {
             'raw_captions': text,

@@ -142,6 +142,10 @@ class ParkinsonEgo(TextVideoDataset):
             'target': target
         }
         
+        # Ensure all tensors are on CPU for distributed training
+        final = final.cpu()
+        text_tokens = {k: v.cpu() for k, v in text_tokens.items()}
+        
         return data
 
     def __len__(self):
