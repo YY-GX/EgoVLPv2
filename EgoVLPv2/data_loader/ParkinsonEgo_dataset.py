@@ -57,6 +57,7 @@ class ParkinsonEgo(TextVideoDataset):
                     'start_time': row['start_time']
                 })
         
+        self.metadata = metadata  # Assign the metadata to self.metadata
         return metadata
 
     def __getitem__(self, item):
