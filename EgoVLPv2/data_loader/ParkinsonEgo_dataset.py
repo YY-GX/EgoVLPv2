@@ -45,9 +45,10 @@ class ParkinsonEgo(TextVideoDataset):
         for _, row in df.iterrows():
             video_id = row['video_id']  # e.g., video_0_clip_066
             source_video = row['source_video']  # e.g., video_0
-            # Extract clip_xxx from video_id (after the first underscore)
+            # Extract the numeric part after the last underscore
             try:
-                clip_name = video_id.split('_', 1)[1]  # e.g., clip_066
+                clip_num = video_id.split('_')[-1]  # e.g., '066'
+                clip_name = f"clip_{clip_num}"
             except IndexError:
                 print(f"[DEBUG] Unexpected video_id format: {video_id}")
                 continue
