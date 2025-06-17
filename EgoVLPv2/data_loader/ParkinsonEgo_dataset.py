@@ -32,40 +32,30 @@ class ParkinsonEgo(TextVideoDataset):
         self.tokenizer = transformers.AutoTokenizer.from_pretrained("roberta-base")
 
     def _load_metadata(self):
-        # Load the CSV file for the current split
-        csv_path = os.path.join(self.meta_dir, f'{self.split}.csv')
+        """Load metadata from CSV file."""
+        metadata = []
+        csv_path = os.path.join(self.data_dir, 'annotations', f'{self.split}.csv')
+        
         if not os.path.exists(csv_path):
             raise FileNotFoundError(f"CSV file not found: {csv_path}")
-            
-        df = pd.read_csv(csv_path)
-        df.columns = df.columns.str.strip()  # Strip whitespace from headers
-        if 'video_id' not in df.columns or 'source_video' not in df.columns:
-            print(f"[DEBUG] Columns in {csv_path}: {df.columns.tolist()}")
-            raise KeyError(f"'video_id' or 'source_video' column not found in {csv_path}")
         
-        self.metadata = []
-        for _, row in df.iterrows():
-            video_id = row['video_id']  # e.g., video_0_clip_066
-            source_video = row['source_video']  # e.g., video_0
-            # Extract the numeric part after the last underscore
-            try:
-                clip_num = video_id.split('_')[-1]  # e.g., '066'
-                clip_name = f"clip_{clip_num}"      
-            except IndexError:
-                print(f"[DEBUG] Unexpected video_id format: {video_id}")
-                continue
-            video_path = os.path.join(self.data_dir, source_video, f"{clip_name}.mp4")
-            if not os.path.exists(video_path):
-                print(f"Warning: Video file not found: {video_path}")
-                continue
-            self.metadata.append({
-                'video_path': video_path,
-                'action_label': row['action_label'],
-                'start_time': row['start_time'],
-                'end_time': row.get('end_time', None)
-            })
-        if len(self.metadata) == 0:
-            raise ValueError(f"No valid samples found in {csv_path}")
+        with open(csv_path, 'r') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                # Convert video_id to string and pad with zeros to ensure 3 digits
+                video_id = str(row['video_id']).zfill(3)
+                
+                # Construct video path
+                video_path = os.path.join(self.data_dir, 'video_0', f'clip_{video_id}.mp4')
+                
+                # Add to metadata
+                metadata.append({
+                    'video_path': video_path,
+                    'action_label': row['action_label'],
+                    'start_time': row['start_time']
+                })
+        
+        return metadata
 
     def __getitem__(self, item):
         try:
@@ -99,7 +89,9 @@ class ParkinsonEgo(TextVideoDataset):
                         raise FileNotFoundError(f"Video file not found: {video_path}")
                     frames = fallback_tensor
                 else:
+                    print(f"[DEBUG] Worker {worker_id} Loading video: {video_path}", flush=True)
                     frames, idxs = self.video_reader(video_path, self.video_params['num_frames'], frame_sample)
+                    print(f"[DEBUG] Worker {worker_id} Video loaded, frames shape: {frames.shape if frames is not None else None}", flush=True)
                     if frames is None or frames.shape[0] == 0:
                         print(f"[DEBUG] Worker {worker_id} No frames loaded from {video_path}", flush=True)
                         if video_loading == 'strict':
@@ -130,6 +122,7 @@ class ParkinsonEgo(TextVideoDataset):
             # Tokenize action label
             text = sample['action_label']
             text_tokens = self.tokenizer(text, padding='max_length', truncation=True, max_length=self.text_params['max_length'], return_tensors='pt')
+            print(f"[DEBUG] Worker {worker_id} Text tokens created: {text_tokens.keys()}", flush=True)
             
             # Ensure all tensors are on CPU for distributed training
             frames = frames.cpu()
@@ -139,8 +132,7 @@ class ParkinsonEgo(TextVideoDataset):
                 'raw_captions': text,
                 'paths': video_path,
                 'dataset': self.dataset_name,
-                'start_time': sample['start_time'],
-                'end_time': sample['end_time']
+                'start_time': sample['start_time']
             }
             
             result = {
@@ -149,6 +141,7 @@ class ParkinsonEgo(TextVideoDataset):
                 'meta': meta_arr
             }
             
+            print(f"[DEBUG] Worker {worker_id} Returning result with keys: {result.keys()}", flush=True)
             return result
             
         except Exception as e:
