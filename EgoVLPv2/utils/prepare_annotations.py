@@ -112,14 +112,18 @@ def generate_combined_annotations(annotation_dir, clip_duration, train_ratio=0.7
     n_train = int(n_clips * train_ratio)
     n_val = int(n_clips * val_ratio)
     
-    train_df = combined_clips[:n_train]
-    val_df = combined_clips[n_train:n_train + n_val]
-    test_df = combined_clips[n_train + n_val:]
+    # Create copies of the splits to avoid SettingWithCopyWarning
+    train_df = combined_clips.iloc[:n_train].copy()
+    val_df = combined_clips.iloc[n_train:n_train + n_val].copy()
+    test_df = combined_clips.iloc[n_train + n_val:].copy()
     
     # Add split column
     train_df['split'] = 'train'
     val_df['split'] = 'val'
     test_df['split'] = 'test'
+    
+    # Combine all splits back for statistics
+    all_splits = pd.concat([train_df, val_df, test_df], ignore_index=True)
     
     # Create output directory if it doesn't exist
     if output_dir is None:
@@ -141,7 +145,7 @@ def generate_combined_annotations(annotation_dir, clip_duration, train_ratio=0.7
     # Print statistics per video
     print("\nClips per video:")
     for video_id in combined_clips['source_video'].unique():
-        video_clips = combined_clips[combined_clips['source_video'] == video_id]
+        video_clips = all_splits[all_splits['source_video'] == video_id]
         print(f"\n{video_id}:")
         print(f"  Total: {len(video_clips)} clips")
         print(f"  Train: {len(video_clips[video_clips['split'] == 'train'])} clips")
