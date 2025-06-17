@@ -236,7 +236,8 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
                         # Store results locally
                         text_embed_arr[dl_idx].append(text_embed.cpu())
                         vid_embed_arr[dl_idx].append(vid_embed.cpu())
-                        idx_embed_arr[dl_idx].append(data['meta']['paths'].cpu())
+                        # Store paths directly since they're not tensors
+                        idx_embed_arr[dl_idx].append(data['meta']['paths'])
                         
                     except Exception as e:
                         print(f"Error processing validation batch {batch_idx} in dataloader {dl_idx}: {str(e)}")
