@@ -242,46 +242,13 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
                         vid_embed = ret['video_embeds']
                         text_embed = ret['text_embeds']
                         
-                        # Gather embeddings from all GPUs
-                        vid_embed_all = [torch.zeros_like(vid_embed) for _ in range(self.n_gpu)]
-                        torch.distributed.all_gather(vid_embed_all, vid_embed)
-                        vid_embed_all = torch.cat(vid_embed_all, dim=0)
-                        
-                        text_embed_all = [torch.zeros_like(text_embed) for _ in range(self.n_gpu)]
-                        torch.distributed.all_gather(text_embed_all, text_embed)
-                        text_embed_all = torch.cat(text_embed_all, dim=0)
-                        
-                        idx_embed_all = [torch.zeros_like(idx_embed) for _ in range(self.n_gpu)]
-                        torch.distributed.all_gather(idx_embed_all, idx_embed)
-                        idx_embed_all = torch.cat(idx_embed_all, dim=0)
-                        
-                        # Store results
-                        text_embed_arr[dl_idx].append(text_embed_all.cpu())
-                        vid_embed_arr[dl_idx].append(vid_embed_all.cpu())
-                        idx_embed_arr[dl_idx].append(idx_embed_all.cpu())
+                        # Store results locally
+                        text_embed_arr[dl_idx].append(text_embed.cpu())
+                        vid_embed_arr[dl_idx].append(vid_embed.cpu())
+                        idx_embed_arr[dl_idx].append(idx_embed.cpu())
                         
                     except Exception as e:
                         print(f"Error processing validation batch {batch_idx} in dataloader {dl_idx}: {str(e)}")
-                        # Create zero tensors with correct shapes for failed batch
-                        zero_vid_embed = torch.zeros([self.video_params['num_frames'], 3, 
-                                                    self.video_params['input_res'],
-                                                    self.video_params['input_res']]).cuda(gpu)
-                        zero_text_embed = torch.zeros([1, self.text_params['max_length']]).cuda(gpu)
-                        
-                        # Gather zero tensors
-                        vid_embed_all = [torch.zeros_like(zero_vid_embed) for _ in range(self.n_gpu)]
-                        torch.distributed.all_gather(vid_embed_all, zero_vid_embed)
-                        vid_embed_all = torch.cat(vid_embed_all, dim=0)
-                        
-                        text_embed_all = [torch.zeros_like(zero_text_embed) for _ in range(self.n_gpu)]
-                        torch.distributed.all_gather(text_embed_all, zero_text_embed)
-                        text_embed_all = torch.cat(text_embed_all, dim=0)
-                        
-                        # Store zero tensors
-                        text_embed_arr[dl_idx].append(text_embed_all.cpu())
-                        vid_embed_arr[dl_idx].append(vid_embed_all.cpu())
-                        idx_embed_arr[dl_idx].append(torch.zeros_like(idx_embed).cpu())
-                        
                         continue
 
             if self.writer is not None and self.args.rank == 0:
@@ -290,31 +257,27 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
                     self.writer.add_scalar(f'Loss_val/loss_total_{dl_idx}', tl, epoch-1)
 
         for dl_idx in range(len(self.valid_data_loader)):
-            # TODO: this needs a clean
-            # if self.writer is not None and self.args.rank == 0:
-            #     self.writer.log_scalar(f'loss_val_{dl_idx}',
-            #                            total_val_loss[dl_idx] / len(self.valid_data_loader[dl_idx]))
             nested_metrics = {x: {} for x in range(len(self.valid_data_loader))}
 
+            # Concatenate local embeddings
             text_embeds = torch.cat(text_embed_arr[dl_idx])
             vid_embeds = torch.cat(vid_embed_arr[dl_idx])
             arr_embeds = torch.cat(idx_embed_arr[dl_idx])
 
+            # Compute similarity matrix locally
             sims = sim_matrix(text_embeds, vid_embeds).detach().cpu().numpy()
 
             for metric in self.metrics:
                 metric_name = metric.__name__
                 res = metric(sims, arr_embeds)
                 if self.args.rank == 0:
-                    self.logger.info( verbose(epoch=epoch, metrics=res, name=self.valid_data_loader[dl_idx].dataset_name,
-                            mode=metric_name, args=self.args) )
+                    self.logger.info(verbose(epoch=epoch, metrics=res, name=self.valid_data_loader[dl_idx].dataset_name,
+                            mode=metric_name, args=self.args))
                 nested_metrics[dl_idx][metric_name] = res
 
                 if self.writer is not None and self.args.rank == 0:
                     to_write = format_nested_metrics_for_writer(res, mode=metric_name,
                                                                 name=self.valid_data_loader[dl_idx].dataset_name)
-                    # for key, val in to_write.items():
-                    #     self.writer.log_scalar(key, val)
                     for key, val in to_write.items():
                         key = key.replace('[', '_').replace(']', '_')
                         self.writer.add_scalar(f'Val_metrics_{dl_idx}/{key}', val, epoch-1)
