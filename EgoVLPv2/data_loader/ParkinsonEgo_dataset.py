@@ -50,7 +50,7 @@ class ParkinsonEgo(TextVideoDataset):
             # Extract the numeric part after the last underscore
             try:
                 clip_num = video_id.split('_')[-1]  # e.g., '066'
-                clip_name = f"clip_{clip_num}"
+                clip_name = f"clip_{clip_num}"      
             except IndexError:
                 print(f"[DEBUG] Unexpected video_id format: {video_id}")
                 continue
@@ -136,6 +136,16 @@ class ParkinsonEgo(TextVideoDataset):
             'meta': meta_arr
         }
         
+        # Debug prints to identify None values
+        if frames is None:
+            print(f"[DEBUG] Video frames is None for video_path: {video_path}")
+        if text_tokens is None:
+            print(f"[DEBUG] Text tokens is None for text: {text}")
+        if meta_arr is None:
+            print(f"[DEBUG] Meta array is None for video_path: {video_path}")
+        if result is None:
+            print(f"[DEBUG] Entire result is None for video_path: {video_path}")
+            
         return result
 
     def __len__(self):
