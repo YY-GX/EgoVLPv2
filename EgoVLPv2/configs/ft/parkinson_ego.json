@@ -53,7 +53,7 @@
         }
     },
     "loss": {
-        "type": "CrossEntropyLoss",
+        "type": "CrossEntropy",
         "args": {
             "reduction": "mean"
         }
