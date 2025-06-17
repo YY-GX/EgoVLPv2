@@ -15,10 +15,12 @@ import transformers
 from tqdm import tqdm
 
 # Add the project root to Python path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.dirname(current_dir)
+sys.path.append(project_root)
 
-from EgoVLPv2.base.base_dataset import TextVideoDataset
-from EgoVLPv2.base.transforms import init_transform_dict, init_video_transform_dict
+from base.base_dataset import TextVideoDataset
+from base.transforms import init_transform_dict, init_video_transform_dict
 
 
 class ParkinsonEgo(TextVideoDataset):
