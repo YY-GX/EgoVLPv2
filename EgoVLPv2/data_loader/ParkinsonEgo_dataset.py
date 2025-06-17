@@ -69,11 +69,15 @@ class ParkinsonEgo(TextVideoDataset):
 
     def __getitem__(self, item):
         try:
+            # Get worker info
+            worker_info = torch.utils.data.get_worker_info()
+            worker_id = worker_info.id if worker_info is not None else 0
+            
             item = item % len(self.metadata)
             sample = self.metadata[item]
             
-            # Debug print at the start
-            print(f"[DEBUG] Processing item {item} with sample: {sample}")
+            # Debug print at the start with worker ID and force flush
+            print(f"[DEBUG] Worker {worker_id} processing item {item} with sample: {sample}", flush=True)
             
             # Load video frames
             video_path = sample['video_path']
@@ -88,14 +92,14 @@ class ParkinsonEgo(TextVideoDataset):
             
             try:
                 if not os.path.isfile(video_path):
-                    print(f"[DEBUG] Video file not found: {video_path}")
+                    print(f"[DEBUG] Worker {worker_id} Video file not found: {video_path}", flush=True)
                     if video_loading == 'strict':
                         raise FileNotFoundError(f"Video file not found: {video_path}")
                     frames = fallback_tensor
                 else:
                     frames, idxs = self.video_reader(video_path, self.video_params['num_frames'], frame_sample)
                     if frames is None or frames.shape[0] == 0:
-                        print(f"[DEBUG] No frames loaded from {video_path}")
+                        print(f"[DEBUG] Worker {worker_id} No frames loaded from {video_path}", flush=True)
                         if video_loading == 'strict':
                             raise ValueError(f"No frames loaded from {video_path}")
                         frames = fallback_tensor
@@ -116,7 +120,7 @@ class ParkinsonEgo(TextVideoDataset):
                     frames = final
                     
             except Exception as e:
-                print(f"[DEBUG] Error in video loading: {str(e)}")
+                print(f"[DEBUG] Worker {worker_id} Error in video loading: {str(e)}", flush=True)
                 if video_loading == 'strict':
                     raise ValueError(f'Video loading failed for {video_path}, video loading for this dataset is strict.') from e
                 frames = fallback_tensor
@@ -146,8 +150,8 @@ class ParkinsonEgo(TextVideoDataset):
             return result
             
         except Exception as e:
-            print(f"[DEBUG] Critical error in __getitem__ for item {item}: {str(e)}")
-            print(f"[DEBUG] Full traceback:", e.__traceback__)
+            print(f"[DEBUG] Worker {worker_id} Critical error in __getitem__ for item {item}: {str(e)}", flush=True)
+            print(f"[DEBUG] Worker {worker_id} Full traceback:", e.__traceback__, flush=True)
             raise  # Re-raise the exception so the worker can handle it
 
     def __len__(self):
