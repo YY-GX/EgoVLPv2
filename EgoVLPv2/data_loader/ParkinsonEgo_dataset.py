@@ -73,6 +73,9 @@ class ParkinsonEgo(TextVideoDataset):
         video_path = sample['video_path']
         try:
             frames = self.video_reader(video_path, self.video_params['num_frames'])
+            # Convert frames to tensor if they're not already
+            if isinstance(frames, tuple):
+                frames = torch.stack(frames)
         except Exception as e:
             print(f"Error loading video {video_path}: {str(e)}")
             # Return a different sample
