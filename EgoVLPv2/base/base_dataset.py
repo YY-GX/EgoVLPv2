@@ -225,7 +225,8 @@ def sample_frames_start_end(num_frames, start, end, sample='rand', fix_start=Non
 
 def read_frames_cv2(video_path, num_frames, sample='rand', fix_start=None):
     cap = cv2.VideoCapture(video_path)
-    assert (cap.isOpened())
+    if not cap.isOpened():
+        return None, []
     vlen = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     # get indexes of sampled frames
     frame_idxs = sample_frames(num_frames, vlen, sample=sample, fix_start=fix_start)
@@ -245,6 +246,10 @@ def read_frames_cv2(video_path, num_frames, sample='rand', fix_start=None):
             pass
             # print(frame_idxs, ' fail ', index, f'  (vlen {vlen})')
 
+    if not frames:  # If no frames were successfully read
+        cap.release()
+        return None, []
+        
     frames = torch.stack(frames).float() / 255
     cap.release()
     return frames, success_idxs

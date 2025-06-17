@@ -27,8 +27,8 @@
         "type": "MultiDistTextVideoDataLoader",
         "args": {
             "dataset_name": "ParkinsonEgo",
-            "data_dir": "data",
-            "meta_dir": "annotations",
+            "data_dir": "/mnt/arc/yygx/pkgs_baselines/EgoVLPv2/EgoVLPv2/data",
+            "meta_dir": "/mnt/arc/yygx/pkgs_baselines/EgoVLPv2/EgoVLPv2/annotations",
             "reader": "cv2",
             "shuffle": true,
             "num_workers": 2,
