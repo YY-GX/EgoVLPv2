@@ -14,8 +14,13 @@ import torch
 import transformers
 from tqdm import tqdm
 
-from ..base.base_dataset import TextVideoDataset
-from ..base.transforms import init_transform_dict, init_video_transform_dict
+# Add the parent directory to Python path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
+
+from base.base_dataset import TextVideoDataset
+from base.transforms import init_transform_dict, init_video_transform_dict
 
 
 class ParkinsonEgo(TextVideoDataset):
