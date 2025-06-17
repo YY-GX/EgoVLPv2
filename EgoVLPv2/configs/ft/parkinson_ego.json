@@ -54,9 +54,7 @@
     },
     "loss": {
         "type": "CrossEntropy",
-        "args": {
-            "reduction": "mean"
-        }
+        "args": {}
     },
     "metrics": ["accuracy"],
     "trainer": {
