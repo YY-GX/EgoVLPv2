@@ -9,8 +9,6 @@ import glob
 def parse_timestamp(timestamp):
     """Convert timestamp string to seconds."""
     try:
-        if timestamp.strip() == 'end':
-            return None
         dt = datetime.strptime(timestamp.strip(), '%M:%S')
         return dt.minute * 60 + dt.second
     except ValueError:
@@ -27,8 +25,8 @@ def get_action_at_time(timestamp, annotations):
         current_start = parse_timestamp(annotations.iloc[i]['timestamp'])
         next_start = parse_timestamp(annotations.iloc[i + 1]['timestamp'])
         
-        # Handle the case where next_start is 'end'
-        if next_start is None:
+        # Handle the case where next row is the end marker
+        if annotations.iloc[i + 1]['action_label'].strip() == 'end':
             if current_start <= timestamp_sec:
                 return annotations.iloc[i]['action_label']
         else:
@@ -52,15 +50,16 @@ def generate_clip_annotations_for_video(raw_annotation_file, clip_duration, vide
     """
     # Read raw annotations
     annotations = pd.read_csv(raw_annotation_file)
-    # Strip whitespace from column names
+    # Strip whitespace from column names and values
     annotations.columns = annotations.columns.str.strip()
+    annotations['action_label'] = annotations['action_label'].str.strip()
     
-    # Get video duration from the 'end' timestamp
-    end_timestamp = annotations.iloc[-1]['timestamp']
-    if end_timestamp.strip() != 'end':
-        raise ValueError(f"Last row of {raw_annotation_file} must have 'end' as timestamp")
-    last_timestamp = parse_timestamp(annotations.iloc[-2]['timestamp'])  # Get timestamp of last action
-    end_time = parse_timestamp(end_timestamp)  # Get the end time
+    # Get video duration from the end timestamp
+    if annotations.iloc[-1]['action_label'] != 'end':
+        raise ValueError(f"Last row of {raw_annotation_file} must have 'end' as action_label")
+    
+    end_time = parse_timestamp(annotations.iloc[-1]['timestamp'])
+    last_action_time = parse_timestamp(annotations.iloc[-2]['timestamp'])
     
     # Generate clip timestamps
     clip_starts = np.arange(0, end_time, clip_duration)
