@@ -13,6 +13,8 @@ import numpy as np
 import torch
 import transformers
 from tqdm import tqdm
+from PIL import Image
+from torchvision import transforms
 
 # Add the parent directory to Python path
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -71,28 +73,35 @@ class ParkinsonEgo(TextVideoDataset):
         
         # Load video frames
         video_path = sample['video_path']
+        video_loading = self.video_params.get('loading', 'strict')
+        
         try:
-            imgs, idxs = self.video_reader(video_path, self.video_params['num_frames'])
-            
-            # Apply video transforms
-            if self.transforms is not None:
-                if self.video_params['num_frames'] > 1:
-                    imgs = imgs.transpose(0, 1)  # [T, C, H, W] ---> [C, T, H, W]
-                    imgs = self.transforms(imgs)
-                    imgs = imgs.transpose(0, 1)  # recover
-                else:
-                    imgs = self.transforms(imgs)
-            
-            # Create final tensor with padding if needed
-            final = torch.zeros([self.video_params['num_frames'], 3, self.video_params['input_res'],
-                               self.video_params['input_res']])
-            final[:imgs.shape[0]] = imgs
-            
+            if os.path.isfile(video_path):
+                imgs, idxs = self.video_reader(video_path, self.video_params['num_frames'])
+            else:
+                print(f"Warning: missing video file {video_path}.")
+                raise FileNotFoundError(f"Video file not found: {video_path}")
         except Exception as e:
-            print(f"Error loading video {video_path}: {str(e)}")
-            # Return a zero tensor instead of recursively calling __getitem__
-            final = torch.zeros([self.video_params['num_frames'], 3, self.video_params['input_res'],
-                               self.video_params['input_res']])
+            if video_loading == 'strict':
+                raise ValueError(f'Video loading failed for {video_path}, video loading for this dataset is strict.') from e
+            else:
+                # Create a black image and convert to tensor
+                imgs = Image.new('RGB', (self.video_params['input_res'], self.video_params['input_res']), (0, 0, 0))
+                imgs = transforms.ToTensor()(imgs).unsqueeze(0)
+        
+        # Apply video transforms
+        if self.transforms is not None:
+            if self.video_params['num_frames'] > 1:
+                imgs = imgs.transpose(0, 1)  # [T, C, H, W] ---> [C, T, H, W]
+                imgs = self.transforms(imgs)
+                imgs = imgs.transpose(0, 1)  # recover
+            else:
+                imgs = self.transforms(imgs)
+        
+        # Create final tensor with padding if needed
+        final = torch.zeros([self.video_params['num_frames'], 3, self.video_params['input_res'],
+                           self.video_params['input_res']])
+        final[:imgs.shape[0]] = imgs
         
         # Tokenize action label
         text = sample['action_label']
