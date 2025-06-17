@@ -37,24 +37,30 @@ class ParkinsonEgo(TextVideoDataset):
             
         df = pd.read_csv(csv_path)
         df.columns = df.columns.str.strip()  # Strip whitespace from headers
-        if 'video_path' not in df.columns:
+        if 'video_id' not in df.columns or 'source_video' not in df.columns:
             print(f"[DEBUG] Columns in {csv_path}: {df.columns.tolist()}")
-            raise KeyError(f"'video_path' column not found in {csv_path}")
+            raise KeyError(f"'video_id' or 'source_video' column not found in {csv_path}")
         
         self.metadata = []
         for _, row in df.iterrows():
-            video_path = os.path.join(self.data_dir, row['video_path'])
+            video_id = row['video_id']  # e.g., video_0_clip_066
+            source_video = row['source_video']  # e.g., video_0
+            # Extract clip_xxx from video_id (after the first underscore)
+            try:
+                clip_name = video_id.split('_', 1)[1]  # e.g., clip_066
+            except IndexError:
+                print(f"[DEBUG] Unexpected video_id format: {video_id}")
+                continue
+            video_path = os.path.join(self.data_dir, source_video, f"{clip_name}.mp4")
             if not os.path.exists(video_path):
                 print(f"Warning: Video file not found: {video_path}")
                 continue
-                
             self.metadata.append({
                 'video_path': video_path,
                 'action_label': row['action_label'],
                 'start_time': row['start_time'],
-                'end_time': row['end_time']
+                'end_time': row.get('end_time', None)
             })
-            
         if len(self.metadata) == 0:
             raise ValueError(f"No valid samples found in {csv_path}")
 
