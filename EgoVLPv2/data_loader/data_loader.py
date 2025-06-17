@@ -11,18 +11,18 @@ import os
 
 # Add the project root to Python path
 current_dir = os.path.dirname(os.path.abspath(__file__))
-project_root = os.path.dirname(current_dir)
+project_root = os.path.dirname(os.path.dirname(current_dir))
 sys.path.append(project_root)
 
-from base import BaseDataLoaderExplicitSplit, BaseMultiDataLoader, \
+from EgoVLPv2.base import BaseDataLoaderExplicitSplit, BaseMultiDataLoader, \
     DistBaseDataLoaderExplicitSplit, MultiDistBaseDataLoaderExplicitSplit
-from data_loader.EgoClip_EgoMCQ_dataset import EgoClip_EgoMCQ
+from EgoVLPv2.data_loader.EgoClip_EgoMCQ_dataset import EgoClip_EgoMCQ
 # from data_loader.EpicKitchens_MIR_dataset import MultiInstanceRetrieval
-from data_loader.EpicKitchens_MIR_dataset_yy import MultiInstanceRetrieval
-from data_loader.CharadesEgo_dataset import CharadesEgo
-from data_loader.Ego4D_MQ_dataset import MomentQueries
+from EgoVLPv2.data_loader.EpicKitchens_MIR_dataset_yy import MultiInstanceRetrieval
+from EgoVLPv2.data_loader.CharadesEgo_dataset import CharadesEgo
+from EgoVLPv2.data_loader.Ego4D_MQ_dataset import MomentQueries
 from .ParkinsonEgo_dataset import ParkinsonEgo
-from data_loader.transforms import init_transform_dict, init_video_transform_dict
+from EgoVLPv2.data_loader.transforms import init_transform_dict, init_video_transform_dict
 
 def dataset_loader(dataset_name,
                    text_params,
