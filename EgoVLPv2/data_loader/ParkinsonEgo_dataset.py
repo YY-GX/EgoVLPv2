@@ -68,60 +68,48 @@ class ParkinsonEgo(TextVideoDataset):
             raise ValueError(f"No valid samples found in {csv_path}")
 
     def __getitem__(self, item):
-        print(f"\n[DEBUG] Processing item {item}")
         item = item % len(self.metadata)
         sample = self.metadata[item]
-        print(f"[DEBUG] Sample keys: {sample.keys()}")
         
         # Load video frames
         video_path = sample['video_path']
-        print(f"[DEBUG] Video path: {video_path}")
         video_loading = self.video_params.get('loading', 'strict')
         frame_sample = 'rand'
         if self.split == 'test':
             frame_sample = 'uniform'
         
         try:
-            if os.path.isfile(video_path):
-                print(f"[DEBUG] Loading video with {self.video_reader.__name__}")
-                frames, idxs = self.video_reader(video_path, self.video_params['num_frames'], frame_sample)
-                print(f"[DEBUG] Loaded frames shape: {frames.shape if frames is not None else None}")
-                if frames is None or frames.shape[0] == 0:
-                    raise ValueError(f"No frames loaded from {video_path}")
-            else:
-                print(f"[DEBUG] Warning: missing video file {video_path}")
+            if not os.path.isfile(video_path):
                 raise FileNotFoundError(f"Video file not found: {video_path}")
+                
+            frames, idxs = self.video_reader(video_path, self.video_params['num_frames'], frame_sample)
+            if frames is None or frames.shape[0] == 0:
+                raise ValueError(f"No frames loaded from {video_path}")
+                
         except Exception as e:
-            print(f"[DEBUG] Error loading video: {str(e)}")
             if video_loading == 'strict':
                 raise ValueError(f'Video loading failed for {video_path}, video loading for this dataset is strict.') from e
             else:
-                print("[DEBUG] Creating zero tensor as fallback")
                 frames = torch.zeros([self.video_params['num_frames'], 3, self.video_params['input_res'], 
                                     self.video_params['input_res']])
         
         # Apply video transforms
         if self.transforms is not None:
-            print("[DEBUG] Applying transforms")
             if self.video_params['num_frames'] > 1:
                 frames = frames.transpose(0, 1)  # [T, C, H, W] ---> [C, T, H, W]
                 frames = self.transforms(frames)
                 frames = frames.transpose(0, 1)  # recover
             else:
                 frames = self.transforms(frames)
-            print(f"[DEBUG] After transforms shape: {frames.shape}")
         
         # Create final tensor with padding if needed
         final = torch.zeros([self.video_params['num_frames'], 3, self.video_params['input_res'],
                            self.video_params['input_res']])
         final[:frames.shape[0]] = frames
-        print(f"[DEBUG] Final tensor shape: {final.shape}")
         
         # Tokenize action label
         text = sample['action_label']
-        print(f"[DEBUG] Action label: {text}")
         text_tokens = self.tokenizer(text, padding='max_length', truncation=True, max_length=self.text_params['max_length'], return_tensors='pt')
-        print(f"[DEBUG] Text tokens shape: {text_tokens['input_ids'].shape}")
         
         # Ensure all tensors are on CPU for distributed training
         final = final.cpu()
@@ -140,7 +128,6 @@ class ParkinsonEgo(TextVideoDataset):
             'text': text_tokens,
             'meta': meta_arr
         }
-        print("[DEBUG] Returning result with keys:", result.keys())
         return result
 
     def __len__(self):
