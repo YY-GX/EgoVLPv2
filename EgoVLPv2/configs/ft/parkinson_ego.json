@@ -35,7 +35,8 @@
             "batch_size": 16,
             "split": "train",
             "text_params": {
-                "input": "text"
+                "input": "text",
+                "max_length": 32
             },
             "video_params": {
                 "input_res": 224,
