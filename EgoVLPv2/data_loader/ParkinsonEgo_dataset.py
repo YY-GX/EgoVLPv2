@@ -14,8 +14,8 @@ import torch
 import transformers
 from tqdm import tqdm
 
-from base.base_dataset import TextVideoDataset
-from base.transforms import init_transform_dict, init_video_transform_dict
+from ..base.base_dataset import TextVideoDataset
+from ..base.transforms import init_transform_dict, init_video_transform_dict
 
 
 class ParkinsonEgo(TextVideoDataset):
