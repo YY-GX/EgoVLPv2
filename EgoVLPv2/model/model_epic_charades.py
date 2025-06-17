@@ -117,9 +117,8 @@ class FrozenInTime(BaseModel):
 
         # Project to a common embedding
         if projection == 'minimal':
-
-            txt_proj = nn.Sequential(nn.ReLU(), nn.Linear(self.text_model.config.hidden_size, 256),)
-            vid_proj = nn.Sequential(nn.Linear(ftr_dim, 256))
+            txt_proj = nn.Sequential(nn.ReLU(), nn.Linear(self.text_model.config.hidden_size, projection_dim),)
+            vid_proj = nn.Sequential(nn.Linear(ftr_dim, projection_dim))
 
             #txt_proj = nn.Sequential(
             #    nn.Linear(self.text_model.config.hidden_size, projection_dim, bias=False),
