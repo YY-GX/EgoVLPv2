@@ -48,7 +48,7 @@ class ParkinsonEgo(TextVideoDataset):
                 video_id = str(row['video_id']).zfill(3)
                 
                 # Construct video path - remove the extra video_0_clip_ prefix
-                video_path = os.path.join(self.data_dir, 'video_0', f'clip_{video_id}.mp4')
+                video_path = os.path.join(self.data_dir, 'video_0', f'clip_{video_id.split("_")[-1]}.mp4')
                 print(f"[DEBUG] Constructed video path: {video_path}")  # Debug print
                 
                 # Add to metadata
