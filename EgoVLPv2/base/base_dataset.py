@@ -420,3 +420,4 @@ video_reader = {
     'decord': read_frames_decord,
     'decord_start_end': read_frames_decord_start_end,
 }
+
