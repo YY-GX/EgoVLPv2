@@ -229,6 +229,7 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
                                 data[k] = v.cuda(gpu, non_blocking=True)
                         
                         # Get embeddings
+                        self.model.module.task_names = "Dual"  # Set task names before inference
                         ret = self.model.module.infer(data, return_embeds=True, task_names="Dual", ret={})
                         vid_embed = ret['video_embeds']
                         text_embed = ret['text_embeds']
@@ -277,7 +278,8 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
                         data[k] = v.cuda(gpu, non_blocking=True)
                 
                 # Get predictions
-                ret = self.model.module.infer(data, return_embeds=False, task_names="Dual", ret={})
+                self.model.module.task_names = "Dual"  # Set task names before inference
+                ret = self.model.module.infer(data, return_embeds=True, task_names="Dual", ret={})
                 
                 # For ensemble metrics, we need both video and text embeddings
                 if "video_embeds" in ret and "text_embeds" in ret:
