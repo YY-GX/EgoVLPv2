@@ -262,16 +262,55 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
             # Compute similarity matrix locally
             sims = sim_matrix(text_embeds, vid_embeds).detach().cpu().numpy()
 
+            # Store predictions and labels for metrics
+            pred_arr_ensemble = []
+            pred_arr_vtm = []
+            label_arr = []
+            types_arr = []
+            for batch_idx, data in enumerate(self.valid_data_loader[dl_idx]):
+                # Move all tensors to GPU
+                for k, v in data.items():
+                    if isinstance(v, dict):
+                        data[k] = {sub_k: sub_v.cuda(gpu, non_blocking=True) if isinstance(sub_v, torch.Tensor) else sub_v 
+                                  for sub_k, sub_v in v.items()}
+                    elif isinstance(v, torch.Tensor):
+                        data[k] = v.cuda(gpu, non_blocking=True)
+                
+                # Get predictions
+                pred_ensemble, pred_vtm = self.model.module.infer(data, return_embeds=False, task_names="Dual", ret={})
+                label = data['relation'].cpu().numpy()
+                
+                # Store predictions and labels for metrics
+                pred_arr_ensemble.append(pred_ensemble)
+                pred_arr_vtm.append(pred_vtm)
+                label_arr.append(label)
+                # Add types for inter/intra video evaluation
+                types_arr.append(torch.zeros_like(label))  # All samples are inter-video for now
+
+            # Concatenate predictions and labels for metrics
+            pred_arr_cat = {
+                "egomcq_accuracy_metrics_ensemble": torch.cat(pred_arr_ensemble),
+                "egomcq_accuracy_metrics_vtm": torch.cat(pred_arr_vtm)
+            }
+            label_arr_cat = torch.cat(label_arr)
+            types_arr_cat = torch.cat(types_arr)
+            
+            # Calculate metrics
             for metric in self.metrics:
-                metric_name = metric.__name__
-                res = metric(sims, arr_embeds)
+                if metric == "egomcq_accuracy_metrics_ensemble":
+                    res = metric(pred_arr_cat[metric], label_arr_cat, types_arr_cat)
+                elif metric == "egomcq_accuracy_metrics_vtm":
+                    res = metric(pred_arr_cat[metric], label_arr_cat, types_arr_cat)
+                else:
+                    res = metric(sims, arr_embeds)
+
                 if self.args.rank == 0:
                     self.logger.info(verbose(epoch=epoch, metrics=res, name=self.valid_data_loader[dl_idx].dataset_name,
-                            mode=metric_name, args=self.args))
-                nested_metrics[dl_idx][metric_name] = res
+                            mode=metric.__name__, args=self.args))
+                nested_metrics[dl_idx][metric.__name__] = res
 
                 if self.writer is not None and self.args.rank == 0:
-                    to_write = format_nested_metrics_for_writer(res, mode=metric_name,
+                    to_write = format_nested_metrics_for_writer(res, mode=metric.__name__,
                                                                 name=self.valid_data_loader[dl_idx].dataset_name)
                     for key, val in to_write.items():
                         key = key.replace('[', '_').replace(']', '_')
