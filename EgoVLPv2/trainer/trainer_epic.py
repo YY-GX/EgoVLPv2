@@ -255,7 +255,9 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
             # Concatenate local embeddings
             text_embeds = torch.cat(text_embed_arr[dl_idx])
             vid_embeds = torch.cat(vid_embed_arr[dl_idx])
-            arr_embeds = torch.cat(idx_embed_arr[dl_idx])
+            
+            # Flatten the list of paths
+            arr_embeds = [path for batch_paths in idx_embed_arr[dl_idx] for path in batch_paths]
 
             # Compute similarity matrix locally
             sims = sim_matrix(text_embeds, vid_embeds).detach().cpu().numpy()
