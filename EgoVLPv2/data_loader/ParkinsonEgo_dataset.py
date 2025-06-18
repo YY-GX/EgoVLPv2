@@ -27,6 +27,13 @@ from base.base_dataset import TextVideoDataset
 
 
 class ParkinsonEgo(TextVideoDataset):
+    # Define the mapping from action_label string to integer index
+    ACTION_LABELS = [
+        'sitting', 'walking', 'standing', 'upstair'
+    ]
+    ACTION_LABEL_TO_IDX = {label: idx for idx, label in enumerate(ACTION_LABELS)}
+    IDX_TO_ACTION_LABEL = {idx: label for label, idx in ACTION_LABEL_TO_IDX.items()}
+
     def __init__(self, dataset_name, text_params, video_params, data_dir, meta_dir=None, split='train', tsfms=None, cut=None, subsample=None, sliding_window_stride=-1, reader='decord', neg_param=None):
         super().__init__(dataset_name=dataset_name, text_params=text_params, video_params=video_params, data_dir=data_dir, meta_dir=meta_dir, split=split, tsfms=tsfms, cut=cut, subsample=subsample, sliding_window_stride=sliding_window_stride, reader=reader, neg_param=neg_param)
         
@@ -139,10 +146,15 @@ class ParkinsonEgo(TextVideoDataset):
                 'start_time': sample['start_time']
             }
             
+            action_label_str = sample['action_label']
+            assert action_label_str in self.ACTION_LABEL_TO_IDX, f"Unknown action_label: {action_label_str}"
+            label = self.ACTION_LABEL_TO_IDX[action_label_str]
+            
             result = {
                 'video': frames,
                 'text': text_tokens,
-                'meta': meta_arr
+                'meta': meta_arr,
+                'label': torch.tensor(label, dtype=torch.long)
             }
             
             print(f"[DEBUG] Worker {worker_id} Returning result with keys: {result.keys()}", flush=True)

@@ -1,0 +1,44 @@
+{
+  "name": "parkinson_action_classification",
+  "model": {
+    "type": "FrozenInTime",
+    "video_params": {
+      "model": "SpaceTimeTransformer",
+      "num_frames": 16,
+      "img_size": 224,
+      "patch_size": 16
+    },
+    "text_params": {
+      "model": "roberta-base",
+      "max_length": 32,
+      "projection": "minimal",
+      "projection_dim": 4096
+    },
+    "projection": "minimal",
+    "projection_dim": 4096
+  },
+  "data_loader": {
+    "type": "MultiDistTextVideoDataLoader",
+    "dataset": "ParkinsonEgo",
+    "data_dir": "data",
+    "meta_dir": "annotations",
+    "batch_size": 16,
+    "num_workers": 1,
+    "split": "train"
+  },
+  "loss": {
+    "type": "CrossEntropy",
+    "args": {}
+  },
+  "metrics": ["accuracy"],
+  "trainer": {
+    "epochs": 100,
+    "save_dir": "saved/",
+    "save_period": 1,
+    "verbosity": 2,
+    "monitor": "min val_loss",
+    "early_stop": 10,
+    "tensorboard": true,
+    "max_samples_per_epoch": 100000
+  }
+} 

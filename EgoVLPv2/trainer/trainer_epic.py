@@ -380,3 +380,16 @@ def format_nested_metrics_for_writer(metrics, mode, name="TEST"):
         log_name = f"[{mode}]{name}_{key}"
         res[log_name] = val
     return res
+
+def oscc_metrics(preds, labels):
+    metrics = {}
+    correct = 0
+    total = 0
+    for pred, label in zip(preds, labels):
+        pred_ = torch.argmax(pred)
+        if pred_.item() == label.item():
+            correct += 1
+        total += 1
+    accuracy = correct / total
+    metrics['accuracy'] = accuracy * 100
+    return metrics
