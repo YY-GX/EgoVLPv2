@@ -425,7 +425,7 @@ class FrozenInTime(BaseModel):
             output = sim_matrix(text_embeds, video_embeds)
 
             if dataset_name == 'epic':
-                w_embeds = data['relation']
+                w_embeds = data['label']
                 w_embeds = allgather(w_embeds, n_gpu, args)
                 loss = loss_dual(output, w_embeds)
             elif dataset_name == 'charades':
@@ -434,7 +434,7 @@ class FrozenInTime(BaseModel):
                 raise NameError()
 
             if dataset_name == 'epic':
-                ret.update({"sim_v2t": output, "sim_t2v": output.t(), 'epic_relation': w_embeds})
+                ret.update({"sim_v2t": output, "sim_t2v": output.t(), 'epic_label': w_embeds})
             elif dataset_name == 'charades':
                 ret.update({"sim_v2t": output, "sim_t2v": output.t()})
             else:
