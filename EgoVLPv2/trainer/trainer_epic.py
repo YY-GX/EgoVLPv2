@@ -231,7 +231,11 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
                         # Use video embeddings for classification
                         # Add a simple linear classifier if not exists
                         if not hasattr(self.model.module, 'classification_head'):
+<<<<<<< HEAD
                             num_classes = 4  # Set this to your actual number of action classes: sitting, walking, standing, upstair
+=======
+                            num_classes = 5  # Set this to your actual number of action classes: sitting, walking, standing, upstair, downstair
+>>>>>>> 6fc70ee (update)
                             self.model.module.classification_head = nn.Linear(vid_embed.shape[-1], num_classes).cuda(gpu)
                         
                         # Get classification logits

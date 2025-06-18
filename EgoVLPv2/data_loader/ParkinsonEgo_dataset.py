@@ -29,7 +29,7 @@ from base.base_dataset import TextVideoDataset
 class ParkinsonEgo(TextVideoDataset):
     # Define the mapping from action_label string to integer index
     ACTION_LABELS = [
-        'sitting', 'walking', 'standing', 'upstair'
+        'sitting', 'walking', 'standing', 'upstair', 'downstair'
     ]
     ACTION_LABEL_TO_IDX = {label: idx for idx, label in enumerate(ACTION_LABELS)}
     IDX_TO_ACTION_LABEL = {idx: label for label, idx in ACTION_LABEL_TO_IDX.items()}
