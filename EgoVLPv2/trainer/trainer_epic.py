@@ -227,23 +227,13 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
                         self.model.module.task_names = "Dual"  # Set task names before inference
                         ret = self.model.module.infer(data, return_embeds=True, task_names="Dual", ret={})
                         vid_embed = ret['video_embeds']
+                        text_embed = ret['text_embeds']
                         
-                        # Use video embeddings for classification
-                        # Add a simple linear classifier if not exists
-                        if not hasattr(self.model.module, 'classification_head'):
-<<<<<<< HEAD
-                            num_classes = 4  # Set this to your actual number of action classes: sitting, walking, standing, upstair
-=======
-                            num_classes = 5  # Set this to your actual number of action classes: sitting, walking, standing, upstair, downstair
->>>>>>> 6fc70ee (update)
-                            self.model.module.classification_head = nn.Linear(vid_embed.shape[-1], num_classes).cuda(gpu)
-                        
-                        # Get classification logits
-                        logits = self.model.module.classification_head(vid_embed)
-                        
-                        # Store predictions and labels
-                        all_predictions.append(logits.cpu())
-                        all_labels.append(data['label'].cpu())
+                        # Store results locally
+                        text_embed_arr[dl_idx].append(text_embed.cpu())
+                        vid_embed_arr[dl_idx].append(vid_embed.cpu())
+                        # Store paths directly since they're not tensors
+                        idx_embed_arr[dl_idx].append(data['meta']['paths'])
                         
                     except Exception as e:
                         print(f"Error processing validation batch {batch_idx} in dataloader {dl_idx}: {str(e)}")
