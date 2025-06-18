@@ -129,10 +129,8 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
             if (batch_idx + 1) * self.total_batch_sum > self.max_samples_per_epoch:
                 break
             for dl_idx, data in enumerate(data_li):
-                # then assume we must tokenize the input, e.g. its a string
-                if self.tokenizer is not None:
-                    data['text'] = self.tokenizer(data['text'], return_tensors='pt', padding='max_length', max_length=30,
-                                                  truncation=True)
+                # The dataset already returns tokenized text, so we don't need to tokenize again
+                # Just move the tensors to GPU
                 data['text'] = {key: val.cuda(gpu, non_blocking=True) for key, val in data['text'].items()}
                 data['video'] = data['video'].cuda(gpu, non_blocking=True)
                 data['relation'] = data['relation'].cuda(gpu, non_blocking=True)

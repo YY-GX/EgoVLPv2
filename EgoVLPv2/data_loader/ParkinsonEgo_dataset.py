@@ -56,7 +56,6 @@ class ParkinsonEgo(TextVideoDataset):
                 
                 # Construct video path - remove the extra video_0_clip_ prefix
                 video_path = os.path.join(self.data_dir, 'video_0', f'clip_{video_id.split("_")[-1]}.mp4')
-                print(f"[DEBUG] Constructed video path: {video_path}")  # Debug print
                 
                 # Add to metadata
                 metadata.append({
@@ -70,17 +69,8 @@ class ParkinsonEgo(TextVideoDataset):
 
     def __getitem__(self, item):
         try:
-            # Get worker info and print immediately
-            worker_info = torch.utils.data.get_worker_info()
-            worker_id = worker_info.id if worker_info is not None else 0
-            num_workers = worker_info.num_workers if worker_info is not None else 1
-            print(f"[DEBUG] Worker {worker_id}/{num_workers} starting to process item {item}", flush=True)
-            
             item = item % len(self.metadata)
             sample = self.metadata[item]
-            
-            # Debug print at the start with worker ID and force flush
-            print(f"[DEBUG] Worker {worker_id}/{num_workers} processing item {item} with sample: {sample}", flush=True)
             
             # Load video frames
             video_path = sample['video_path']
@@ -95,16 +85,12 @@ class ParkinsonEgo(TextVideoDataset):
             
             try:
                 if not os.path.isfile(video_path):
-                    print(f"[DEBUG] Worker {worker_id} Video file not found: {video_path}", flush=True)
                     if video_loading == 'strict':
                         raise FileNotFoundError(f"Video file not found: {video_path}")
                     frames = fallback_tensor
                 else:
-                    print(f"[DEBUG] Worker {worker_id} Loading video: {video_path}", flush=True)
                     frames, idxs = self.video_reader(video_path, self.video_params['num_frames'], frame_sample)
-                    print(f"[DEBUG] Worker {worker_id} Video loaded, frames shape: {frames.shape if frames is not None else None}", flush=True)
                     if frames is None or frames.shape[0] == 0:
-                        print(f"[DEBUG] Worker {worker_id} No frames loaded from {video_path}", flush=True)
                         if video_loading == 'strict':
                             raise ValueError(f"No frames loaded from {video_path}")
                         frames = fallback_tensor
@@ -125,7 +111,6 @@ class ParkinsonEgo(TextVideoDataset):
                     frames = final
                     
             except Exception as e:
-                print(f"[DEBUG] Worker {worker_id} Error in video loading: {str(e)}", flush=True)
                 if video_loading == 'strict':
                     raise ValueError(f'Video loading failed for {video_path}, video loading for this dataset is strict.') from e
                 frames = fallback_tensor
@@ -133,7 +118,6 @@ class ParkinsonEgo(TextVideoDataset):
             # Tokenize action label
             text = sample['action_label']
             text_tokens = self.tokenizer(text, padding='max_length', truncation=True, max_length=self.text_params['max_length'], return_tensors='pt')
-            print(f"[DEBUG] Worker {worker_id} Text tokens created: {text_tokens.keys()}", flush=True)
             
             # Ensure all tensors are on CPU for distributed training
             frames = frames.cpu()
@@ -157,12 +141,9 @@ class ParkinsonEgo(TextVideoDataset):
                 'label': torch.tensor(label, dtype=torch.long)
             }
             
-            print(f"[DEBUG] Worker {worker_id} Returning result with keys: {result.keys()}", flush=True)
             return result
             
         except Exception as e:
-            print(f"[DEBUG] Worker {worker_id} Critical error in __getitem__ for item {item}: {str(e)}", flush=True)
-            print(f"[DEBUG] Worker {worker_id} Full traceback:", e.__traceback__, flush=True)
             raise  # Re-raise the exception so the worker can handle it
 
     def __len__(self):
