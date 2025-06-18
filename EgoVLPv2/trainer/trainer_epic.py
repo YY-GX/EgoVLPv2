@@ -277,21 +277,24 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
                         data[k] = v.cuda(gpu, non_blocking=True)
                 
                 # Get predictions
-                ret = self.model.module.infer(data, return_embeds=False, task_names="EgoNCE_ITM_MLM", ret={})
+                ret = self.model.module.infer(data, return_embeds=False, task_names="Dual", ret={})
                 
-                # For ensemble metrics, we need both ITM and MLM predictions
-                if "cross_attn_itm_logits" in ret and "cross_attn_mlm_logits" in ret:
-                    pred_ensemble = ret["cross_attn_itm_logits"]
-                    pred_vtm = ret["cross_attn_mlm_logits"]
+                # For ensemble metrics, we need both video and text embeddings
+                if "video_embeds" in ret and "text_embeds" in ret:
+                    video_embeds = ret["video_embeds"]
+                    text_embeds = ret["text_embeds"]
+                    
+                    # Compute similarity matrix
+                    sims = sim_matrix(text_embeds, video_embeds)
                     
                     # Store predictions and labels for metrics
-                    pred_arr_ensemble[dl_idx].append(pred_ensemble)
-                    pred_arr_vtm[dl_idx].append(pred_vtm)
+                    pred_arr_ensemble[dl_idx].append(sims)
+                    pred_arr_vtm[dl_idx].append(sims)  # Use same similarity matrix for both metrics
                     label_arr[dl_idx].append(data['relation'].cpu())
                     # Add types for inter/intra video evaluation
                     types_arr[dl_idx].append(torch.zeros_like(data['relation'].cpu()))  # All samples are inter-video for now
                 else:
-                    print(f"Warning: Missing predictions in batch {batch_idx}. Available keys: {ret.keys()}")
+                    print(f"Warning: Missing embeddings in batch {batch_idx}. Available keys: {ret.keys()}")
 
             # Concatenate predictions and labels for metrics
             pred_arr_cat = {
