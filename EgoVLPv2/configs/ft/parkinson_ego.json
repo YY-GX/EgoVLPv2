@@ -32,7 +32,7 @@
             "reader": "cv2",
             "shuffle": true,
             "num_workers": 2,
-            "batch_size": 16,
+            "batch_size": 32,
             "split": "train",
             "text_params": {
                 "input": "text",
@@ -48,7 +48,7 @@
     "optimizer": {
         "type": "AdamW",
         "args": {
-            "lr": 0.0002,
+            "lr": 0.000005,
             "weight_decay": 0.01,
             "lr_mult_head": 1,
             "lr_mult_cross_modal": 1
