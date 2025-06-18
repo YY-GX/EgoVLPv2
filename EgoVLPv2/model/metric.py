@@ -382,3 +382,11 @@ def pnr_metrics(
         metrics['keyframe_distance'] = np.mean(0.0)
     metrics['keyframe_distance'] = np.mean(distance_list)
     return metrics
+
+def accuracy(output, target):
+    """Computes the accuracy for classification"""
+    with torch.no_grad():
+        pred = output.argmax(dim=1)
+        correct = (pred == target).sum().item()
+        total = target.size(0)
+        return correct / total
