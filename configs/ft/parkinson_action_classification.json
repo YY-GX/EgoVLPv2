@@ -1,0 +1,87 @@
+{
+    "name": "Parkinson_Action_Classification",
+    "n_gpu": 8,
+    "arch": {
+        "type": "FrozenInTime",
+        "args": {
+            "video_params": {
+                "model": "SpaceTimeTransformer",
+                "arch_config": "base_patch16_224",
+                "num_frames": 16,
+                "pretrained": true,
+                "time_init": "zeros",
+                "drop_path_rate": 0.0
+            },
+            "text_params": {
+                "model": "roberta-base",
+                "max_length": 32,
+                "pretrained": true,
+                "input": "text"
+            },
+            "projection": "minimal",
+            "projection_dim": 4096,
+            "load_checkpoint": "checkpoints/EgoVLPv2.pth"
+        }
+    },
+    "data_loader": {
+        "type": "MultiDistTextVideoDataLoader",
+        "args": {
+            "dataset_name": "ParkinsonEgo",
+            "data_dir": "data",
+            "meta_dir": "annotations",
+            "reader": "cv2",
+            "shuffle": true,
+            "num_workers": 2,
+            "batch_size": 16,
+            "split": "train",
+            "text_params": {
+                "input": "text",
+                "max_length": 32
+            },
+            "video_params": {
+                "input_res": 224,
+                "num_frames": 16,
+                "loading": "lax"
+            }
+        }
+    },
+    "optimizer": {
+        "type": "AdamW",
+        "args": {
+            "lr": 0.0002,
+            "weight_decay": 0.01,
+            "lr_mult_head": 1,
+            "lr_mult_cross_modal": 1
+        }
+    },
+    "loss": {
+        "type": "CrossEntropy",
+        "args": {}
+    },
+    "metrics": ["accuracy"],
+    "trainer": {
+        "epochs": 100,
+        "save_dir": "saved/",
+        "save_period": 1,
+        "verbosity": 2,
+        "monitor": "min val_loss",
+        "early_stop": 10,
+        "tensorboard": true,
+        "max_samples_per_epoch": 100000
+    },
+    "visualizer": {
+        "type": "",
+        "args": {
+            "log_dir": "runs/",
+            "enabled": false,
+            "web_domain": "localhost",
+            "web_port": 8097,
+            "args": {
+                "log_dir": "runs/",
+                "enabled": false,
+                "web_domain": "localhost",
+                "web_port": 8097
+            }
+        }
+    }
+} 
