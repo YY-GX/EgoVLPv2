@@ -277,7 +277,14 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
                         data[k] = v.cuda(gpu, non_blocking=True)
                 
                 # Get predictions
-                pred_ensemble, pred_vtm = self.model.module.infer(data, return_embeds=False, task_names="Dual", ret={})
+                ret = self.model.module.infer(data, return_embeds=False, task_names="Dual", ret={})
+                pred_ensemble = ret.get("cross_attn_itm_logits", None)
+                pred_vtm = ret.get("cross_attn_mlm_logits", None)
+                
+                if pred_ensemble is None or pred_vtm is None:
+                    print(f"Warning: Missing predictions in batch {batch_idx}")
+                    continue
+                
                 label = data['relation'].cpu().numpy()
                 
                 # Store predictions and labels for metrics
