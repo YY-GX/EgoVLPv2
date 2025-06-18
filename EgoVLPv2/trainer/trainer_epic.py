@@ -133,7 +133,7 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
                 # Just move the tensors to GPU
                 data['text'] = {key: val.cuda(gpu, non_blocking=True) for key, val in data['text'].items()}
                 data['video'] = data['video'].cuda(gpu, non_blocking=True)
-                data['relation'] = data['relation'].cuda(gpu, non_blocking=True)
+                data['label'] = data['label'].cuda(gpu, non_blocking=True)
 
                 self.optimizer.zero_grad()
                 with torch.set_grad_enabled(True):
