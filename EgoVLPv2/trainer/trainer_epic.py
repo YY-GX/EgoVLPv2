@@ -199,27 +199,22 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
 
     def _valid_epoch(self, epoch, gpu):
         """
-        Validate after training an epoch
+        Validate after training an epoch - Classification evaluation
 
         :return: A log that contains information about validation
-
-        Note:
-            The validation metrics in log must have the key 'val_metrics'.
         """
         self.model.eval()
         total_val_loss = [0] * len(self.valid_data_loader)
         total_val_metrics = [np.zeros(len(self.metrics))] * len(self.valid_data_loader)
-        meta_arr = {x: [] for x in range(len(self.valid_data_loader))}
-        text_embed_arr = {x: [] for x in range(len(self.valid_data_loader))}
-        vid_embed_arr = {x: [] for x in range(len(self.valid_data_loader))}
-        idx_embed_arr = {x: [] for x in range(len(self.valid_data_loader))}
+        
+        # For classification evaluation
+        all_predictions = []
+        all_labels = []
         
         with torch.no_grad():
             for dl_idx, dl in enumerate(self.valid_data_loader):
                 for batch_idx, data in enumerate(tqdm(dl)):
                     try:
-                        meta_arr[dl_idx].append(data['meta'])
-                        
                         # Move all tensors to GPU
                         for k, v in data.items():
                             if isinstance(v, dict):
@@ -228,118 +223,60 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
                             elif isinstance(v, torch.Tensor):
                                 data[k] = v.cuda(gpu, non_blocking=True)
                         
-                        # Get embeddings
+                        # Get video embeddings for classification
                         self.model.module.task_names = "Dual"  # Set task names before inference
                         ret = self.model.module.infer(data, return_embeds=True, task_names="Dual", ret={})
                         vid_embed = ret['video_embeds']
-                        text_embed = ret['text_embeds']
                         
-                        # Store results locally
-                        text_embed_arr[dl_idx].append(text_embed.cpu())
-                        vid_embed_arr[dl_idx].append(vid_embed.cpu())
-                        # Store paths directly since they're not tensors
-                        idx_embed_arr[dl_idx].append(data['meta']['paths'])
+                        # Use video embeddings for classification
+                        # Add a simple linear classifier if not exists
+                        if not hasattr(self.model.module, 'classification_head'):
+                            num_classes = 4  # Set this to your actual number of action classes: sitting, walking, standing, upstair
+                            self.model.module.classification_head = nn.Linear(vid_embed.shape[-1], num_classes).cuda(gpu)
+                        
+                        # Get classification logits
+                        logits = self.model.module.classification_head(vid_embed)
+                        
+                        # Store predictions and labels
+                        all_predictions.append(logits.cpu())
+                        all_labels.append(data['label'].cpu())
                         
                     except Exception as e:
                         print(f"Error processing validation batch {batch_idx} in dataloader {dl_idx}: {str(e)}")
                         print(f"Full traceback:", e.__traceback__)
                         raise  # Re-raise to see the full error
 
-            if self.writer is not None and self.args.rank == 0:
-                for dl_idx in range(len(self.valid_data_loader)):
-                    tl = total_val_loss[dl_idx] / len(self.valid_data_loader[dl_idx])
-                    self.writer.add_scalar(f'Loss_val/loss_total_{dl_idx}', tl, epoch-1)
-
-        for dl_idx in range(len(self.valid_data_loader)):
-            nested_metrics = {x: {} for x in range(len(self.valid_data_loader))}
-
-            # Concatenate local embeddings
-            text_embeds = torch.cat(text_embed_arr[dl_idx])
-            vid_embeds = torch.cat(vid_embed_arr[dl_idx])
+        # Concatenate all predictions and labels
+        all_predictions = torch.cat(all_predictions, dim=0)
+        all_labels = torch.cat(all_labels, dim=0)
+        
+        # Compute classification accuracy
+        correct = 0
+        total = 0
+        for pred, label in zip(all_predictions, all_labels):
+            pred_class = torch.argmax(pred)
+            if pred_class.item() == label.item():
+                correct += 1
+            total += 1
+        
+        accuracy = correct / total if total > 0 else 0.0
+        
+        # Log results
+        if self.args.rank == 0:
+            msg = f"[VALIDATION] Epoch {epoch}, Classification Accuracy: {accuracy:.4f} ({correct}/{total})"
+            print(msg)
             
-            # Flatten the list of paths
-            arr_embeds = [path for batch_paths in idx_embed_arr[dl_idx] for path in batch_paths]
-
-            # Compute similarity matrix locally
-            sims = sim_matrix(text_embeds, vid_embeds).detach().cpu().numpy()
-
-            # Store predictions and labels for metrics
-            pred_arr_ensemble = []
-            pred_arr_vtm = []
-            label_arr = []
-            types_arr = []
-            for batch_idx, data in enumerate(self.valid_data_loader[dl_idx]):
-                # Move all tensors to GPU
-                for k, v in data.items():
-                    if isinstance(v, dict):
-                        data[k] = {sub_k: sub_v.cuda(gpu, non_blocking=True) if isinstance(sub_v, torch.Tensor) else sub_v 
-                                  for sub_k, sub_v in v.items()}
-                    elif isinstance(v, torch.Tensor):
-                        data[k] = v.cuda(gpu, non_blocking=True)
-                
-                # Get predictions
-                self.model.module.task_names = "Dual"  # Set task names before inference
-                ret = self.model.module.infer(data, return_embeds=True, task_names="Dual", ret={})
-                
-                # For ensemble metrics, we need both video and text embeddings
-                if "video_embeds" in ret and "text_embeds" in ret:
-                    video_embeds = ret["video_embeds"]
-                    text_embeds = ret["text_embeds"]
-                    
-                    # Compute similarity matrix
-                    sims = sim_matrix(text_embeds, video_embeds)
-                    
-                    # Store predictions and labels for metrics
-                    pred_arr_ensemble[dl_idx].append(sims)
-                    pred_arr_vtm[dl_idx].append(sims)  # Use same similarity matrix for both metrics
-                    label_arr[dl_idx].append(data['relation'].cpu())
-                    # Add types for inter/intra video evaluation
-                    types_arr[dl_idx].append(torch.zeros_like(data['relation'].cpu()))  # All samples are inter-video for now
-                else:
-                    print(f"Warning: Missing embeddings in batch {batch_idx}. Available keys: {ret.keys()}")
-
-            # Concatenate predictions and labels for metrics
-            pred_arr_cat = {
-                "egomcq_accuracy_metrics_ensemble": torch.cat(pred_arr_ensemble),
-                "egomcq_accuracy_metrics_vtm": torch.cat(pred_arr_vtm)
-            }
-            label_arr_cat = torch.cat(label_arr)
-            types_arr_cat = torch.cat(types_arr)
-            
-            # Calculate metrics
-            for metric in self.metrics:
-                if metric == "egomcq_accuracy_metrics_ensemble":
-                    res = metric(pred_arr_cat[metric], label_arr_cat, types_arr_cat)
-                elif metric == "egomcq_accuracy_metrics_vtm":
-                    res = metric(pred_arr_cat[metric], label_arr_cat, types_arr_cat)
-                else:
-                    res = metric(sims, arr_embeds)
-
-                if self.args.rank == 0:
-                    self.logger.info(verbose(epoch=epoch, metrics=res, name=self.valid_data_loader[dl_idx].dataset_name,
-                            mode=metric.__name__, args=self.args))
-                nested_metrics[dl_idx][metric.__name__] = res
-
-                if self.writer is not None and self.args.rank == 0:
-                    to_write = format_nested_metrics_for_writer(res, mode=metric.__name__,
-                                                                name=self.valid_data_loader[dl_idx].dataset_name)
-                    for key, val in to_write.items():
-                        key = key.replace('[', '_').replace(']', '_')
-                        self.writer.add_scalar(f'Val_metrics_{dl_idx}/{key}', val, epoch-1)
-
-                if self.visualizer is not None and self.args.rank == 0:
-                    meta_arr_cat = {key: [] for key in meta_arr[0]}
-                    for meta in meta_arr:
-                        for key, val in meta.items():
-                            meta_arr_cat[key] += val
-                    self.visualizer.visualize_ranking(sims, epoch, meta_arr_cat, nested_metrics)
-
+            if self.writer is not None:
+                self.writer.add_scalar('Val_metrics/classification_accuracy', accuracy, epoch-1)
+        
         res_dict = {}
         if self.args.rank == 0:
-            res_dict = {f'val_loss_{dl_idx}': total_val_loss[dl_idx] / len(self.valid_data_loader[dl_idx])
-                        for dl_idx in range(len(self.valid_data_loader))}
-            res_dict['nested_val_metrics'] = nested_metrics
-
+            res_dict = {
+                'val_classification_accuracy': accuracy,
+                'val_correct_predictions': correct,
+                'val_total_predictions': total
+            }
+        
         return res_dict
 
     def _progress(self, batch_idx, dl_idx):
