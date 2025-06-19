@@ -32,7 +32,7 @@
             "reader": "cv2",
             "shuffle": true,
             "num_workers": 2,
-            "batch_size": 32,
+            "batch_size": 16,
             "split": "train",
             "text_params": {
                 "input": "text",
