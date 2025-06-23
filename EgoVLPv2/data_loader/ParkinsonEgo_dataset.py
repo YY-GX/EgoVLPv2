@@ -51,11 +51,20 @@ class ParkinsonEgo(TextVideoDataset):
         with open(csv_path, 'r') as f:
             reader = csv.DictReader(f)
             for row in reader:
-                # Convert video_id to string and pad with zeros to ensure 3 digits
-                video_id = str(row['video_id']).zfill(3)
+                # Extract source_video and clip number from video_id
+                video_id = row['video_id']  # e.g., "video_0_clip_001"
                 
-                # Construct video path - remove the extra video_0_clip_ prefix
-                video_path = os.path.join(self.data_dir, 'video_0', f'clip_{video_id.split("_")[-1]}.mp4')
+                # Parse the video_id to get source_video and clip number
+                if '_clip_' in video_id:
+                    source_video = video_id.split('_clip_')[0]  # e.g., "video_0"
+                    clip_num = video_id.split('_clip_')[1]  # e.g., "001"
+                else:
+                    # Fallback: assume it's just a clip number and use video_0
+                    source_video = 'video_0'
+                    clip_num = video_id
+                
+                # Construct video path using the source_video
+                video_path = os.path.join(self.data_dir, source_video, f'clip_{clip_num}.mp4')
                 
                 # Add to metadata
                 metadata.append({

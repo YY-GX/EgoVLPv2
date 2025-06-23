@@ -138,7 +138,7 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
                 self.optimizer.zero_grad()
                 with torch.set_grad_enabled(True):
                     with torch.cuda.amp.autocast():
-                        loss, loss_dict, _ = self.model(data, self.allgather, self.n_gpu, self.args, self.config, self.loss, gpu, task_names='Dual', dataset_name='epic')
+                        loss, loss_dict, _ = self.model(data, self.allgather, self.n_gpu, self.args, self.config, self.loss, gpu, task_names='Dual', dataset_name='parkinson')
                         assert loss == loss_dict['Dual']
 
                 scaler.scale(loss).backward()
@@ -195,17 +195,22 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
 
         return log
 
+
     def _valid_epoch(self, epoch, gpu):
         """
-        Validate after training an epoch - Classification evaluation
+        Validate after training an epoch - Distance-based action classification
 
         :return: A log that contains information about validation
         """
         self.model.eval()
-        total_val_loss = [0] * len(self.valid_data_loader)
-        total_val_metrics = [np.zeros(len(self.metrics))] * len(self.valid_data_loader)
         
-        # For classification evaluation
+        # Pre-compute action text embeddings
+        action_texts = ["sitting", "walking", "standing", "upstair", "downstair"]
+        action_tokens = self.tokenizer(action_texts, padding=True, truncation=True, return_tensors='pt')
+        action_tokens = {k: v.cuda(gpu) for k, v in action_tokens.items()}
+        action_embeddings = self.model.module.compute_text(action_tokens)  # [5, embed_dim]
+        
+        # Evaluation loop
         all_predictions = []
         all_labels = []
         
@@ -214,68 +219,55 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
                 for batch_idx, data in enumerate(tqdm(dl)):
                     try:
                         # Move all tensors to GPU
-                        for k, v in data.items():
-                            if isinstance(v, dict):
-                                data[k] = {sub_k: sub_v.cuda(gpu, non_blocking=True) if isinstance(sub_v, torch.Tensor) else sub_v 
-                                          for sub_k, sub_v in v.items()}
-                            elif isinstance(v, torch.Tensor):
-                                data[k] = v.cuda(gpu, non_blocking=True)
+                        data['text'] = {key: val.cuda(gpu, non_blocking=True) for key, val in data['text'].items()}
+                        data['video'] = data['video'].cuda(gpu, non_blocking=True)
+                        data['label'] = data['label'].cuda(gpu, non_blocking=True)
                         
-                        # Get video embeddings for classification
-                        self.model.module.task_names = "Dual"  # Set task names before inference
+                        # Get video embeddings
                         ret = self.model.module.infer(data, return_embeds=True, task_names="Dual", ret={})
-                        vid_embed = ret['video_embeds']
+                        video_embeds = ret['video_embeds']  # [batch_size, embed_dim]
                         
-                        # Use video embeddings for classification
-                        # Add a simple linear classifier if not exists
-                        if not hasattr(self.model.module, 'classification_head'):
-                            num_classes = 5  # Set this to your actual number of action classes: sitting, walking, standing, upstair, downstair
-                            self.model.module.classification_head = nn.Linear(vid_embed.shape[-1], num_classes).cuda(gpu)
-                        
-                        # Get classification logits
-                        logits = self.model.module.classification_head(vid_embed)
+                        # Compute distances between video embeddings and action text embeddings
+                        distances = torch.cdist(video_embeds, action_embeddings)  # [batch_size, 5]
+                        predictions = torch.argmin(distances, dim=1)  # [batch_size]
                         
                         # Store predictions and labels
-                        all_predictions.append(logits.cpu())
+                        all_predictions.append(predictions.cpu())
                         all_labels.append(data['label'].cpu())
                         
                     except Exception as e:
                         print(f"Error processing validation batch {batch_idx} in dataloader {dl_idx}: {str(e)}")
-                        print(f"Full traceback:", e.__traceback__)
-                        raise  # Re-raise to see the full error
+                        continue
 
         # Concatenate all predictions and labels
-        all_predictions = torch.cat(all_predictions, dim=0)
-        all_labels = torch.cat(all_labels, dim=0)
-        
-        # Compute classification accuracy
-        correct = 0
-        total = 0
-        for pred, label in zip(all_predictions, all_labels):
-            pred_class = torch.argmax(pred)
-            if pred_class.item() == label.item():
-                correct += 1
-            total += 1
-        
-        accuracy = correct / total if total > 0 else 0.0
-        
-        # Log results
-        if self.args.rank == 0:
-            msg = f"[VALIDATION] Epoch {epoch}, Classification Accuracy: {accuracy:.4f} ({correct}/{total})"
-            print(msg)
+        if all_predictions:
+            all_predictions = torch.cat(all_predictions, dim=0)
+            all_labels = torch.cat(all_labels, dim=0)
             
-            if self.writer is not None:
-                self.writer.add_scalar('Val_metrics/classification_accuracy', accuracy, epoch-1)
-        
-        res_dict = {}
-        if self.args.rank == 0:
-            res_dict = {
-                'val_classification_accuracy': accuracy,
-                'val_correct_predictions': correct,
-                'val_total_predictions': total
-            }
-        
-        return res_dict
+            # Compute classification accuracy
+            correct = (all_predictions == all_labels).sum().item()
+            total = all_predictions.size(0)
+            accuracy = correct / total if total > 0 else 0.0
+            
+            # Log results
+            if self.args.rank == 0:
+                msg = f"[VALIDATION] Epoch {epoch}, Distance-based Classification Accuracy: {accuracy:.4f} ({correct}/{total})"
+                print(msg)
+                
+                if self.writer is not None:
+                    self.writer.add_scalar('Val_metrics/distance_based_accuracy', accuracy, epoch-1)
+            
+            res_dict = {}
+            if self.args.rank == 0:
+                res_dict = {
+                    'val_distance_based_accuracy': accuracy,
+                    'val_correct_predictions': correct,
+                    'val_total_predictions': total
+                }
+            
+            return res_dict
+        else:
+            return {'val_distance_based_accuracy': 0.0, 'val_correct_predictions': 0, 'val_total_predictions': 0}
 
     def _progress(self, batch_idx, dl_idx):
         base = '[{}/{} ({:.0f}%)]'

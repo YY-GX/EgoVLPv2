@@ -24,25 +24,33 @@ def get_most_common_action(start_time, end_time, annotations):
     
     # Get all actions that overlap with this time period
     actions = []
-    for i in range(len(annotations) - 1):
+    for i in range(len(annotations)):
         current_start = parse_timestamp(annotations.iloc[i]['timestamp'])
-        next_start = parse_timestamp(annotations.iloc[i + 1]['timestamp'])
         
-        # Skip the end marker
-        if annotations.iloc[i + 1]['action_label'].strip() == 'end':
+        # For the last annotation, assume it continues until the end
+        if i == len(annotations) - 1:
+            # If this action overlaps with our time period
             if current_start <= end_sec:
-                actions.append(annotations.iloc[i]['action_label'])
-            continue
+                # Calculate overlap duration
+                overlap_start = max(current_start, start_sec)
+                overlap_duration = end_sec - overlap_start
+                
+                # Add the action multiple times based on duration
+                if overlap_duration > 0:
+                    actions.extend([annotations.iloc[i]['action_label']] * int(overlap_duration))
+        else:
+            next_start = parse_timestamp(annotations.iloc[i + 1]['timestamp'])
             
-        # If this action overlaps with our time period
-        if (current_start <= end_sec and next_start >= start_sec):
-            # Calculate overlap duration
-            overlap_start = max(current_start, start_sec)
-            overlap_end = min(next_start, end_sec)
-            overlap_duration = overlap_end - overlap_start
-            
-            # Add the action multiple times based on duration
-            actions.extend([annotations.iloc[i]['action_label']] * overlap_duration)
+            # If this action overlaps with our time period
+            if (current_start <= end_sec and next_start >= start_sec):
+                # Calculate overlap duration
+                overlap_start = max(current_start, start_sec)
+                overlap_end = min(next_start, end_sec)
+                overlap_duration = overlap_end - overlap_start
+                
+                # Add the action multiple times based on duration
+                if overlap_duration > 0:
+                    actions.extend([annotations.iloc[i]['action_label']] * int(overlap_duration))
     
     if not actions:
         return None
@@ -64,19 +72,35 @@ def generate_clip_annotations_for_video(raw_annotation_file, clip_duration, vide
         pd.DataFrame: DataFrame containing clip annotations
     """
     # Read raw annotations
-    annotations = pd.read_csv(raw_annotation_file)
-    annotations.columns = annotations.columns.str.strip()
-    annotations['action_label'] = annotations['action_label'].str.strip()
+    try:
+        annotations = pd.read_csv(raw_annotation_file)
+        annotations.columns = annotations.columns.str.strip()
+        annotations['action_label'] = annotations['action_label'].str.strip()
+        
+        # Validate required columns
+        required_columns = ['timestamp', 'action_label']
+        missing_columns = [col for col in required_columns if col not in annotations.columns]
+        if missing_columns:
+            raise ValueError(f"Missing required columns: {missing_columns}")
+            
+        print(f"  Loaded {len(annotations)} annotations from {raw_annotation_file}")
+        
+    except Exception as e:
+        raise ValueError(f"Error reading annotation file {raw_annotation_file}: {str(e)}")
     
-    # Get list of existing clips
-    clip_pattern = os.path.join(video_dir, f"{video_id}", "clip_*.mp4")
+    # Get list of existing clips - clips are directly in video_dir/video_id/clip_*.mp4
+    clip_pattern = os.path.join(video_dir, video_id, "clip_*.mp4")
     existing_clips = glob.glob(clip_pattern)
     
     if not existing_clips:
         raise ValueError(f"No clips found matching pattern: {clip_pattern}")
     
+    print(f"  Found {len(existing_clips)} clips in {video_dir}/{video_id}")
+    
     # Create clips dataframe
     clips = []
+    skipped_clips = 0
+    
     for clip_path in existing_clips:
         # Extract clip number from filename
         clip_num = int(os.path.basename(clip_path).replace('clip_', '').replace('.mp4', ''))
@@ -91,7 +115,8 @@ def generate_clip_annotations_for_video(raw_annotation_file, clip_duration, vide
         action_label = get_most_common_action(timestamp, f"{int((start_time + clip_duration) // 60):02d}:{int((start_time + clip_duration) % 60):02d}", annotations)
         
         if action_label is None:
-            print(f"Warning: No action label found for clip {clip_path}")
+            print(f"  Warning: No action label found for clip {clip_path}")
+            skipped_clips += 1
             continue
             
         clips.append({
@@ -100,6 +125,12 @@ def generate_clip_annotations_for_video(raw_annotation_file, clip_duration, vide
             'start_time': timestamp,
             'source_video': video_id
         })
+    
+    if skipped_clips > 0:
+        print(f"  Skipped {skipped_clips} clips due to missing action labels")
+    
+    if not clips:
+        raise ValueError(f"No valid clips generated for {video_id}")
     
     return pd.DataFrame(clips)
 
@@ -116,17 +147,32 @@ def generate_combined_annotations(annotation_dir, clip_duration, video_dir, trai
         test_ratio (float): Ratio of clips for testing
         output_dir (str): Directory to save the generated annotation files
     """
-    # Find all raw annotation files
+    # Find all raw annotation files (video_*.csv)
     raw_annotation_files = glob.glob(os.path.join(annotation_dir, 'video_*.csv'))
+    
     if not raw_annotation_files:
-        raise ValueError(f"No raw annotation files found in {annotation_dir}")
+        raise ValueError(f"No raw annotation files found in {annotation_dir}. Expected video_*.csv files")
+    
+    # Sort files to ensure consistent processing order
+    raw_annotation_files.sort()
+    
+    print(f"Found {len(raw_annotation_files)} annotation files: {[os.path.basename(f) for f in raw_annotation_files]}")
     
     # Generate clips for each video
     all_clips = []
     for raw_file in raw_annotation_files:
         video_id = os.path.splitext(os.path.basename(raw_file))[0]  # Get video_0, video_1, etc.
-        clips_df = generate_clip_annotations_for_video(raw_file, clip_duration, video_id, video_dir)
-        all_clips.append(clips_df)
+        print(f"Processing {video_id}...")
+        try:
+            clips_df = generate_clip_annotations_for_video(raw_file, clip_duration, video_id, video_dir)
+            all_clips.append(clips_df)
+            print(f"  Generated {len(clips_df)} clips for {video_id}")
+        except Exception as e:
+            print(f"  Error processing {video_id}: {str(e)}")
+            continue
+    
+    if not all_clips:
+        raise ValueError("No clips were generated from any video")
     
     # Combine all clips
     combined_clips = pd.concat(all_clips, ignore_index=True)
@@ -178,6 +224,12 @@ def generate_combined_annotations(annotation_dir, clip_duration, video_dir, trai
         print(f"  Train: {len(video_clips[video_clips['split'] == 'train'])} clips")
         print(f"  Val: {len(video_clips[video_clips['split'] == 'val'])} clips")
         print(f"  Test: {len(video_clips[video_clips['split'] == 'test'])} clips")
+    
+    # Print action distribution
+    print("\nAction distribution:")
+    action_counts = combined_clips['action_label'].value_counts()
+    for action, count in action_counts.items():
+        print(f"  {action}: {count} clips")
 
 def main():
     parser = argparse.ArgumentParser(description='Generate train/val/test annotation files from raw timestamps')

@@ -55,10 +55,11 @@
         }
     },
     "loss": {
-        "type": "CrossEntropy",
-        "args": {}
+        "type": "AdaptiveMaxMarginRankingLoss",
+        "args": {
+            "margin": 0.2
+        }
     },
-    "metrics": ["egomcq_accuracy_metrics_ensemble"],
     "trainer": {
         "epochs": 100,
         "save_dir": "saved/",

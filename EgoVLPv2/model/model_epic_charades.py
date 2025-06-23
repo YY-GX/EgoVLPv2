@@ -428,6 +428,10 @@ class FrozenInTime(BaseModel):
                 w_embeds = data['label']
                 w_embeds = allgather(w_embeds, n_gpu, args)
                 loss = loss_dual(output, w_embeds)
+            elif dataset_name == 'parkinson':
+                w_embeds = data['label']
+                w_embeds = allgather(w_embeds, n_gpu, args)
+                loss = loss_dual(output, w_embeds)
             elif dataset_name == 'charades':
                 loss, temp = loss_dual(output)
             else:
@@ -435,6 +439,8 @@ class FrozenInTime(BaseModel):
 
             if dataset_name == 'epic':
                 ret.update({"sim_v2t": output, "sim_t2v": output.t(), 'epic_label': w_embeds})
+            elif dataset_name == 'parkinson':
+                ret.update({"sim_v2t": output, "sim_t2v": output.t(), 'parkinson_label': w_embeds})
             elif dataset_name == 'charades':
                 ret.update({"sim_v2t": output, "sim_t2v": output.t()})
             else:

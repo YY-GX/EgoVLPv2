@@ -1,32 +1,31 @@
-timestamp, action_label
-00:00, sitting
-01:21, standing
-01:35, walking
-02:29, sitting
-03:16, walking
-03:20, standing
-03:30, walking
-03:38, standing
-03:47, walking
-03:52, downstair
-04:01, walking
-04:32, standing
-04:47, walking
-04:58, standing
-05:12, walking
-05:23, sitting
-06:13, walking
-06:53, standing
-07:06, walking
-07:19, sitting
-08:19, walking
-08:35, standing
-08:41, walking
-08:52, upstair
-09:06, walking
-09:17, standing
-09:24, walking
-09:53, sitting
-10:03, walking
-10:11, sitting
-10:30, end
+timestamp,action_label
+00:00,standing
+00:13,walking
+02:36,standing
+03:41,walking
+04:09,standing
+04:15,sitting
+07:50,standing
+08:03,walking
+08:42,standing
+18:38,walking
+18:47,standing
+19:04,sitting
+24:08,standing
+24:15,walking
+24:29,upstair
+24:39,walking
+24:51,standing
+25:02,walking
+25:12,standing
+25:19,walking
+25:28,downstair
+25:36,walking
+26:04,standing
+26:11,sitting
+26:17,walking
+26:26,standing
+26:32,sitting
+35:49,standing
+35:52,walking
+36:23,standing
