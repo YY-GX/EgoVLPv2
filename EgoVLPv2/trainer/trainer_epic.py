@@ -121,7 +121,7 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
 
         self.model.train()
         total_loss = [0] * len(self.data_loader)
-        total_metrics = np.zeros(len(self.metrics))
+        total_metrics = np.zeros(len(self.metrics)) if self.metrics else np.zeros(0)
         
         for loader in self.data_loader:
             loader.train_sampler.set_epoch(epoch)

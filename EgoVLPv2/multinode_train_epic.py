@@ -130,7 +130,8 @@ def main_worker(gpu, args):
     
     # get function handles of loss and metrics
     loss = config.initialize(name="loss", module=module_loss)
-    metrics = [getattr(module_metric, met) for met in config['metrics']]
+    # Note: metrics are not used in this trainer - validation uses custom distance-based evaluation
+    metrics = []  # Empty list since we don't use standard metrics
     # build optimizer, learning rate scheduler. delete every lines containing lr_scheduler for disabling scheduler
     
     ## set_schedule will be modified; currently same as pretraining
