@@ -1,0 +1,2 @@
+multinode_train_epic.py --save_dir eval_epic --config ./configs/eval/epic.json --print_freq 100
+{"epoch": -1, "msg": "[mir_metrics_vtc]EpicKitchens_MIR epoch -1, nDCG_V2T: 30.073, nDCG_T2V: 28.125, nDCG_AVG: 29.099,, mAP_V2T: 29.882, mAP_T2V: 23.451, mAP_AVG: 26.666"}

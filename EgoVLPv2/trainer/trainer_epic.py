@@ -17,6 +17,11 @@ from utils import inf_loop
 from pathlib import Path
 import sys
 import json
+import os
+from sklearn.metrics import confusion_matrix
+import shutil
+import warnings
+warnings.filterwarnings("ignore")
 
 class AllGather_multi(torch.autograd.Function):
     """An autograd function that performs allgather on a tensor."""
@@ -114,10 +119,33 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
 
         log = {}
 
-        if self.do_validation and epoch == 1:
-            val_log = self._valid_epoch(0, gpu)
-            if self.args.rank == 0:
+        if self.do_validation and (epoch == 1 or epoch % 20 == 0):
+            val_log = self._valid_epoch(epoch, gpu)
+            # Only rank 0 gets validation results, others get empty dict
+            if dist.get_rank() == 0:
+                val_acc = val_log.get('val_distance_based_accuracy', None)
+                if val_acc is None:
+                    print(f"Warning: val_acc is None at epoch {epoch}, val_log: {val_log}")
+                    val_acc = 0.0  # Set default value instead of crashing
+                assert val_acc is not None, f"val_acc is None at epoch {epoch}, val_log: {val_log}"
+                stats_file = open(Path(self.args.save_dir) / str('stats_vtc.txt'), 'a', buffering=1)
+                print(f"[VAL] Epoch {epoch}: val_acc={val_acc}, best_val_acc={getattr(self, 'best_val_acc', None)}", file=stats_file)
+                save_dir = None
+                if val_acc is not None and (not hasattr(self, 'best_val_acc') or val_acc > self.best_val_acc):
+                    self.best_val_acc = val_acc
+                    self.best_epoch = epoch
+                    # Save best checkpoint
+                    best_ckpt_path = os.path.join(self.args.save_dir, 'model_best.pth')
+                    torch.save(self.model.state_dict(), best_ckpt_path)
+                    save_dir = os.path.join(self.args.save_dir, 'best_val_ckpt')
+                # Save confusion matrix and mis-predicted stats for best epoch
+                if save_dir is not None:
+                    os.makedirs(save_dir, exist_ok=True)
+                    self._valid_epoch(epoch, gpu, save_mis_preds_dir=save_dir, dataset_obj=self.valid_data_loader[0].dataset if self.valid_data_loader else None)
                 log.update(val_log)
+            else:
+                # Non-rank 0 processes don't get validation results, so no assertion needed
+                val_acc = None
 
         self.model.train()
         total_loss = [0] * len(self.data_loader)
@@ -184,19 +212,14 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
         if self.writer is not None and self.args.rank == 0:
             for dl_idx in range(len(self.data_loader)):
                 tl = total_loss[dl_idx] / self.len_epoch
-                self.writer.add_scalar(f'Loss_training/loss_total_{dl_idx}', tl, epoch-1)
-
-        if self.do_validation:
-            val_log = self._valid_epoch(epoch, gpu)
-            if self.args.rank == 0:
-                log.update(val_log)
+                self.writer.add_scalar(f'Loss_training/loss_total_{dl_idx}', tl, epoch)
 
         self._adjust_learning_rate(self.optimizer, epoch, self.args)
 
         return log
 
 
-    def _valid_epoch(self, epoch, gpu):
+    def _valid_epoch(self, epoch, gpu, save_mis_preds_dir=None, dataset_obj=None, return_predictions=False):
         """
         Validate after training an epoch - Distance-based action classification
 
@@ -213,6 +236,8 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
         # Evaluation loop
         all_predictions = []
         all_labels = []
+        video_ids = []
+        pred_label_dicts = []
         
         with torch.no_grad():
             for dl_idx, dl in enumerate(self.valid_data_loader):
@@ -234,9 +259,30 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
                         # Store predictions and labels
                         all_predictions.append(predictions.cpu())
                         all_labels.append(data['label'].cpu())
+                        # Robustly extract video IDs from meta
+                        meta = data['meta']
+                        batch_video_ids = []
+                        if isinstance(meta, list):
+                            if len(meta) > 0 and isinstance(meta[0], dict) and 'paths' in meta[0]:
+                                batch_video_ids = [m['paths'] for m in meta]
+                            else:
+                                batch_video_ids = [str(m) for m in meta]
+                        elif isinstance(meta, dict) and 'paths' in meta:
+                            batch_video_ids = meta['paths'] if isinstance(meta['paths'], list) else [meta['paths']]
+                        else:
+                            batch_video_ids = [str(meta)]
+                        # If returning predictions, collect them as dicts
+                        if return_predictions:
+                            for vp, pred_idx in zip(batch_video_ids, predictions.cpu().tolist()):
+                                pred_label_dicts.append({
+                                    "video_path": vp,
+                                    "classified_action": action_texts[pred_idx]
+                                })
+                        video_ids.extend(batch_video_ids)
                         
                     except Exception as e:
-                        print(f"Error processing validation batch {batch_idx} in dataloader {dl_idx}: {str(e)}")
+                        if self.args.rank == 0:
+                            print(f"Error processing validation batch {batch_idx} in dataloader {dl_idx}: {str(e)}")
                         continue
 
         # Concatenate all predictions and labels
@@ -255,7 +301,7 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
                 print(msg)
                 
                 if self.writer is not None:
-                    self.writer.add_scalar('Val_metrics/distance_based_accuracy', accuracy, epoch-1)
+                    self.writer.add_scalar('Val_metrics/distance_based_accuracy', accuracy, epoch)
             
             res_dict = {}
             if self.args.rank == 0:
@@ -265,9 +311,55 @@ class Multi_Trainer_dist_MIR(Multi_BaseTrainer_dist):
                     'val_total_predictions': total
                 }
             
-            return res_dict
+            # --- Save confusion matrix, mis-predicted stats, and videos if requested ---
+            if save_mis_preds_dir is not None and dataset_obj is not None:
+                true_labels = all_labels.numpy()
+                pred_labels = all_predictions.numpy()
+                # Confusion matrix
+                cm = confusion_matrix(true_labels, pred_labels)
+                np.save(os.path.join(save_mis_preds_dir, 'confusion_matrix.npy'), cm)
+                # Mis-predicted stats
+                mis_pred_counts = {}
+                num_classes = 5  # Hardcoded for now: ["sitting", "walking", "standing", "upstair", "downstair"]
+                action_names = ["sitting", "walking", "standing", "upstair", "downstair"]
+                for i in range(num_classes):
+                    mis_pred_counts[i] = sum((np.array(true_labels) == i) & (np.array(pred_labels) != i))
+                # Save ranked mis-predicted actions
+                ranked = sorted(mis_pred_counts.items(), key=lambda x: x[1], reverse=True)
+                with open(os.path.join(save_mis_preds_dir, 'mis_pred_stats.txt'), 'w') as f:
+                    for idx, count in ranked:
+                        action_name = action_names[idx] if idx < len(action_names) else f"action_{idx}"
+                        f.write(f"Action {idx} ({action_name}): {count} mis-predicted\n")
+                # Save up to 5 mis-predicted videos per action
+                mis_pred_examples = {i: [] for i in range(num_classes)}
+                for i, (t, p, vid) in enumerate(zip(true_labels, pred_labels, video_ids)):
+                    if t != p and len(mis_pred_examples[t]) < 5:
+                        mis_pred_examples[t].append((vid, t, p))
+                for action_idx, examples in mis_pred_examples.items():
+                    for j, (vid, t, p) in enumerate(examples):
+                        # Reconstruct video path based on annotation logic
+                        # vid is like 'video_0_clip_504'
+                        try:
+                            folder, clip = vid.split('_', 1)  # folder='video_0', clip='clip_504'
+                            video_fp = os.path.join(dataset_obj.data_dir, folder, f"{clip}.mp4")
+                            dst = os.path.join(save_mis_preds_dir, f'action{action_idx}_mis{j}_true{t}_pred{p}.mp4')
+                            shutil.copy(video_fp, dst)
+                        except Exception as e:
+                            print(f"[Warning] Could not copy video for video_id {vid}: {e}")
+            # --- End save ---
+
+            if return_predictions:
+                return pred_label_dicts
+            else:
+                return res_dict
         else:
-            return {'val_distance_based_accuracy': 0.0, 'val_correct_predictions': 0, 'val_total_predictions': 0}
+            # Return empty dict for non-rank 0 processes, or default values for rank 0
+            if return_predictions:
+                return pred_label_dicts
+            elif self.args.rank == 0:
+                return {'val_distance_based_accuracy': 0.0, 'val_correct_predictions': 0, 'val_total_predictions': 0}
+            else:
+                return {}
 
     def _progress(self, batch_idx, dl_idx):
         base = '[{}/{} ({:.0f}%)]'

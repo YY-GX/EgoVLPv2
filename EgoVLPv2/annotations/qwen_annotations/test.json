@@ -1,0 +1,7492 @@
+[
+  {
+    "id": "video_0_clip_340",
+    "video": "qwen_data/video_0/clip_340.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_801",
+    "video": "qwen_data/video_0/clip_801.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1004",
+    "video": "qwen_data/video_0/clip_1004.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_509",
+    "video": "qwen_data/video_0/clip_509.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_752",
+    "video": "qwen_data/video_0/clip_752.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_295",
+    "video": "qwen_data/video_0/clip_295.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_851",
+    "video": "qwen_data/video_0/clip_851.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_184",
+    "video": "qwen_data/video_0/clip_184.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_761",
+    "video": "qwen_data/video_0/clip_761.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_570",
+    "video": "qwen_data/video_0/clip_570.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_513",
+    "video": "qwen_data/video_0/clip_513.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_657",
+    "video": "qwen_data/video_0/clip_657.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_110",
+    "video": "qwen_data/video_0/clip_110.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1007",
+    "video": "qwen_data/video_0/clip_1007.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_069",
+    "video": "qwen_data/video_0/clip_069.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_181",
+    "video": "qwen_data/video_0/clip_181.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_151",
+    "video": "qwen_data/video_0/clip_151.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_686",
+    "video": "qwen_data/video_0/clip_686.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_924",
+    "video": "qwen_data/video_0/clip_924.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1037",
+    "video": "qwen_data/video_0/clip_1037.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_424",
+    "video": "qwen_data/video_0/clip_424.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_715",
+    "video": "qwen_data/video_0/clip_715.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_577",
+    "video": "qwen_data/video_0/clip_577.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_068",
+    "video": "qwen_data/video_0/clip_068.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_123",
+    "video": "qwen_data/video_0/clip_123.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_486",
+    "video": "qwen_data/video_0/clip_486.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_080",
+    "video": "qwen_data/video_0/clip_080.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_806",
+    "video": "qwen_data/video_0/clip_806.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_165",
+    "video": "qwen_data/video_0/clip_165.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_676",
+    "video": "qwen_data/video_0/clip_676.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_633",
+    "video": "qwen_data/video_0/clip_633.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_562",
+    "video": "qwen_data/video_0/clip_562.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_244",
+    "video": "qwen_data/video_0/clip_244.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_536",
+    "video": "qwen_data/video_0/clip_536.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_738",
+    "video": "qwen_data/video_0/clip_738.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "upstair"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_252",
+    "video": "qwen_data/video_0/clip_252.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_432",
+    "video": "qwen_data/video_0/clip_432.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_064",
+    "video": "qwen_data/video_0/clip_064.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_744",
+    "video": "qwen_data/video_0/clip_744.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_910",
+    "video": "qwen_data/video_0/clip_910.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_389",
+    "video": "qwen_data/video_0/clip_389.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_751",
+    "video": "qwen_data/video_0/clip_751.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_675",
+    "video": "qwen_data/video_0/clip_675.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1055",
+    "video": "qwen_data/video_0/clip_1055.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_688",
+    "video": "qwen_data/video_0/clip_688.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_211",
+    "video": "qwen_data/video_0/clip_211.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_253",
+    "video": "qwen_data/video_0/clip_253.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_742",
+    "video": "qwen_data/video_0/clip_742.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_961",
+    "video": "qwen_data/video_0/clip_961.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_505",
+    "video": "qwen_data/video_0/clip_505.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_983",
+    "video": "qwen_data/video_0/clip_983.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_918",
+    "video": "qwen_data/video_0/clip_918.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_964",
+    "video": "qwen_data/video_0/clip_964.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_265",
+    "video": "qwen_data/video_0/clip_265.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_857",
+    "video": "qwen_data/video_0/clip_857.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_345",
+    "video": "qwen_data/video_0/clip_345.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_456",
+    "video": "qwen_data/video_0/clip_456.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_660",
+    "video": "qwen_data/video_0/clip_660.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_044",
+    "video": "qwen_data/video_0/clip_044.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_954",
+    "video": "qwen_data/video_0/clip_954.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_603",
+    "video": "qwen_data/video_0/clip_603.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_819",
+    "video": "qwen_data/video_0/clip_819.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_866",
+    "video": "qwen_data/video_0/clip_866.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_401",
+    "video": "qwen_data/video_0/clip_401.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_042",
+    "video": "qwen_data/video_0/clip_042.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_156",
+    "video": "qwen_data/video_0/clip_156.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_107",
+    "video": "qwen_data/video_0/clip_107.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_887",
+    "video": "qwen_data/video_0/clip_887.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_143",
+    "video": "qwen_data/video_0/clip_143.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_335",
+    "video": "qwen_data/video_0/clip_335.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_613",
+    "video": "qwen_data/video_0/clip_613.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_535",
+    "video": "qwen_data/video_0/clip_535.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_360",
+    "video": "qwen_data/video_0/clip_360.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_254",
+    "video": "qwen_data/video_0/clip_254.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_888",
+    "video": "qwen_data/video_0/clip_888.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_526",
+    "video": "qwen_data/video_0/clip_526.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_478",
+    "video": "qwen_data/video_0/clip_478.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_016",
+    "video": "qwen_data/video_0/clip_016.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1008",
+    "video": "qwen_data/video_0/clip_1008.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_074",
+    "video": "qwen_data/video_0/clip_074.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_785",
+    "video": "qwen_data/video_0/clip_785.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_105",
+    "video": "qwen_data/video_0/clip_105.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_201",
+    "video": "qwen_data/video_0/clip_201.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_868",
+    "video": "qwen_data/video_0/clip_868.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_021",
+    "video": "qwen_data/video_0/clip_021.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_892",
+    "video": "qwen_data/video_0/clip_892.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_492",
+    "video": "qwen_data/video_0/clip_492.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_272",
+    "video": "qwen_data/video_0/clip_272.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_909",
+    "video": "qwen_data/video_0/clip_909.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_233",
+    "video": "qwen_data/video_0/clip_233.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_481",
+    "video": "qwen_data/video_0/clip_481.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_586",
+    "video": "qwen_data/video_0/clip_586.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_283",
+    "video": "qwen_data/video_0/clip_283.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_833",
+    "video": "qwen_data/video_0/clip_833.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_328",
+    "video": "qwen_data/video_0/clip_328.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_596",
+    "video": "qwen_data/video_0/clip_596.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_949",
+    "video": "qwen_data/video_0/clip_949.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_863",
+    "video": "qwen_data/video_0/clip_863.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_114",
+    "video": "qwen_data/video_0/clip_114.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_770",
+    "video": "qwen_data/video_0/clip_770.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_567",
+    "video": "qwen_data/video_0/clip_567.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_183",
+    "video": "qwen_data/video_0/clip_183.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_783",
+    "video": "qwen_data/video_0/clip_783.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_581",
+    "video": "qwen_data/video_0/clip_581.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_277",
+    "video": "qwen_data/video_0/clip_277.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_780",
+    "video": "qwen_data/video_0/clip_780.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_383",
+    "video": "qwen_data/video_0/clip_383.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_858",
+    "video": "qwen_data/video_0/clip_858.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1043",
+    "video": "qwen_data/video_0/clip_1043.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_571",
+    "video": "qwen_data/video_0/clip_571.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1016",
+    "video": "qwen_data/video_0/clip_1016.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_592",
+    "video": "qwen_data/video_0/clip_592.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_661",
+    "video": "qwen_data/video_0/clip_661.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_197",
+    "video": "qwen_data/video_0/clip_197.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_394",
+    "video": "qwen_data/video_0/clip_394.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_240",
+    "video": "qwen_data/video_0/clip_240.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_437",
+    "video": "qwen_data/video_0/clip_437.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_318",
+    "video": "qwen_data/video_0/clip_318.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_460",
+    "video": "qwen_data/video_0/clip_460.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_195",
+    "video": "qwen_data/video_0/clip_195.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_595",
+    "video": "qwen_data/video_0/clip_595.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_837",
+    "video": "qwen_data/video_0/clip_837.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_459",
+    "video": "qwen_data/video_0/clip_459.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_572",
+    "video": "qwen_data/video_0/clip_572.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_668",
+    "video": "qwen_data/video_0/clip_668.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_680",
+    "video": "qwen_data/video_0/clip_680.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_552",
+    "video": "qwen_data/video_0/clip_552.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_298",
+    "video": "qwen_data/video_0/clip_298.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_429",
+    "video": "qwen_data/video_0/clip_429.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_789",
+    "video": "qwen_data/video_0/clip_789.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_472",
+    "video": "qwen_data/video_0/clip_472.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_754",
+    "video": "qwen_data/video_0/clip_754.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_698",
+    "video": "qwen_data/video_0/clip_698.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_553",
+    "video": "qwen_data/video_0/clip_553.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_815",
+    "video": "qwen_data/video_0/clip_815.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_891",
+    "video": "qwen_data/video_0/clip_891.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_257",
+    "video": "qwen_data/video_0/clip_257.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_397",
+    "video": "qwen_data/video_0/clip_397.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_170",
+    "video": "qwen_data/video_0/clip_170.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_710",
+    "video": "qwen_data/video_0/clip_710.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_433",
+    "video": "qwen_data/video_0/clip_433.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_453",
+    "video": "qwen_data/video_0/clip_453.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_651",
+    "video": "qwen_data/video_0/clip_651.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_593",
+    "video": "qwen_data/video_0/clip_593.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_375",
+    "video": "qwen_data/video_0/clip_375.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_885",
+    "video": "qwen_data/video_0/clip_885.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_032",
+    "video": "qwen_data/video_0/clip_032.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_386",
+    "video": "qwen_data/video_0/clip_386.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_214",
+    "video": "qwen_data/video_0/clip_214.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_356",
+    "video": "qwen_data/video_0/clip_356.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_399",
+    "video": "qwen_data/video_0/clip_399.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_529",
+    "video": "qwen_data/video_0/clip_529.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_494",
+    "video": "qwen_data/video_0/clip_494.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_316",
+    "video": "qwen_data/video_0/clip_316.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_525",
+    "video": "qwen_data/video_0/clip_525.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_379",
+    "video": "qwen_data/video_0/clip_379.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1018",
+    "video": "qwen_data/video_0/clip_1018.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_293",
+    "video": "qwen_data/video_0/clip_293.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_274",
+    "video": "qwen_data/video_0/clip_274.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_381",
+    "video": "qwen_data/video_0/clip_381.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_736",
+    "video": "qwen_data/video_0/clip_736.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "upstair"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_768",
+    "video": "qwen_data/video_0/clip_768.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1005",
+    "video": "qwen_data/video_0/clip_1005.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_799",
+    "video": "qwen_data/video_0/clip_799.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_344",
+    "video": "qwen_data/video_0/clip_344.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_708",
+    "video": "qwen_data/video_0/clip_708.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_077",
+    "video": "qwen_data/video_0/clip_077.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_427",
+    "video": "qwen_data/video_0/clip_427.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_331",
+    "video": "qwen_data/video_0/clip_331.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_278",
+    "video": "qwen_data/video_0/clip_278.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_893",
+    "video": "qwen_data/video_0/clip_893.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_467",
+    "video": "qwen_data/video_0/clip_467.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_431",
+    "video": "qwen_data/video_0/clip_431.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_850",
+    "video": "qwen_data/video_0/clip_850.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_856",
+    "video": "qwen_data/video_0/clip_856.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_731",
+    "video": "qwen_data/video_0/clip_731.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_239",
+    "video": "qwen_data/video_0/clip_239.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_476",
+    "video": "qwen_data/video_0/clip_476.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_953",
+    "video": "qwen_data/video_0/clip_953.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_566",
+    "video": "qwen_data/video_0/clip_566.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_364",
+    "video": "qwen_data/video_0/clip_364.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_645",
+    "video": "qwen_data/video_0/clip_645.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_616",
+    "video": "qwen_data/video_0/clip_616.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_659",
+    "video": "qwen_data/video_0/clip_659.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1033",
+    "video": "qwen_data/video_0/clip_1033.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_681",
+    "video": "qwen_data/video_0/clip_681.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_248",
+    "video": "qwen_data/video_0/clip_248.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_791",
+    "video": "qwen_data/video_0/clip_791.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_092",
+    "video": "qwen_data/video_0/clip_092.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_158",
+    "video": "qwen_data/video_0/clip_158.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1068",
+    "video": "qwen_data/video_0/clip_1068.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_463",
+    "video": "qwen_data/video_0/clip_463.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_872",
+    "video": "qwen_data/video_0/clip_872.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_714",
+    "video": "qwen_data/video_0/clip_714.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_299",
+    "video": "qwen_data/video_0/clip_299.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_261",
+    "video": "qwen_data/video_0/clip_261.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_745",
+    "video": "qwen_data/video_0/clip_745.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_609",
+    "video": "qwen_data/video_0/clip_609.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_894",
+    "video": "qwen_data/video_0/clip_894.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_702",
+    "video": "qwen_data/video_0/clip_702.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_879",
+    "video": "qwen_data/video_0/clip_879.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_167",
+    "video": "qwen_data/video_0/clip_167.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_174",
+    "video": "qwen_data/video_0/clip_174.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_860",
+    "video": "qwen_data/video_0/clip_860.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_732",
+    "video": "qwen_data/video_0/clip_732.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_531",
+    "video": "qwen_data/video_0/clip_531.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_209",
+    "video": "qwen_data/video_0/clip_209.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1048",
+    "video": "qwen_data/video_0/clip_1048.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_287",
+    "video": "qwen_data/video_0/clip_287.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_475",
+    "video": "qwen_data/video_0/clip_475.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_694",
+    "video": "qwen_data/video_0/clip_694.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_669",
+    "video": "qwen_data/video_0/clip_669.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_490",
+    "video": "qwen_data/video_0/clip_490.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_199",
+    "video": "qwen_data/video_0/clip_199.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_135",
+    "video": "qwen_data/video_0/clip_135.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_587",
+    "video": "qwen_data/video_0/clip_587.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_756",
+    "video": "qwen_data/video_0/clip_756.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_054",
+    "video": "qwen_data/video_0/clip_054.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_235",
+    "video": "qwen_data/video_0/clip_235.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_625",
+    "video": "qwen_data/video_0/clip_625.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_070",
+    "video": "qwen_data/video_0/clip_070.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_028",
+    "video": "qwen_data/video_0/clip_028.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_917",
+    "video": "qwen_data/video_0/clip_917.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_067",
+    "video": "qwen_data/video_0/clip_067.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_634",
+    "video": "qwen_data/video_0/clip_634.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_266",
+    "video": "qwen_data/video_0/clip_266.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_173",
+    "video": "qwen_data/video_0/clip_173.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_452",
+    "video": "qwen_data/video_0/clip_452.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_047",
+    "video": "qwen_data/video_0/clip_047.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1002",
+    "video": "qwen_data/video_0/clip_1002.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_730",
+    "video": "qwen_data/video_0/clip_730.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_412",
+    "video": "qwen_data/video_0/clip_412.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_927",
+    "video": "qwen_data/video_0/clip_927.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_289",
+    "video": "qwen_data/video_0/clip_289.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_280",
+    "video": "qwen_data/video_0/clip_280.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_263",
+    "video": "qwen_data/video_0/clip_263.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_825",
+    "video": "qwen_data/video_0/clip_825.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_160",
+    "video": "qwen_data/video_0/clip_160.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_692",
+    "video": "qwen_data/video_0/clip_692.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_932",
+    "video": "qwen_data/video_0/clip_932.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_374",
+    "video": "qwen_data/video_0/clip_374.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_255",
+    "video": "qwen_data/video_0/clip_255.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_637",
+    "video": "qwen_data/video_0/clip_637.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_713",
+    "video": "qwen_data/video_0/clip_713.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_171",
+    "video": "qwen_data/video_0/clip_171.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_430",
+    "video": "qwen_data/video_0/clip_430.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_178",
+    "video": "qwen_data/video_0/clip_178.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1040",
+    "video": "qwen_data/video_0/clip_1040.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_327",
+    "video": "qwen_data/video_0/clip_327.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_034",
+    "video": "qwen_data/video_0/clip_034.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_251",
+    "video": "qwen_data/video_0/clip_251.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_434",
+    "video": "qwen_data/video_0/clip_434.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_943",
+    "video": "qwen_data/video_0/clip_943.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_060",
+    "video": "qwen_data/video_0/clip_060.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_204",
+    "video": "qwen_data/video_0/clip_204.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_154",
+    "video": "qwen_data/video_0/clip_154.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_341",
+    "video": "qwen_data/video_0/clip_341.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_911",
+    "video": "qwen_data/video_0/clip_911.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_349",
+    "video": "qwen_data/video_0/clip_349.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_491",
+    "video": "qwen_data/video_0/clip_491.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_387",
+    "video": "qwen_data/video_0/clip_387.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_393",
+    "video": "qwen_data/video_0/clip_393.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_294",
+    "video": "qwen_data/video_0/clip_294.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_809",
+    "video": "qwen_data/video_0/clip_809.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_886",
+    "video": "qwen_data/video_0/clip_886.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_995",
+    "video": "qwen_data/video_0/clip_995.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_371",
+    "video": "qwen_data/video_0/clip_371.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_787",
+    "video": "qwen_data/video_0/clip_787.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_076",
+    "video": "qwen_data/video_0/clip_076.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_584",
+    "video": "qwen_data/video_0/clip_584.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_426",
+    "video": "qwen_data/video_0/clip_426.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_607",
+    "video": "qwen_data/video_0/clip_607.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_094",
+    "video": "qwen_data/video_0/clip_094.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_099",
+    "video": "qwen_data/video_0/clip_099.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_861",
+    "video": "qwen_data/video_0/clip_861.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_259",
+    "video": "qwen_data/video_0/clip_259.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_469",
+    "video": "qwen_data/video_0/clip_469.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_382",
+    "video": "qwen_data/video_0/clip_382.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_646",
+    "video": "qwen_data/video_0/clip_646.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_733",
+    "video": "qwen_data/video_0/clip_733.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_786",
+    "video": "qwen_data/video_0/clip_786.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_063",
+    "video": "qwen_data/video_0/clip_063.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_765",
+    "video": "qwen_data/video_0/clip_765.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "downstair"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_001",
+    "video": "qwen_data/video_0/clip_001.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_502",
+    "video": "qwen_data/video_0/clip_502.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_923",
+    "video": "qwen_data/video_0/clip_923.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_643",
+    "video": "qwen_data/video_0/clip_643.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1014",
+    "video": "qwen_data/video_0/clip_1014.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_363",
+    "video": "qwen_data/video_0/clip_363.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_876",
+    "video": "qwen_data/video_0/clip_876.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_977",
+    "video": "qwen_data/video_0/clip_977.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_973",
+    "video": "qwen_data/video_0/clip_973.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_907",
+    "video": "qwen_data/video_0/clip_907.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_807",
+    "video": "qwen_data/video_0/clip_807.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_347",
+    "video": "qwen_data/video_0/clip_347.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_439",
+    "video": "qwen_data/video_0/clip_439.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_901",
+    "video": "qwen_data/video_0/clip_901.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_140",
+    "video": "qwen_data/video_0/clip_140.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_053",
+    "video": "qwen_data/video_0/clip_053.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_898",
+    "video": "qwen_data/video_0/clip_898.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_931",
+    "video": "qwen_data/video_0/clip_931.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1030",
+    "video": "qwen_data/video_0/clip_1030.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1028",
+    "video": "qwen_data/video_0/clip_1028.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_179",
+    "video": "qwen_data/video_0/clip_179.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_023",
+    "video": "qwen_data/video_0/clip_023.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_166",
+    "video": "qwen_data/video_0/clip_166.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_086",
+    "video": "qwen_data/video_0/clip_086.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_038",
+    "video": "qwen_data/video_0/clip_038.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_884",
+    "video": "qwen_data/video_0/clip_884.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_940",
+    "video": "qwen_data/video_0/clip_940.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_921",
+    "video": "qwen_data/video_0/clip_921.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_127",
+    "video": "qwen_data/video_0/clip_127.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1041",
+    "video": "qwen_data/video_0/clip_1041.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_534",
+    "video": "qwen_data/video_0/clip_534.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_982",
+    "video": "qwen_data/video_0/clip_982.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_589",
+    "video": "qwen_data/video_0/clip_589.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_163",
+    "video": "qwen_data/video_0/clip_163.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_707",
+    "video": "qwen_data/video_0/clip_707.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_916",
+    "video": "qwen_data/video_0/clip_916.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_354",
+    "video": "qwen_data/video_0/clip_354.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_968",
+    "video": "qwen_data/video_0/clip_968.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1066",
+    "video": "qwen_data/video_0/clip_1066.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_497",
+    "video": "qwen_data/video_0/clip_497.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_980",
+    "video": "qwen_data/video_0/clip_980.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_104",
+    "video": "qwen_data/video_0/clip_104.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_795",
+    "video": "qwen_data/video_0/clip_795.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_706",
+    "video": "qwen_data/video_0/clip_706.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_763",
+    "video": "qwen_data/video_0/clip_763.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_003",
+    "video": "qwen_data/video_0/clip_003.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1023",
+    "video": "qwen_data/video_0/clip_1023.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_711",
+    "video": "qwen_data/video_0/clip_711.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1013",
+    "video": "qwen_data/video_0/clip_1013.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_511",
+    "video": "qwen_data/video_0/clip_511.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_548",
+    "video": "qwen_data/video_0/clip_548.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_419",
+    "video": "qwen_data/video_0/clip_419.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_726",
+    "video": "qwen_data/video_0/clip_726.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_207",
+    "video": "qwen_data/video_0/clip_207.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1011",
+    "video": "qwen_data/video_0/clip_1011.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_192",
+    "video": "qwen_data/video_0/clip_192.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_687",
+    "video": "qwen_data/video_0/clip_687.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_766",
+    "video": "qwen_data/video_0/clip_766.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "downstair"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1056",
+    "video": "qwen_data/video_0/clip_1056.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_540",
+    "video": "qwen_data/video_0/clip_540.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_717",
+    "video": "qwen_data/video_0/clip_717.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_846",
+    "video": "qwen_data/video_0/clip_846.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_019",
+    "video": "qwen_data/video_0/clip_019.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_286",
+    "video": "qwen_data/video_0/clip_286.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_136",
+    "video": "qwen_data/video_0/clip_136.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_925",
+    "video": "qwen_data/video_0/clip_925.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_560",
+    "video": "qwen_data/video_0/clip_560.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_164",
+    "video": "qwen_data/video_0/clip_164.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_817",
+    "video": "qwen_data/video_0/clip_817.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_281",
+    "video": "qwen_data/video_0/clip_281.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_974",
+    "video": "qwen_data/video_0/clip_974.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_689",
+    "video": "qwen_data/video_0/clip_689.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_187",
+    "video": "qwen_data/video_0/clip_187.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_842",
+    "video": "qwen_data/video_0/clip_842.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_628",
+    "video": "qwen_data/video_0/clip_628.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_532",
+    "video": "qwen_data/video_0/clip_532.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1036",
+    "video": "qwen_data/video_0/clip_1036.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_085",
+    "video": "qwen_data/video_0/clip_085.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_081",
+    "video": "qwen_data/video_0/clip_081.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_422",
+    "video": "qwen_data/video_0/clip_422.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_947",
+    "video": "qwen_data/video_0/clip_947.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_930",
+    "video": "qwen_data/video_0/clip_930.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_030",
+    "video": "qwen_data/video_0/clip_030.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_757",
+    "video": "qwen_data/video_0/clip_757.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_404",
+    "video": "qwen_data/video_0/clip_404.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_873",
+    "video": "qwen_data/video_0/clip_873.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_797",
+    "video": "qwen_data/video_0/clip_797.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_569",
+    "video": "qwen_data/video_0/clip_569.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_725",
+    "video": "qwen_data/video_0/clip_725.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_514",
+    "video": "qwen_data/video_0/clip_514.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_043",
+    "video": "qwen_data/video_0/clip_043.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_662",
+    "video": "qwen_data/video_0/clip_662.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_903",
+    "video": "qwen_data/video_0/clip_903.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_039",
+    "video": "qwen_data/video_0/clip_039.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_601",
+    "video": "qwen_data/video_0/clip_601.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_997",
+    "video": "qwen_data/video_0/clip_997.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_723",
+    "video": "qwen_data/video_0/clip_723.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_075",
+    "video": "qwen_data/video_0/clip_075.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1044",
+    "video": "qwen_data/video_0/clip_1044.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_465",
+    "video": "qwen_data/video_0/clip_465.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_311",
+    "video": "qwen_data/video_0/clip_311.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_395",
+    "video": "qwen_data/video_0/clip_395.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_124",
+    "video": "qwen_data/video_0/clip_124.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_447",
+    "video": "qwen_data/video_0/clip_447.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_741",
+    "video": "qwen_data/video_0/clip_741.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_046",
+    "video": "qwen_data/video_0/clip_046.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_602",
+    "video": "qwen_data/video_0/clip_602.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1006",
+    "video": "qwen_data/video_0/clip_1006.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_811",
+    "video": "qwen_data/video_0/clip_811.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_970",
+    "video": "qwen_data/video_0/clip_970.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_350",
+    "video": "qwen_data/video_0/clip_350.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_010",
+    "video": "qwen_data/video_0/clip_010.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_803",
+    "video": "qwen_data/video_0/clip_803.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_642",
+    "video": "qwen_data/video_0/clip_642.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_129",
+    "video": "qwen_data/video_0/clip_129.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_177",
+    "video": "qwen_data/video_0/clip_177.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_346",
+    "video": "qwen_data/video_0/clip_346.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_484",
+    "video": "qwen_data/video_0/clip_484.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1049",
+    "video": "qwen_data/video_0/clip_1049.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_353",
+    "video": "qwen_data/video_0/clip_353.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1017",
+    "video": "qwen_data/video_0/clip_1017.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_479",
+    "video": "qwen_data/video_0/clip_479.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_619",
+    "video": "qwen_data/video_0/clip_619.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_324",
+    "video": "qwen_data/video_0/clip_324.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_079",
+    "video": "qwen_data/video_0/clip_079.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_352",
+    "video": "qwen_data/video_0/clip_352.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_315",
+    "video": "qwen_data/video_0/clip_315.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_302",
+    "video": "qwen_data/video_0/clip_302.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_288",
+    "video": "qwen_data/video_0/clip_288.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_097",
+    "video": "qwen_data/video_0/clip_097.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_321",
+    "video": "qwen_data/video_0/clip_321.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_959",
+    "video": "qwen_data/video_0/clip_959.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_115",
+    "video": "qwen_data/video_0/clip_115.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_685",
+    "video": "qwen_data/video_0/clip_685.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_031",
+    "video": "qwen_data/video_0/clip_031.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_992",
+    "video": "qwen_data/video_0/clip_992.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_955",
+    "video": "qwen_data/video_0/clip_955.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_699",
+    "video": "qwen_data/video_0/clip_699.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_516",
+    "video": "qwen_data/video_0/clip_516.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_441",
+    "video": "qwen_data/video_0/clip_441.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_816",
+    "video": "qwen_data/video_0/clip_816.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_568",
+    "video": "qwen_data/video_0/clip_568.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_270",
+    "video": "qwen_data/video_0/clip_270.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_802",
+    "video": "qwen_data/video_0/clip_802.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_385",
+    "video": "qwen_data/video_0/clip_385.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1009",
+    "video": "qwen_data/video_0/clip_1009.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_608",
+    "video": "qwen_data/video_0/clip_608.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_228",
+    "video": "qwen_data/video_0/clip_228.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_631",
+    "video": "qwen_data/video_0/clip_631.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_654",
+    "video": "qwen_data/video_0/clip_654.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_493",
+    "video": "qwen_data/video_0/clip_493.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_617",
+    "video": "qwen_data/video_0/clip_617.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1001",
+    "video": "qwen_data/video_0/clip_1001.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_798",
+    "video": "qwen_data/video_0/clip_798.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_830",
+    "video": "qwen_data/video_0/clip_830.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_336",
+    "video": "qwen_data/video_0/clip_336.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_284",
+    "video": "qwen_data/video_0/clip_284.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_684",
+    "video": "qwen_data/video_0/clip_684.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_544",
+    "video": "qwen_data/video_0/clip_544.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_113",
+    "video": "qwen_data/video_0/clip_113.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1027",
+    "video": "qwen_data/video_0/clip_1027.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_841",
+    "video": "qwen_data/video_0/clip_841.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_057",
+    "video": "qwen_data/video_0/clip_057.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1053",
+    "video": "qwen_data/video_0/clip_1053.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_138",
+    "video": "qwen_data/video_0/clip_138.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_647",
+    "video": "qwen_data/video_0/clip_647.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1059",
+    "video": "qwen_data/video_0/clip_1059.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1031",
+    "video": "qwen_data/video_0/clip_1031.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_446",
+    "video": "qwen_data/video_0/clip_446.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_902",
+    "video": "qwen_data/video_0/clip_902.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_159",
+    "video": "qwen_data/video_0/clip_159.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_342",
+    "video": "qwen_data/video_0/clip_342.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_547",
+    "video": "qwen_data/video_0/clip_547.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_292",
+    "video": "qwen_data/video_0/clip_292.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_855",
+    "video": "qwen_data/video_0/clip_855.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_935",
+    "video": "qwen_data/video_0/clip_935.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_134",
+    "video": "qwen_data/video_0/clip_134.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_303",
+    "video": "qwen_data/video_0/clip_303.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_597",
+    "video": "qwen_data/video_0/clip_597.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_759",
+    "video": "qwen_data/video_0/clip_759.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_950",
+    "video": "qwen_data/video_0/clip_950.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_357",
+    "video": "qwen_data/video_0/clip_357.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_929",
+    "video": "qwen_data/video_0/clip_929.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_583",
+    "video": "qwen_data/video_0/clip_583.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1021",
+    "video": "qwen_data/video_0/clip_1021.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_037",
+    "video": "qwen_data/video_0/clip_037.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_271",
+    "video": "qwen_data/video_0/clip_271.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_624",
+    "video": "qwen_data/video_0/clip_624.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_119",
+    "video": "qwen_data/video_0/clip_119.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_406",
+    "video": "qwen_data/video_0/clip_406.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1024",
+    "video": "qwen_data/video_0/clip_1024.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_877",
+    "video": "qwen_data/video_0/clip_877.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_314",
+    "video": "qwen_data/video_0/clip_314.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_062",
+    "video": "qwen_data/video_0/clip_062.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_767",
+    "video": "qwen_data/video_0/clip_767.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "downstair"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_175",
+    "video": "qwen_data/video_0/clip_175.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_936",
+    "video": "qwen_data/video_0/clip_936.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_667",
+    "video": "qwen_data/video_0/clip_667.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_111",
+    "video": "qwen_data/video_0/clip_111.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_275",
+    "video": "qwen_data/video_0/clip_275.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_712",
+    "video": "qwen_data/video_0/clip_712.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_443",
+    "video": "qwen_data/video_0/clip_443.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_827",
+    "video": "qwen_data/video_0/clip_827.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_966",
+    "video": "qwen_data/video_0/clip_966.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_308",
+    "video": "qwen_data/video_0/clip_308.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_489",
+    "video": "qwen_data/video_0/clip_489.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_198",
+    "video": "qwen_data/video_0/clip_198.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1042",
+    "video": "qwen_data/video_0/clip_1042.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_640",
+    "video": "qwen_data/video_0/clip_640.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_545",
+    "video": "qwen_data/video_0/clip_545.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_988",
+    "video": "qwen_data/video_0/clip_988.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_800",
+    "video": "qwen_data/video_0/clip_800.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1045",
+    "video": "qwen_data/video_0/clip_1045.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_188",
+    "video": "qwen_data/video_0/clip_188.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_908",
+    "video": "qwen_data/video_0/clip_908.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_205",
+    "video": "qwen_data/video_0/clip_205.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_451",
+    "video": "qwen_data/video_0/clip_451.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_665",
+    "video": "qwen_data/video_0/clip_665.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_598",
+    "video": "qwen_data/video_0/clip_598.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_309",
+    "video": "qwen_data/video_0/clip_309.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_693",
+    "video": "qwen_data/video_0/clip_693.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_653",
+    "video": "qwen_data/video_0/clip_653.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_398",
+    "video": "qwen_data/video_0/clip_398.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_999",
+    "video": "qwen_data/video_0/clip_999.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_594",
+    "video": "qwen_data/video_0/clip_594.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_073",
+    "video": "qwen_data/video_0/clip_073.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1015",
+    "video": "qwen_data/video_0/clip_1015.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_102",
+    "video": "qwen_data/video_0/clip_102.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_125",
+    "video": "qwen_data/video_0/clip_125.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_421",
+    "video": "qwen_data/video_0/clip_421.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_522",
+    "video": "qwen_data/video_0/clip_522.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_002",
+    "video": "qwen_data/video_0/clip_002.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_914",
+    "video": "qwen_data/video_0/clip_914.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_832",
+    "video": "qwen_data/video_0/clip_832.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1063",
+    "video": "qwen_data/video_0/clip_1063.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_933",
+    "video": "qwen_data/video_0/clip_933.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_282",
+    "video": "qwen_data/video_0/clip_282.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_758",
+    "video": "qwen_data/video_0/clip_758.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_934",
+    "video": "qwen_data/video_0/clip_934.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_118",
+    "video": "qwen_data/video_0/clip_118.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "walking"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_991",
+    "video": "qwen_data/video_0/clip_991.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1057",
+    "video": "qwen_data/video_0/clip_1057.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_788",
+    "video": "qwen_data/video_0/clip_788.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_1039",
+    "video": "qwen_data/video_0/clip_1039.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_578",
+    "video": "qwen_data/video_0/clip_578.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_538",
+    "video": "qwen_data/video_0/clip_538.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_864",
+    "video": "qwen_data/video_0/clip_864.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_368",
+    "video": "qwen_data/video_0/clip_368.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "standing"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_162",
+    "video": "qwen_data/video_0/clip_162.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_722",
+    "video": "qwen_data/video_0/clip_722.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_989",
+    "video": "qwen_data/video_0/clip_989.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  },
+  {
+    "id": "video_0_clip_231",
+    "video": "qwen_data/video_0/clip_231.mp4",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<video>\nWhat action is being performed in this video?"
+      },
+      {
+        "from": "gpt",
+        "value": "sitting"
+      }
+    ]
+  }
+]

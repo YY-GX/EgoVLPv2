@@ -1,0 +1,8 @@
+multinode_train_yy.py --save_dir eval_yy --config ./configs/eval/yy_egoclip.json --print_freq 100
+{"epoch": -1, "msg": "[mir_metrics_vtc]EpicKitchens_MIR epoch -1, nDCG_V2T: 0.000, nDCG_T2V: 0.000, nDCG_AVG: 0.000,, mAP_V2T: 0.000, mAP_T2V: 0.000, mAP_AVG: 0.000"}
+multinode_train_yy.py --save_dir eval_yy --config ./configs/eval/yy_egoclip.json --print_freq 100
+{"epoch": -1, "msg": "[mir_metrics_vtc]EpicKitchens_MIR epoch -1, nDCG_V2T: 0.000, nDCG_T2V: 0.000, nDCG_AVG: 0.000,, mAP_V2T: 0.000, mAP_T2V: 0.000, mAP_AVG: 0.000"}
+multinode_train_yy.py --save_dir eval_yy --config ./configs/eval/yy_egoclip.json --print_freq 100
+{"epoch": -1, "msg": "[mir_metrics_vtc]EpicKitchens_MIR epoch -1, nDCG_V2T: 1.802, nDCG_T2V: nan, nDCG_AVG: nan,, mAP_V2T: 4.614, mAP_T2V: nan, mAP_AVG: nan"}
+multinode_train_yy.py --save_dir eval_yy --config ./configs/eval/yy_egoclip.json --print_freq 100
+{"epoch": -1, "msg": "[mir_metrics_vtc]EpicKitchens_MIR epoch -1, nDCG_V2T: 1.802, nDCG_T2V: nan, nDCG_AVG: nan,, mAP_V2T: 4.614, mAP_T2V: nan, mAP_AVG: nan"}

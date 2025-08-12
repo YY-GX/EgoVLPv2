@@ -1,0 +1,5 @@
+Action 0 (sitting): 274 mis-predicted
+Action 1 (walking): 71 mis-predicted
+Action 4 (downstair): 3 mis-predicted
+Action 3 (upstair): 2 mis-predicted
+Action 2 (standing): 0 mis-predicted

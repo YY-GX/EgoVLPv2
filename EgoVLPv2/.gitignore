@@ -1,0 +1,68 @@
+# Large model checkpoints
+checkpoints/*.pth
+checkpoints/*.pt
+
+# Training checkpoints and outputs
+finetune_parkinson/
+finetune_*/
+saved/
+runs/
+tf/
+tf_logs/
+
+# Large video files
+data/raw_videos/
+data/*.mp4
+data/*.vrs
+clips/
+clips_v2/
+clips_egoclip/
+clips_egoclip_v2/
+
+# Large data files
+*.csv
+*.mp4
+*.vrs
+
+# Model outputs and logs
+out.out
+*.log
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Environment files
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
